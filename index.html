@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Razor Wire Feels</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #080808;
+      --deep: #0e0e0e;
+      --red: #c0160f;
+      --blood: #8b0000;
+      --paper: #e8dfc8;
+      --smoke: #a09a8e;
+      --wire: #3a3a3a;
+      --white: #f0ece2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Courier Prime', monospace;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* GRAIN OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* === 18+ WARNING GATE === */
+    #age-gate {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    #age-gate .gate-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 7rem);
+      color: var(--red);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(192,22,15,0.5);
+    }
+
+    #age-gate .gate-sub {
+      font-family: 'Special Elite', cursive;
+      color: var(--smoke);
+      font-size: clamp(0.8rem, 2vw, 1.1rem);
+      margin: 1rem 0 2.5rem;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    #age-gate .gate-warning {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      color: var(--wire);
+      margin-top: 2rem;
+      max-width: 400px;
+      line-height: 1.7;
+    }
+
+    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn-enter {
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      padding: 1rem 3rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.2s;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    }
+    .btn-enter:hover { background: #e01a12; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(192,22,15,0.5); }
+
+    .btn-leave {
+      background: transparent;
+      color: var(--smoke);
+      border: 1px solid var(--wire);
+      padding: 1rem 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-leave:hover { color: var(--white); border-color: var(--smoke); }
+
+    /* === MAIN SITE (hidden until age gate cleared) === */
+    #site { display: none; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.98), transparent);
+      border-bottom: 1px solid rgba(192,22,15,0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--red); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Special Elite', cursive;
+      color: var(--smoke);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,0,0,0.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(255,255,255,0.012) 60px,
+          rgba(255,255,255,0.012) 61px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(255,255,255,0.012) 60px,
+          rgba(255,255,255,0.012) 61px
+        );
+    }
+
+    /* Razor wire SVG decoration */
+    .wire-line {
+      position: absolute;
+      width: 100%;
+      left: 0;
+      opacity: 0.15;
+    }
+    .wire-line.top { top: 15%; }
+    .wire-line.bottom { bottom: 15%; }
+
+    .hero-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: slideUp 1s ease 0.2s both;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 18vw, 16rem);
+      line-height: 0.85;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      text-shadow:
+        4px 4px 0 var(--blood),
+        8px 8px 0 rgba(139,0,0,0.3),
+        0 0 100px rgba(192,22,15,0.2);
+      animation: slideUp 1s ease 0.4s both;
+      position: relative;
+    }
+
+    .hero-title .red { color: var(--red); display: block; }
+
+    .hero-subtitle {
+      font-family: 'Special Elite', cursive;
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      color: var(--smoke);
+      margin-top: 2rem;
+      max-width: 600px;
+      line-height: 1.7;
+      animation: slideUp 1s ease 0.6s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: slideUp 1s ease 0.8s both;
+    }
+
+    .cta-primary {
+      background: var(--red);
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: all 0.2s;
+    }
+    .cta-primary:hover { background: #e01a12; transform: translateY(-3px); box-shadow: 0 10px 40px rgba(192,22,15,0.4); }
+
+    .cta-secondary {
+      border: 1px solid var(--wire);
+      color: var(--smoke);
+      padding: 1rem 2.5rem;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .cta-secondary:hover { border-color: var(--red); color: var(--white); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: slideUp 1s ease 1.2s both;
+    }
+    .scroll-hint span {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--wire);
+    }
+    .scroll-hint .arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--wire), transparent);
+      animation: pulse 2s infinite;
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 4rem;
+      margin: 1rem 0;
+    }
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--wire), transparent);
+    }
+    .section-divider span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: var(--red);
+    }
+
+    /* === ABOUT SECTION === */
+    #about {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-text { }
+
+    .section-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 0.9;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+    .section-title span { color: var(--red); }
+
+    .about-body {
+      font-family: 'Special Elite', cursive;
+      color: var(--smoke);
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+    .about-body p + p { margin-top: 1.2rem; }
+
+    .about-stat-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .stat-card {
+      border-left: 3px solid var(--red);
+      padding: 1.5rem 2rem;
+      background: rgba(255,255,255,0.02);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(192,22,15,0.05) 0%, transparent 60%);
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--smoke);
+      margin-top: 0.3rem;
+    }
+
+    /* === CHAPTERS / PARTS === */
+    #manuscript {
+      padding: 8rem 2rem;
+      background: var(--deep);
+      position: relative;
+    }
+
+    #manuscript::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--blood), transparent);
+    }
+
+    .manuscript-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .manuscript-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .parts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .part-card {
+      border: 1px solid var(--wire);
+      padding: 2.5rem;
+      position: relative;
+      transition: all 0.3s;
+      background: rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .part-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(192,22,15,0.06), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .part-card:hover { border-color: var(--blood); transform: translateY(-4px); }
+    .part-card:hover::before { opacity: 1; }
+
+    .part-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      color: rgba(192,22,15,0.12);
+      line-height: 1;
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+    }
+
+    .part-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .part-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+    .part-desc {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85rem;
+      color: var(--smoke);
+      line-height: 1.7;
+    }
+    .part-years {
+      margin-top: 1.5rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      color: var(--wire);
+      letter-spacing: 0.15em;
+    }
+
+    /* === COMIC SECTION === */
+    #comic {
+      padding: 8rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .comic-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .comic-mockup {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+      border: 2px solid var(--wire);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .comic-mockup::before {
+      content: 'K-MASTER K\A&\A THE HAMMER';
+      white-space: pre;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--red);
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 0 0 40px rgba(192,22,15,0.6);
+      letter-spacing: 0.05em;
+    }
+    .comic-mockup::after {
+      content: 'ISSUE #0';
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      color: var(--smoke);
+      border-top: 1px solid var(--wire);
+      padding-top: 0.8rem;
+      width: 80%;
+      text-align: center;
+    }
+
+    .comic-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--red);
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.7rem;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    }
+
+    .comic-info { }
+
+    .comic-desc {
+      font-family: 'Special Elite', cursive;
+      color: var(--smoke);
+      font-size: 1rem;
+      line-height: 1.9;
+      margin-bottom: 2rem;
+    }
+
+    .comic-cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* === LETTERS / UPDATES === */
+    #dispatches {
+      padding: 8rem 2rem;
+      background: var(--deep);
+      position: relative;
+    }
+    #dispatches::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--blood), transparent);
+    }
+
+    .dispatches-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .letter-stack {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .letter-card {
+      background: rgba(232,223,200,0.04);
+      border: 1px solid rgba(232,223,200,0.08);
+      padding: 2rem;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .letter-card:hover { background: rgba(232,223,200,0.07); border-color: rgba(232,223,200,0.15); transform: translateY(-3px); }
+
+    .letter-date {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+    .letter-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+      line-height: 1.1;
+    }
+    .letter-excerpt {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85rem;
+      color: var(--smoke);
+      line-height: 1.7;
+    }
+    .letter-tag {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--wire);
+      border: 1px solid var(--wire);
+      padding: 0.2rem 0.6rem;
+    }
+
+    /* === FOOTER === */
+    footer {
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+      border-top: 1px solid var(--wire);
+      position: relative;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    .footer-logo span { color: var(--red); }
+
+    .footer-tagline {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.9rem;
+      color: var(--smoke);
+      margin-bottom: 3rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      list-style: none;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--wire);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--red); }
+
+    .footer-copy {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      color: var(--wire);
+      letter-spacing: 0.1em;
+    }
+
+    /* === ANIMATIONS === */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Intersection Observer animation class */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #about, .comic-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-stat-block { flex-direction: row; flex-wrap: wrap; }
+      .stat-card { flex: 1; min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AGE GATE -->
+  <div id="age-gate">
+    <div class="gate-title">RAZOR<br>WIRE<br>FEELS</div>
+    <p class="gate-sub">
+      This site contains mature themes including violence, adult content, and frank depictions of incarceration. You must be 18 or older to enter.
+    </p>
+    <div class="btn-group">
+      <button class="btn-enter" onclick="enterSite()">I AM 18+ — ENTER</button>
+      <button class="btn-leave" onclick="window.location.href='https://www.google.com'">I AM UNDER 18</button>
+    </div>
+    <p class="gate-warning">
+      RAZOR WIRE FEELS is a memoir project.<br>
+      All events depicted are based on true events.<br>
+      Names may have been changed.
+    </p>
+  </div>
+
+  <!-- MAIN SITE -->
+  <div id="site">
+
+    <!-- NAV -->
+    <nav>
+      <a href="#hero" class="nav-logo">RAZOR<span>WIRE</span>FEELS</a>
+      <ul class="nav-links">
+        <li><a href="#about">THE STORY</a></li>
+        <li><a href="#manuscript">THE BOOK</a></li>
+        <li><a href="#comic">THE COMIC</a></li>
+        <li><a href="#dispatches">DISPATCHES</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+      <svg class="wire-line top" viewBox="0 0 1440 20" fill="none" preserveAspectRatio="none">
+        <path d="M0 10 Q 180 0 360 10 Q 540 20 720 10 Q 900 0 1080 10 Q 1260 20 1440 10" stroke="#c0160f" stroke-width="1.5" fill="none"/>
+        <circle cx="360" cy="10" r="4" fill="#c0160f"/>
+        <circle cx="720" cy="10" r="4" fill="#c0160f"/>
+        <circle cx="1080" cy="10" r="4" fill="#c0160f"/>
+      </svg>
+
+      <div class="hero-eyebrow">A TRUE STORY FROM BEHIND THE WIRE</div>
+      <h1 class="hero-title">
+        RAZOR WIRE
+        <span class="red">FEELS</span>
+      </h1>
+      <p class="hero-subtitle">
+        A memoir of incarceration, survival, and the absurd.<br>
+        Written letter by letter from inside a box.
+      </p>
+      <div class="hero-cta">
+        <a href="#manuscript" class="cta-primary">READ THE BOOK</a>
+        <a href="#comic" class="cta-secondary">GET THE COMIC</a>
+      </div>
+
+      <svg class="wire-line bottom" viewBox="0 0 1440 20" fill="none" preserveAspectRatio="none">
+        <path d="M0 10 Q 180 20 360 10 Q 540 0 720 10 Q 900 20 1080 10 Q 1260 0 1440 10" stroke="#3a3a3a" stroke-width="1" fill="none"/>
+        <circle cx="360" cy="10" r="3" fill="#3a3a3a"/>
+        <circle cx="720" cy="10" r="3" fill="#3a3a3a"/>
+        <circle cx="1080" cy="10" r="3" fill="#3a3a3a"/>
+      </svg>
+
+      <div class="scroll-hint">
+        <span>SCROLL</span>
+        <div class="arrow"></div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="section-divider"><span>///</span></div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="about-text reveal">
+        <p class="section-label">// THE STORY</p>
+        <h2 class="section-title">COUSIN,<br>BLOOD OF<br><span>MY BLOOD.</span></h2>
+        <div class="about-body">
+          <p>
+            What started as handwritten letters smuggled through the system became something else entirely — a raw, unfiltered document of life inside.
+          </p>
+          <p>
+            From county lockup to state time, this is the story no prison memoir has told: equal parts gut-punch and dark comedy, gonzo journalism meets jailhouse philosophy.
+          </p>
+          <p>
+            52 episodes. 5 years. One voice that refused to go quiet.
+          </p>
+        </div>
+      </div>
+      <div class="about-stat-block reveal">
+        <div class="stat-card">
+          <div class="stat-number">52</div>
+          <div class="stat-label">// EPISODES</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5</div>
+          <div class="stat-label">// PARTS OF THE MEMOIR</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2017</div>
+          <div class="stat-label">// FIRST LETTER WRITTEN</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">26</div>
+          <div class="stat-label">// PAGES IN ISSUE #0</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANUSCRIPT PARTS -->
+    <section id="manuscript">
+      <div class="manuscript-inner">
+        <div class="manuscript-header reveal">
+          <p class="section-label">// THE BOOK</p>
+          <h2 class="section-title">THE MANUSCRIPT</h2>
+        </div>
+        <div class="parts-grid">
+
+          <div class="part-card reveal">
+            <div class="part-number">I</div>
+            <p class="part-tag">// PART ONE</p>
+            <h3 class="part-title">THE COLD OPEN</h3>
+            <p class="part-desc">The 72 hours before everything collapsed. A fictional-yet-true prequel. The last night of freedom — told the way it actually felt.</p>
+            <p class="part-years">PRE-ARREST // 2017</p>
+          </div>
+
+          <div class="part-card reveal">
+            <div class="part-number">II</div>
+            <p class="part-tag">// PART TWO</p>
+            <h3 class="part-title">COUNTY TIME</h3>
+            <p class="part-desc">The first letters. The first episodes. Learning the rhythms of a world with no horizon. Christmas in a cage, 2017.</p>
+            <p class="part-years">2017 – 2018</p>
+          </div>
+
+          <div class="part-card reveal">
+            <div class="part-number">III</div>
+            <p class="part-tag">// PART THREE</p>
+            <h3 class="part-title">STATE PROPERTY</h3>
+            <p class="part-desc">Sentenced. Transferred. The real machine begins. Where absurdity and brutality share a cell and you learn to laugh or lose it.</p>
+            <p class="part-years">2019 – 2020</p>
+          </div>
+
+          <div class="part-card reveal">
+            <div class="part-number">IV</div>
+            <p class="part-tag">// PART FOUR</p>
+            <h3 class="part-title">PANDEMIC INSIDE</h3>
+            <p class="part-desc">COVID hits the yard. The stimulus check arrives. A comic book is born. The world outside stops — but inside, nothing changes.</p>
+            <p class="part-years">2020 – 2021</p>
+          </div>
+
+          <div class="part-card reveal">
+            <div class="part-number">V</div>
+            <p class="part-tag">// PART FIVE</p>
+            <h3 class="part-title">GETTING OUT</h3>
+            <p class="part-desc">The count down. The exit. The strange unreality of reentry. And the question every person asks when the gate opens: now what?</p>
+            <p class="part-years">2022 – 2023</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- COMIC SECTION -->
+    <section id="comic">
+      <div class="comic-inner">
+        <div class="comic-mockup reveal">
+          <div class="comic-badge">ISSUE #0</div>
+        </div>
+        <div class="comic-info reveal">
+          <p class="section-label">// THE COMIC</p>
+          <h2 class="section-title">K-MASTER K<br>& THE<br><span>HAMMER</span></h2>
+          <p class="comic-desc">
+            Created from scratch with a COVID stimulus check during lockdown. 26 pages of pure, unhinged energy — the Kissmobile, Couch Pizza, and a philosophical debate about the foundations of human civilization.
+          </p>
+          <p class="comic-desc">
+            This isn't a prison comic. This is what happens when you refuse to let the walls close in on your imagination.
+          </p>
+          <div class="comic-cta-group">
+            <a href="#" class="cta-primary">BUY ON ITCH.IO</a>
+            <a href="#" class="cta-secondary">READ FREE</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISPATCHES / LETTERS -->
+    <section id="dispatches">
+      <div class="dispatches-inner">
+        <div class="manuscript-header reveal">
+          <p class="section-label">// FROM THE INSIDE</p>
+          <h2 class="section-title">DISPATCHES<br><span style="color:var(--red)">FROM THE WIRE</span></h2>
+        </div>
+        <div class="letter-stack">
+
+          <div class="letter-card reveal">
+            <p class="letter-date">// CHRISTMAS 2017</p>
+            <h3 class="letter-title">THE FIRST LETTER</h3>
+            <p class="letter-excerpt">Where the story begins. County. The holidays. The strange comfort of a pen and paper when everything else is stripped away.</p>
+            <span class="letter-tag">EPISODE 001</span>
+          </div>
+
+          <div class="letter-card reveal">
+            <p class="letter-date">// JUNE 2020</p>
+            <h3 class="letter-title">COUSIN, BLOOD OF MY BLOOD</h3>
+            <p class="letter-excerpt">One of the defining letters of the collection. Written during the early pandemic months — when the outside world finally caught a taste of what inside already knew.</p>
+            <span class="letter-tag">EPISODE 032</span>
+          </div>
+
+          <div class="letter-card reveal">
+            <p class="letter-date">// 2021</p>
+            <h3 class="letter-title">THE STIMULUS CHECK ISSUE</h3>
+            <p class="letter-excerpt">How one check became a comic book. The origin story of K-Master K. Art made under maximum constraint is always the most honest art.</p>
+            <span class="letter-tag">EPISODE 041</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">RAZOR<span>WIRE</span>FEELS</div>
+      <p class="footer-tagline">A true story. Written in blood and ballpoint.</p>
+      <ul class="footer-links">
+        <li><a href="#about">THE STORY</a></li>
+        <li><a href="#manuscript">THE BOOK</a></li>
+        <li><a href="#comic">THE COMIC</a></li>
+        <li><a href="#dispatches">DISPATCHES</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#debdb1b0aabfbdaa9eacbfa4b1aca9b7acbbb8bbbbb2adf0bdb1b3">CONTACT</a></li>
+      </ul>
+      <p class="footer-copy">© 2024 RAZORWIREFEELS.COM — ALL RIGHTS RESERVED</p>
+    </footer>
+
+  </div><!-- /#site -->
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    function enterSite() {
+      document.getElementById('age-gate').style.animation = 'none';
+      document.getElementById('age-gate').style.opacity = '0';
+      document.getElementById('age-gate').style.transition = 'opacity 0.6s ease';
+      setTimeout(() => {
+        document.getElementById('age-gate').style.display = 'none';
+        document.getElementById('site').style.display = 'block';
+        initReveal();
+      }, 600);
+    }
+
+    function initReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('visible');
+            }, 100);
+            observer.unobserve(entry.target);
+          }
+ 

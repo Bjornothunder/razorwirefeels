@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Redbeard the Great — Razor Wire Feels</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f4f2ee; --surface: #ffffff; --surface2: #f9f7f4;
+      --border: #ddd8d0; --border-light: #ece8e2;
+      --text: #1a1a1a; --text-mid: #4a4540; --text-muted: #8a8278;
+      --red: #b8160f; --red-soft: #f5e9e8; --red-mid: rgba(184,22,15,0.09);
+      --ink: #2c2420; --tag-bg: #eeeae4;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.6; }
+
+    /* TOP BAR */
+    .topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; height:56px; }
+    .topbar-brand { display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
+    .topbar-logo { height:36px; width:auto; display:block; }
+    .topbar-path { font-family:'Source Code Pro',monospace; font-size:0.7rem; color:var(--text-muted); letter-spacing:0.05em; }
+    .topbar-path a { color:var(--red); text-decoration:none; }
+    .topbar-path a:hover { text-decoration:underline; }
+    .topbar-nav { display:flex; gap:1.5rem; list-style:none; }
+    .topbar-nav a { font-size:0.82rem; color:var(--text-muted); text-decoration:none; font-weight:500; transition:color 0.15s; }
+    .topbar-nav a:hover { color:var(--red); }
+
+    /* LAYOUT */
+    .page-wrap { max-width:1060px; margin:0 auto; padding:2.5rem 1.5rem; display:grid; grid-template-columns:280px 1fr; gap:2rem; align-items:start; }
+
+    /* SIDEBAR */
+    .sidebar { display:flex; flex-direction:column; gap:1.2rem; position:sticky; top:66px; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+    .card-header { padding:0.8rem 1.2rem; border-bottom:1px solid var(--border-light); font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); }
+    .card-body { padding:1.2rem; }
+
+    .profile-banner { height:72px; background:repeating-linear-gradient(135deg,#1a1a1a 0px,#1a1a1a 4px,#2a2420 4px,#2a2420 12px); position:relative; }
+    .profile-banner::after { content:''; position:absolute; inset:0; background:linear-gradient(to right,rgba(184,22,15,0.35),transparent); }
+    .profile-avatar-wrap { padding:0 1.2rem; margin-top:-30px; position:relative; z-index:2; }
+    .profile-avatar { width:60px; height:60px; border-radius:50%; border:3px solid var(--surface); background:var(--ink); display:flex; align-items:center; justify-content:center; font-family:'Lora',serif; font-size:1.5rem; font-weight:700; color:white; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+    .profile-info { padding:0.8rem 1.2rem 1.4rem; }
+    .profile-alias { font-family:'Lora',serif; font-size:1.15rem; font-weight:700; color:var(--ink); line-height:1.2; }
+    .profile-realname { font-size:0.8rem; color:var(--text-muted); margin-top:0.15rem; }
+    .profile-id-badge { display:inline-flex; align-items:center; gap:0.4rem; background:var(--tag-bg); border:1px solid var(--border); border-radius:2px; padding:0.25rem 0.6rem; margin-top:0.8rem; font-family:'Source Code Pro',monospace; font-size:0.68rem; color:var(--text-mid); letter-spacing:0.05em; }
+    .profile-id-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--red); }
+    .profile-tagline { margin-top:1rem; font-family:'Lora',serif; font-style:italic; font-size:0.85rem; color:var(--text-mid); line-height:1.5; padding-top:0.8rem; border-top:1px solid var(--border-light); }
+    .profile-stats { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:1rem; border-top:1px solid var(--border-light); }
+    .pstat { padding:0.7rem 0.8rem; text-align:center; border-right:1px solid var(--border-light); }
+    .pstat:nth-child(even) { border-right:none; }
+    .pstat:nth-child(3), .pstat:nth-child(4) { border-top:1px solid var(--border-light); }
+    .pstat-num { font-family:'Lora',serif; font-weight:700; font-size:1.2rem; color:var(--ink); }
+    .pstat-label { font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; margin-top:0.1rem; }
+
+    .info-row { display:flex; justify-content:space-between; align-items:flex-start; padding:0.45rem 0; border-bottom:1px solid var(--border-light); font-size:0.82rem; gap:0.5rem; }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { color:var(--text-muted); flex-shrink:0; }
+    .info-value { color:var(--text); text-align:right; font-weight:500; }
+    .tag-list { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .tag { background:var(--tag-bg); border:1px solid var(--border); border-radius:2px; padding:0.2rem 0.55rem; font-size:0.72rem; color:var(--text-mid); font-weight:500; }
+    .tag.red { background:var(--red-soft); border-color:rgba(184,22,15,0.2); color:var(--red); }
+
+    .project-item { display:flex; gap:0.8rem; align-items:flex-start; padding:0.6rem 0; border-bottom:1px solid var(--border-light); }
+    .project-item:last-child { border-bottom:none; }
+    .project-thumb { width:42px; height:52px; background:var(--ink); border-radius:2px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Lora',serif; font-size:0.5rem; color:rgba(255,255,255,0.5); text-align:center; line-height:1.3; font-weight:600; letter-spacing:0.05em; }
+    .project-thumb.red { background:var(--red); }
+    .project-info { flex:1; }
+    .project-name { font-size:0.82rem; font-weight:600; color:var(--ink); line-height:1.3; }
+    .project-sub { font-size:0.72rem; color:var(--text-muted); margin-top:0.2rem; }
+    .project-link { font-size:0.7rem; color:var(--red); text-decoration:none; font-weight:600; display:inline-block; margin-top:0.3rem; }
+    .project-link:hover { text-decoration:underline; }
+
+    /* MAIN */
+    .main-col { display:flex; flex-direction:column; gap:1.5rem; }
+    .bio-text { font-family:'Lora',serif; font-size:0.95rem; line-height:1.85; color:var(--text-mid); }
+    .bio-text p + p { margin-top:1rem; }
+    .bio-text strong { color:var(--ink); font-weight:600; }
+    .bio-quote { margin:1.2rem 0; padding:1rem 1.2rem; border-left:3px solid var(--red); background:var(--red-mid); font-family:'Lora',serif; font-style:italic; font-size:0.95rem; color:var(--ink); line-height:1.7; }
+    .alias-strip { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border-light); }
+    .alias-chip { font-family:'Source Code Pro',monospace; font-size:0.65rem; color:var(--text-muted); background:var(--tag-bg); border:1px solid var(--border); padding:0.2rem 0.55rem; border-radius:2px; letter-spacing:0.05em; }
+    .alias-chip.current { background:var(--red-soft); color:var(--red); border-color:rgba(184,22,15,0.25); }
+    .alias-label { font-size:0.7rem; color:var(--text-muted); margin-top:0.5rem; width:100%; }
+
+    /* FEED */
+    .feed-tabs { display:flex; border-bottom:1px solid var(--border); background:var(--surface); padding:0 1.2rem; overflow-x:auto; }
+    .feed-tab { padding:0.85rem 1rem; font-size:0.8rem; font-weight:600; color:var(--text-muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.15s; letter-spacing:0.03em; white-space:nowrap; }
+    .feed-tab.active { color:var(--red); border-bottom-color:var(--red); }
+    .feed-tab:hover:not(.active) { color:var(--text); }
+    .feed-body { padding:1.2rem; display:flex; flex-direction:column; gap:1.5rem; }
+
+    .part-divider { display:flex; align-items:center; gap:0.8rem; margin:0.5rem 0 0; }
+    .part-divider-label { font-family:'Source Code Pro',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap; }
+    .part-divider-line { flex:1; height:1px; background:var(--border-light); }
+
+    .post-card { border:1px solid var(--border-light); border-radius:3px; overflow:hidden; transition:box-shadow 0.2s,border-color 0.2s; background:var(--surface2); }
+    .post-card:hover { border-color:var(--border); box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+    .post-header { display:flex; align-items:center; gap:0.7rem; padding:0.8rem 1rem; border-bottom:1px solid var(--border-light); }
+    .post-avatar { width:32px; height:32px; border-radius:50%; background:var(--ink); color:white; font-family:'Lora',serif; font-weight:700; font-size:0.8rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .post-meta { flex:1; }
+    .post-author { font-weight:600; font-size:0.85rem; color:var(--ink); }
+    .post-date { font-size:0.7rem; color:var(--text-muted); margin-top:0.05rem; }
+    .post-type-badge { font-family:'Source Code Pro',monospace; font-size:0.62rem; letter-spacing:0.08em; padding:0.2rem 0.5rem; border-radius:2px; background:var(--tag-bg); color:var(--text-muted); border:1px solid var(--border); text-transform:uppercase; white-space:nowrap; }
+    .post-type-badge.writing { background:var(--red-soft); color:var(--red); border-color:rgba(184,22,15,0.2); }
+    .post-type-badge.digital { background:#eef2ff; color:#4361c2; border-color:rgba(67,97,194,0.25); }
+    .post-type-badge.heavy { background:#1a1a1a; color:#fff; border-color:#1a1a1a; }
+    .post-type-badge.final { background:#1a1a1a; color:#fff; border-color:#1a1a1a; }
+    .post-body { padding:1rem 1rem 1.2rem; }
+    .post-title { font-family:'Lora',serif; font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:0.5rem; line-height:1.3; }
+    .post-excerpt { font-family:'Lora',serif; font-style:italic; font-size:0.88rem; color:var(--text-mid); line-height:1.75; }
+    .post-footer { padding:0.6rem 1rem; border-top:1px solid var(--border-light); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; }
+    .post-episode { font-family:'Source Code Pro',monospace; font-size:0.65rem; color:var(--text-muted); letter-spacing:0.1em; }
+    .read-link { font-size:0.75rem; font-weight:600; color:var(--red); text-decoration:none; transition:opacity 0.15s; }
+    .read-link:hover { opacity:0.7; }
+
+    .page-footer { text-align:center; padding:3rem 1.5rem 2rem; border-top:1px solid var(--border); margin-top:2rem; }
+    .page-footer .back-link { font-size:0.78rem; color:var(--text-muted); text-decoration:none; }
+    .page-footer .back-link:hover { color:var(--red); }
+    .page-footer .url-path { margin-top:0.6rem; font-family:'Source Code Pro',monospace; font-size:0.65rem; color:var(--border); letter-spacing:0.08em; }
+    .page-footer .aotd { margin-top:1rem; font-family:'Lora',serif; font-style:italic; font-size:0.8rem; color:var(--text-muted); }
+
+    @media(max-width:720px) { .page-wrap { grid-template-columns:1fr; } .sidebar { position:static; } .topbar-nav { display:none; } .topbar-path { display:none; } }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/" class="topbar-brand">
+    <img class="topbar-logo" src="RWF_Logo_8000px.jpg" alt="Razor Wire Feels"/>
+  </a>
+  <span class="topbar-path"><a href="/NC">NC</a> / 1369313</span>
+  <ul class="topbar-nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/submit">Submit Work</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</header>
+
+<div class="page-wrap">
+  <aside class="sidebar">
+
+    <div class="card">
+      <div class="profile-banner"></div>
+      <div class="profile-avatar-wrap"><div class="profile-avatar">R</div></div>
+      <div class="profile-info">
+        <div class="profile-alias">Redbeard the Great</div>
+        <div class="profile-realname">Nicolas Losito</div>
+        <div class="profile-id-badge"><span class="dot"></span>NC · 1369313 · NCDAC</div>
+        <div class="profile-tagline">"Written one letter — and one text — at a time from inside a box."</div>
+        <div class="profile-stats">
+          <div class="pstat"><div class="pstat-num">52</div><div class="pstat-label">Episodes</div></div>
+          <div class="pstat"><div class="pstat-num">5</div><div class="pstat-label">Parts</div></div>
+          <div class="pstat"><div class="pstat-num">2017</div><div class="pstat-label">First Letter</div></div>
+          <div class="pstat"><div class="pstat-num">#0</div><div class="pstat-label">Comic Issue</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">About</div>
+      <div class="card-body">
+        <div class="info-row"><span class="info-label">Location</span><span class="info-value">North Carolina</span></div>
+        <div class="info-row"><span class="info-label">Active</span><span class="info-value">2017 – 2023</span></div>
+        <div class="info-row"><span class="info-label">Founder</span><span class="info-value">Razor Wire Feels</span></div>
+        <div class="info-row"><span class="info-label">Publisher</span><span class="info-value">Bich Fist Comics</span></div>
+        <div class="info-row"><span class="info-label">Released</span><span class="info-value">2023</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Tags</div>
+      <div class="card-body">
+        <div class="tag-list">
+          <span class="tag red">Memoir</span>
+          <span class="tag red">Founder</span>
+          <span class="tag">Incarceration</span>
+          <span class="tag">Gonzo</span>
+          <span class="tag">Comic Book</span>
+          <span class="tag">NCDAC</span>
+          <span class="tag">Dark Comedy</span>
+          <span class="tag">Poems</span>
+          <span class="tag">Prison Politics</span>
+          <span class="tag">Grief</span>
+          <span class="tag">Music</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Projects</div>
+      <div class="card-body" style="padding:0.8rem 1.2rem;">
+        <div class="project-item">
+          <div class="project-thumb">RAZOR<br>WIRE<br>FEELS</div>
+          <div class="project-info">
+            <div class="project-name">Razor Wire Feels</div>
+            <div class="project-sub">Memoir · 52 Episodes · 5 Parts</div>
+            <a href="#feed" class="project-link">Read episodes →</a>
+          </div>
+        </div>
+        <div class="project-item">
+          <div class="project-thumb red">K-<br>MASTER<br>K #0</div>
+          <div class="project-info">
+            <div class="project-name">K-Master K & The Hammer</div>
+            <div class="project-sub">Comic · Issue #0 · 26 Pages · Bich Fist Comics</div>
+            <a href="#" class="project-link">Get Issue #0 →</a>
+          </div>
+        </div>
+        <div class="project-item">
+          <div class="project-thumb" style="font-size:0.45rem;">THE<br>RAVAGED</div>
+          <div class="project-info">
+            <div class="project-name">The Ravaged</div>
+            <div class="project-sub">Short Story · 17 pages · Handwritten</div>
+            <a href="#" class="project-link">Read →</a>
+          </div>
+        </div>
+        <div class="project-item">
+          <div class="project-thumb" style="font-size:0.45rem;">HENRY<br>SAVAGE</div>
+          <div class="project-info">
+            <div class="project-name">Henry Savage & Lilith Flowers</div>
+            <div class="project-sub">Fiction · Part 1 · 18+</div>
+            <a href="#" class="project-link">Read (18+) →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="main-col">
+
+    <div class="card">
+      <div class="card-header">Bio / Story</div>
+      <div class="card-body">
+        <div class="bio-text">
+          <p>My name is <strong>Nicolas Losito</strong>. Inside, they call me <strong>Redbeard the Great</strong> — though the alias has had other forms. It started as a joke. I was teaching myself card tricks in my cell in late 2020, and I thought: every good magician needs a name. <em>Redbeard the Great. Coincidence? I think not.</em></p>
+
+          <div class="bio-quote">
+            "Out in the real world, I'm a junkie fuckup. In here, apparently I'm one of the smart ones. People come to me for wisdom and insight and fun facts."<br>
+            <small style="opacity:0.7;font-style:normal;">— 11/23/20</small>
+          </div>
+
+          <p>Starting in <strong>2017</strong>, I wrote letters home from inside NCDAC. Those letters became a memoir — <em>Razor Wire Feels</em> — 52 episodes across 5 parts. When they gave us tablets in 2021, the letters became texts. The format changed; the voice didn't. Each episode ends the same: <em>"This has been another episode of Razor Wire Feels, I'm your host, Redbeard the [fill in the blank]."</em></p>
+
+          <p>During the pandemic I used my COVID stimulus check to draw <em>K-Master K & The Hammer: Issue #0</em>, 26 pages. In 2022 I founded <strong>Bich Fist Comics</strong> (yes, spelled exactly like that — in reference to BC Rich Bich guitars) as the publishing arm. I also finished a short story, <em>The Ravaged</em>, 17 handwritten pages, second draft final. And I have a son, Mason, who at age 6 saw a picture of me for the first time and told his mom — proudly — <em>"My Dad comes home from prison next year."</em></p>
+
+          <p>This page is mine. It is also the template for everyone inside who deserves one.</p>
+        </div>
+        <div class="alias-label">Known aliases, in order of appearance:</div>
+        <div class="alias-strip">
+          <span class="alias-chip">the Wise</span>
+          <span class="alias-chip">the Regressor</span>
+          <span class="alias-chip">the Capitalist</span>
+          <span class="alias-chip">the Poet</span>
+          <span class="alias-chip">the Intolerant</span>
+          <span class="alias-chip">the Cannabalisticly Inclined</span>
+          <span class="alias-chip">the Paranoid</span>
+          <span class="alias-chip current">the Astronomer ✦ final</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEED -->
+    <div class="card" id="feed">
+      <div class="feed-tabs">
+        <div class="feed-tab active">Writing</div>
+        <div class="feed-tab">Artwork</div>
+        <div class="feed-tab">All Posts</div>
+      </div>
+      <div class="feed-body">
+
+        <!-- PART V -->
+        <div class="part-divider"><div class="part-divider-line"></div><span class="part-divider-label">Part V — Getting Out · 2022–2023</span><div class="part-divider-line"></div></div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Astronomer</div><div class="post-date">October 26, 2023</div></div>
+            <span class="post-type-badge final">Final Episode</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">C-Lizzle Mainizzle — Greetings from the Dungeon</div>
+            <div class="post-excerpt">The last letter. The hole again. In his final weeks. No phone, no coffee, no sunlight. Contains a full mathematical inquiry into the exact size of a dick required to choke the sun, conducted in dialogue with a CO who Googled it and came back an hour later. <em>"This has been the final incarcerated episode of Razor Wire Feels. See you soon Cuz. (a.o.T.D over)"</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART V · FINAL · a.o.T.D</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Paranoid</div><div class="post-date">March 30, 2023</div></div>
+            <span class="post-type-badge writing">Writing</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">Squeaky Pip — Solitary Confinement is the Catalyst</div>
+            <div class="post-excerpt">Back in the hole on protective custody. A stranger he'd never met walked up and handed him a freshly sharpened pencil, said he seemed like a good dude. He knew immediately what it meant. He could hear someone coaching someone else to aim for his carotid artery under his ear. He chose life. <em>"Respect from a bunch of criminals isn't gonna pay my bills or raise my son. I'm coming home."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART V · 3/30/23</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Great</div><div class="post-date">November 14, 2022</div></div>
+            <span class="post-type-badge digital">Digital</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">Mason</div>
+            <div class="post-excerpt">His son, age 6, had never seen a picture of him. His mom was showing Mason photos on her phone. He saw one and asked who that was. She said: that's your dad, he comes home from prison next year. Mason looked at his mom and said proudly: <em>"My Dad comes home from prison next year."</em> His baby mama was furious. He wrote: <em>"I'm proud of the kid for being proud of me coming home from prison."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART V · 11/14/22</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Great</div><div class="post-date">September 8, 2022</div></div>
+            <span class="post-type-badge digital">Digital</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">Bich Fist Comics — Founded</div>
+            <div class="post-excerpt">Starting a comic book company with K-Master K. Calling it Bich Fist Comics. Yes, spelled exactly like that. In reference to BC Rich Bich guitars. Already drew the logo. Purpose: to publish the comic, and then: <em>"If you want to write some comics or anything for that matter I will publish it. Who says we can't publish books too."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART V · 9/8/22</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <!-- PART IV -->
+        <div class="part-divider"><div class="part-divider-line"></div><span class="part-divider-label">Part IV — Pandemic Inside · 2020–2021</span><div class="part-divider-line"></div></div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Great</div><div class="post-date">March 27, 2022</div></div>
+            <span class="post-type-badge heavy">Grief</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">The Breaking Bad Letter — Mary Beth & Nate</div>
+            <div class="post-excerpt">He tried to watch the Breaking Bad episode where Jesse's girlfriend chokes on her vomit. He couldn't get through it. His body went into a full panic attack — hyperventilation, shaking, had to lie on the floor. <em>"That's how Mary Beth went out. Alone in her apartment. That's how Nate went out. Alone in his room. And both of them are people I introduced to this seductively numbing personal form of Hell."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART IV–V · 3/27/22</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Great</div><div class="post-date">December 4, 2021</div></div>
+            <span class="post-type-badge digital">Digital</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">The Ravaged — Finished</div>
+            <div class="post-excerpt">17 handwritten pages. Second draft done; second draft is final. Mailing it out this week. A short story about fire, suicide as choice vs. necessity, the nature of reality, and a narrator losing his grip — written entirely in the first person as a letter to the reader. <em>"I let a few people read it and they all really really liked it. And I quote — 'Yo that shit was like that!'"</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART IV · 12/4/21</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Cannabalisticly Inclined</div><div class="post-date">November 4, 2021</div></div>
+            <span class="post-type-badge digital">Digital</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">BTBAM, Vegan Toddlers, and the Transition to Digital</div>
+            <div class="post-excerpt">First digitized episode. On Between the Buried and Me's <em>Automata I</em> — <em>"Everything they do stretches the boundaries, yet still is cordoned within their borders."</em> On veganism. On being top of the food chain. Ends: <em>"Could totally go for a couple vegan toddler shish kabobs right now. No relish, please, I'm not in a pickled mood."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART IV · 11/4/21 · First Digital</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Regressor</div><div class="post-date">December 12, 2020</div></div>
+            <span class="post-type-badge writing">Writing</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">The Birth of Redbeard the Great</div>
+            <div class="post-excerpt">Guards shook down the block and took everything — 40 pairs of socks, 10 pants, 14 boxers. He goes on language regressing to cave paintings, the origin of milk, cannibalism as the first science. Then: teaching himself card tricks, 1–2 hours a day. <em>"Already have my Magician name picked out — Redbeard the Great. Coincidence? I think not."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART IV · 12/12/20 · Origin</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar">R</div>
+            <div class="post-meta"><div class="post-author">Redbeard the Wise</div><div class="post-date">November 26, 2020 — Thanksgiving</div></div>
+            <span class="post-type-badge writing">Writing</span>
+          </div>
+          <div class="post-body">
+            <div class="post-title">Gobble Gobble Motherfuckers</div>
+            <div class="post-excerpt">Thanksgiving on lockdown. The prison radio played Alice's Restaurant at the exact moment they slid his tray under the door. COVID outbreak — 166.75 hours a week trapped in the cell. One slice of turkey that thick. <em>"We came out more in the hole."</em></div>
+          </div>
+          <div class="post-footer"><span class="post-episode">PART IV · 11/26/20</span><a href="#" class="read-link">Read →</a></div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer class="page-footer">
+  <a href="/" class="back-link">← Back to Razor Wire Feels</a>
+  <div class="url-path">razorwirefeels.com/NC/1369313</div>
+  <div class="aotd">"Astronomy is an impossible science, it's a wonder we know anything at all." — Allan Sandage</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.feed-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

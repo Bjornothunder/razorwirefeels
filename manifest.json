@@ -1,0 +1,45 @@
+{
+  "name": "Razor Wire Feels",
+  "short_name": "RWF",
+  "description": "A publishing platform for incarcerated individuals. Every voice deserves to be heard.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c0392b",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["books", "news", "social"],
+  "icons": [
+    {
+      "src": "RWF_Logo_8000px.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "RWF_Logo_8000px.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Directory",
+      "short_name": "Directory",
+      "description": "Browse all inmate pages",
+      "url": "/directory.html",
+      "icons": [{ "src": "RWF_Logo_8000px.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Get Your Page",
+      "short_name": "Sign Up",
+      "description": "Request a page on Razor Wire Feels",
+      "url": "/signup.html",
+      "icons": [{ "src": "RWF_Logo_8000px.jpg", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

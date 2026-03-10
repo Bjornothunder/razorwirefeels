@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directory — Razor Wire Feels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111111;
+    --panel: #161616;
+    --border: #2a2a2a;
+    --red: #c0392b;
+    --red-dim: #7a1a10;
+    --red-glow: rgba(192,57,43,0.15);
+    --gold: #b8960c;
+    --text: #d4c9b8;
+    --text-dim: #7a7060;
+    --text-bright: #ede8df;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'Libre Baskerville', serif;
+    --type: 'Special Elite', cursive;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .nav-logo img {
+    height: 36px;
+    width: auto;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--red); }
+
+  .nav-cta {
+    background: var(--red);
+    color: white !important;
+    padding: 0.4rem 1rem !important;
+    border: none !important;
+  }
+
+  .nav-cta:hover { background: #a93226 !important; color: white !important; }
+
+  /* HEADER */
+  .dir-header {
+    padding: 4rem 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dir-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .dir-title {
+    font-family: var(--display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    color: var(--text-bright);
+    letter-spacing: 0.05em;
+    line-height: 0.95;
+    margin-bottom: 1rem;
+  }
+
+  .dir-subtitle {
+    font-family: var(--body);
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .dir-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-num {
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--red);
+    letter-spacing: 0.05em;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* SEARCH & FILTER BAR */
+  .search-bar {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+  }
+
+  .search-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-field {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-field input {
+    width: 100%;
+    background: var(--black);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    padding: 0.65rem 0.75rem 0.65rem 2.5rem;
+    outline: none;
+    transition: border-color 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .search-field input:focus { border-color: var(--red); }
+  .search-field input::placeholder { color: var(--text-dim); }
+
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--red);
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+
+  .select-filter {
+    background: var(--black);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    outline: none;
+    text-transform: uppercase;
+  }
+
+  .select-filter:focus { border-color: var(--red); }
+
+  .result-count {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* DIRECTORY GRID */
+  .dir-body {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .dir-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  /* PROFILE CARD */
+  .profile-card {
+    background: var(--deep);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+  }
+
+  .profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--red);
+    transition: height 0.3s ease;
+  }
+
+  .profile-card:hover {
+    background: var(--panel);
+  }
+
+  .profile-card:hover::before {
+    height: 100%;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .card-id {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .card-badges {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid;
+  }
+
+  .badge-writing {
+    border-color: var(--red-dim);
+    color: var(--red);
+  }
+
+  .badge-art {
+    border-color: #1a4a2a;
+    color: #4a9a6a;
+  }
+
+  .badge-new {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .badge-featured {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+
+  .card-avatar {
+    width: 52px;
+    height: 52px;
+    background: var(--black);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-size: 1.4rem;
+    color: var(--red);
+    margin-bottom: 0.75rem;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .card-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.3);
+  }
+
+  .card-info {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .card-name {
+    font-family: var(--type);
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    margin-bottom: 0.15rem;
+    line-height: 1.2;
+  }
+
+  .card-alias {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--red);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  .card-facility {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .card-excerpt {
+    font-family: var(--body);
+    font-style: italic;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    border-left: 2px solid var(--border);
+    padding-left: 0.75rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .meta-num {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-bright);
+    font-weight: 700;
+  }
+
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .card-arrow {
+    color: var(--red);
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateX(-5px);
+  }
+
+  .profile-card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    grid-column: 1 / -1;
+    background: var(--deep);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+  }
+
+  .empty-title {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-sub {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .page-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .page-btn:hover {
+    border-color: var(--red);
+    color: var(--text);
+  }
+
+  .page-btn.active {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+
+  .page-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .page-ellipsis {
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0 0.25rem;
+  }
+
+  /* GET YOUR PAGE CTA */
+  .get-page-cta {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    padding: 2.5rem 3rem;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-left {}
+
+  .cta-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-title {
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--text-bright);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-body {
+    font-family: var(--body);
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    max-width: 450px;
+    line-height: 1.7;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 2rem;
+    transition: background 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .cta-btn:hover { background: #a93226; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* LOADING STATE */
+  .card-skeleton {
+    background: var(--deep);
+    padding: 1.5rem;
+  }
+
+  .skel {
+    background: linear-gradient(90deg, var(--border) 25%, #2f2f2f 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .dir-header { padding: 2rem 1rem 1.5rem; }
+    .search-bar { padding: 1rem; }
+    .search-inner { flex-direction: column; align-items: stretch; }
+    .result-count { margin-left: 0; }
+    .dir-body { padding: 1rem; }
+    .dir-grid { grid-template-columns: 1fr; }
+    .get-page-cta { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .profile-card {
+    animation: fadeUp 0.3s ease both;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="RWF_Logo_8000px.jpg" alt="Razor Wire Feels" onerror="this.style.display='none'; this.nextSibling.style.display='block'">
+    <span style="display:none; font-family: var(--display); font-size: 1.2rem; color: var(--text-bright); letter-spacing: 0.1em;">RAZOR WIRE FEELS</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="directory.html" style="color: var(--red);">Directory</a></li>
+    <li><a href="signup.html">Get Your Page</a></li>
+    <li><a href="signup.html" class="nav-cta">Submit</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<div class="dir-header">
+  <div class="dir-eyebrow">North Carolina · NCDAC · All Facilities</div>
+  <h1 class="dir-title">VOICES<br>FROM INSIDE</h1>
+  <p class="dir-subtitle">Every person in here has a story. This is where those stories live. Browse by name, ID, or facility — or just start reading.</p>
+  <div class="dir-stats">
+    <div class="stat-item">
+      <span class="stat-num" id="stat-total">0</span>
+      <span class="stat-label">Active Pages</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="stat-episodes">0</span>
+      <span class="stat-label">Episodes Published</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="stat-art">0</span>
+      <span class="stat-label">Artwork Pieces</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="stat-facilities">47</span>
+      <span class="stat-label">NC Facilities</span>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH & FILTER -->
+<div class="search-bar">
+  <div class="search-inner">
+    <div class="search-field">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search by name or inmate ID..." autocomplete="off">
+    </div>
+    <div class="filter-group">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="writing">Writing</button>
+      <button class="filter-btn" data-filter="art">Artwork</button>
+      <button class="filter-btn" data-filter="featured">Featured</button>
+    </div>
+    <select class="select-filter" id="facilityFilter">
+      <option value="">All Facilities</option>
+      <option value="Central Prison">Central Prison</option>
+      <option value="Alexander CI">Alexander CI</option>
+      <option value="Albemarle CI">Albemarle CI</option>
+      <option value="Brown Creek CI">Brown Creek CI</option>
+      <option value="Caledonia CI">Caledonia CI</option>
+      <option value="Columbus CI">Columbus CI</option>
+      <option value="Dan River Prison Work Farm">Dan River Work Farm</option>
+      <option value="Harnett CI">Harnett CI</option>
+      <option value="Lanesboro CI">Lanesboro CI</option>
+      <option value="Maury CI">Maury CI</option>
+      <option value="Nash CI">Nash CI</option>
+      <option value="Piedmont CI">Piedmont CI</option>
+      <option value="Polk CI">Polk CI</option>
+      <option value="Randolph CI">Randolph CI</option>
+      <option value="Rutherford CI">Rutherford CI</option>
+      <option value="Sampson CI">Sampson CI</option>
+      <option value="NCCWI">NCCWI</option>
+    </select>
+    <select class="select-filter" id="sortFilter">
+      <option value="recent">Most Recent</option>
+      <option value="episodes">Most Episodes</option>
+      <option value="name">A–Z</option>
+    </select>
+    <span class="result-count" id="resultCount">— pages</span>
+  </div>
+</div>
+
+<!-- DIRECTORY BODY -->
+<div class="dir-body">
+
+  <!-- GET YOUR PAGE CTA -->
+  <div class="get-page-cta">
+    <div class="cta-left">
+      <div class="cta-eyebrow">Are you incarcerated in NC?</div>
+      <div class="cta-title">YOUR VOICE BELONGS HERE</div>
+      <p class="cta-body">Write us a letter. We'll send you a release form. Your stories, your art, your words — published and permanent. Family and friends can manage your page too.</p>
+    </div>
+    <a href="signup.html" class="cta-btn">→ Get Your Page</a>
+  </div>
+
+  <!-- GRID -->
+  <div class="dir-grid" id="profileGrid">
+    <!-- cards injected by JS -->
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination" id="pagination"></div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-text">Razor Wire Feels · North Carolina · razorwirefeels.com · Every voice deserves to be heard</p>
+</footer>
+
+<script>
+// ============================================================
+// DATA — Mock profiles. In production this loads from your DB.
+// ============================================================
+const PROFILES = [
+  {
+    id: "1369313",
+    state: "NC",
+    name: "Nicolas Losito",
+    alias: "Redbeard the Great",
+    facility: "Alexander CI",
+    types: ["writing", "art"],
+    featured: true,
+    episodes: 52,
+    artwork: 1,
+    excerpt: "I experienced COVID-19 through a radio. The world discovered lockdown in March 2020. I'd been locked down since May 2019, buried in the dungeon under the dungeon at Central Prison...",
+    joined: "2024-01",
+    updated: "2024-11"
+  },
+  {
+    id: "0847291",
+    state: "NC",
+    name: "Marcus T. Williams",
+    alias: "The Quiet Storm",
+    facility: "Central Prison",
+    types: ["writing"],
+    featured: false,
+    episodes: 14,
+    artwork: 0,
+    excerpt: "My grandmother used to say the Lord don't give you more than you can carry. I've been carrying this weight so long I can't remember what it felt like to set it down...",
+    joined: "2024-03",
+    updated: "2024-10"
+  },
+  {
+    id: "1122034",
+    state: "NC",
+    name: "DeShawn A. Prichard",
+    alias: "D-Pritch",
+    facility: "Lanesboro CI",
+    types: ["art"],
+    featured: false,
+    episodes: 0,
+    artwork: 23,
+    excerpt: "I draw to survive. Pencil on whatever paper I can get. Portraits mostly. I want people on the outside to see the faces in here.",
+    joined: "2024-05",
+    updated: "2024-11"
+  },
+  {
+    id: "0993847",
+    state: "NC",
+    name: "Raymond L. Okafor",
+    alias: null,
+    facility: "Nash CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 7,
+    artwork: 0,
+    excerpt: "Letters to my daughter. She's eight now. By the time I get home she'll be thirteen. I write so she knows I never stopped thinking about her, not one single day...",
+    joined: "2024-04",
+    updated: "2024-09"
+  },
+  {
+    id: "0765432",
+    state: "NC",
+    name: "James E. Holloway",
+    alias: "Hollow",
+    facility: "Maury CI",
+    types: ["writing", "art"],
+    featured: false,
+    episodes: 31,
+    artwork: 8,
+    excerpt: "They took my name the day they processed me in. Handed me a number and an orange jumpsuit. I've been getting my name back one page at a time ever since...",
+    joined: "2023-11",
+    updated: "2024-11"
+  },
+  {
+    id: "1204567",
+    state: "NC",
+    name: "Terrence B. Holt",
+    alias: "Big T",
+    facility: "Piedmont CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 4,
+    artwork: 0,
+    excerpt: "First time I ever wrote anything down that wasn't a confession, I was 38 years old. Never thought I had anything worth saying. Turns out I had about forty years of it...",
+    joined: "2024-08",
+    updated: "2024-10"
+  },
+  {
+    id: "0871234",
+    state: "NC",
+    name: "Angela M. Torres",
+    alias: "Angel T",
+    facility: "NCCWI",
+    types: ["writing", "art"],
+    featured: true,
+    episodes: 19,
+    artwork: 12,
+    excerpt: "People ask me what it's like being a woman in here. I tell them it's like being invisible and watched at the same time. You get used to the contradiction or it swallows you.",
+    joined: "2024-02",
+    updated: "2024-11"
+  },
+  {
+    id: "1045892",
+    state: "NC",
+    name: "Calvin J. Byers",
+    alias: null,
+    facility: "Harnett CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 9,
+    artwork: 0,
+    excerpt: "Vietnam vet in here told me the secret to surviving any bad situation is to find one thing every day that reminds you the world is still beautiful. I found mine. It's coffee.",
+    joined: "2024-06",
+    updated: "2024-08"
+  },
+  {
+    id: "1388201",
+    state: "NC",
+    name: "Darius P. Mason",
+    alias: "Pharaoh",
+    facility: "Caledonia CI",
+    types: ["art"],
+    featured: false,
+    episodes: 0,
+    artwork: 34,
+    excerpt: "I paint murals on the wall in my mind. On paper I use whatever I got — pencil, colored pencil, sometimes ballpoint pen crosshatch. Google my name when I get out.",
+    joined: "2024-01",
+    updated: "2024-11"
+  },
+  {
+    id: "0902345",
+    state: "NC",
+    name: "Michael R. Fontenot",
+    alias: "Fon",
+    facility: "Polk CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 22,
+    artwork: 0,
+    excerpt: "I'm a cook by trade. In here I write recipes I'll never get to make. Full menus. Wine pairings. I've got three notebooks full of restaurants that don't exist yet.",
+    joined: "2024-03",
+    updated: "2024-10"
+  },
+  {
+    id: "1156789",
+    state: "NC",
+    name: "Leroy K. Simmons",
+    alias: "LK",
+    facility: "Brown Creek CI",
+    types: ["writing", "art"],
+    featured: false,
+    episodes: 11,
+    artwork: 5,
+    excerpt: "My first letter to my mother from this place started 'Dear Mom, I know I disappointed you.' She wrote back and said 'Son, I'm just glad you're writing.' That changed everything.",
+    joined: "2024-02",
+    updated: "2024-09"
+  },
+  {
+    id: "1289034",
+    state: "NC",
+    name: "Roberto C. Espinoza",
+    alias: "El Profe",
+    facility: "Sampson CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 16,
+    artwork: 0,
+    excerpt: "I taught myself English in here. Started with a dictionary and a Bible because those were the only books I could get. Now I write in two languages and they both feel like home.",
+    joined: "2024-04",
+    updated: "2024-11"
+  },
+  {
+    id: "0783920",
+    state: "NC",
+    name: "Wendell A. Burke",
+    alias: "Duke",
+    facility: "Albemarle CI",
+    types: ["art"],
+    featured: false,
+    episodes: 0,
+    artwork: 18,
+    excerpt: "I draw comic books. My own characters, my own world. In my world the good guys actually win and the system actually works. It's fiction but it keeps me sane.",
+    joined: "2024-05",
+    updated: "2024-10"
+  },
+  {
+    id: "1034567",
+    state: "NC",
+    name: "Tyrone M. Garrett",
+    alias: "TG",
+    facility: "Randolph CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 6,
+    artwork: 0,
+    excerpt: "In here time moves different. A week can feel like a year and a year can feel like a week. I write to keep track of which is which. Otherwise I think I'd lose my mind completely.",
+    joined: "2024-07",
+    updated: "2024-09"
+  },
+  {
+    id: "1411203",
+    state: "NC",
+    name: "Patricia D. Washington",
+    alias: "Pat W",
+    facility: "NCCWI",
+    types: ["writing", "art"],
+    featured: false,
+    episodes: 8,
+    artwork: 9,
+    excerpt: "I paint my children's faces from memory. I'm afraid if I stop painting them I'll forget what they look like. It's been four years. I still remember every detail.",
+    joined: "2024-06",
+    updated: "2024-11"
+  },
+  {
+    id: "0923401",
+    state: "NC",
+    name: "Samuel G. Price",
+    alias: "Preacher Sam",
+    facility: "Columbus CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 28,
+    artwork: 0,
+    excerpt: "I'm not a preacher. I just got the nickname because I talk too much and too loud. But I'll tell you this — I've read the Bible cover to cover in here. And I have questions.",
+    joined: "2023-12",
+    updated: "2024-11"
+  },
+  {
+    id: "1177834",
+    state: "NC",
+    name: "Kendrick L. Davis",
+    alias: "K-Wick",
+    facility: "Dan River Prison Work Farm",
+    types: ["writing", "art"],
+    featured: false,
+    episodes: 3,
+    artwork: 6,
+    excerpt: "I came in here at 22. I'll be 29 when I leave. Those are your prime years. I'm spending mine learning to draw, learning to write, learning to be something other than what got me here.",
+    joined: "2024-09",
+    updated: "2024-11"
+  },
+  {
+    id: "0855219",
+    state: "NC",
+    name: "Harold E. Nguyen",
+    alias: "H",
+    facility: "Rutherford CI",
+    types: ["writing"],
+    featured: false,
+    episodes: 11,
+    artwork: 0,
+    excerpt: "My family is from Vietnam. They came here with nothing and built something. I had something and threw it away. I write to understand the distance between those two stories.",
+    joined: "2024-03",
+    updated: "2024-08"
+  },
+  {
+    id: "1321045",
+    state: "NC",
+    name: "Marvin T. Jones",
+    alias: "Slick",
+    facility: "Harnett CI",
+    types: ["art"],
+    featured: false,
+    episodes: 0,
+    artwork: 41,
+    excerpt: "I do portraits. You want your mother's face, your daughter's smile, the girl you left behind — I'll draw it in pencil so sharp it looks like a photograph. Just send me the reference.",
+    joined: "2024-01",
+    updated: "2024-11"
+  },
+  {
+    id: "0978123",
+    state: "NC",
+    name: "Antoine L. Robinson",
+    alias: "Ant",
+    facility: "Central Prison",
+    types: ["writing"],
+    featured: false,
+    episodes: 17,
+    artwork: 0,
+    excerpt: "I've been writing letters to my judge. Not to appeal anything. Just to tell him what his decision actually looked like from where I was standing. He's never written back. I keep writing.",
+    joined: "2024-02",
+    updated: "2024-10"
+  },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentPage = 1;
+const CARDS_PER_PAGE = 12;
+let activeFilter = 'all';
+let searchQuery = '';
+let facilityFilter = '';
+let sortMode = 'recent';
+
+// ============================================================
+// STATS COUNTER ANIMATION
+// ============================================================
+function animateCount(el, target, duration = 1500) {
+  const start = performance.now();
+  const update = (time) => {
+    const progress = Math.min((time - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target).toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+function initStats() {
+  animateCount(document.getElementById('stat-total'), PROFILES.length);
+  const totalEpisodes = PROFILES.reduce((s, p) => s + p.episodes, 0);
+  const totalArt = PROFILES.reduce((s, p) => s + p.artwork, 0);
+  animateCount(document.getElementById('stat-episodes'), totalEpisodes);
+  animateCount(document.getElementById('stat-art'), totalArt);
+}
+
+// ============================================================
+// FILTER & SEARCH
+// ============================================================
+function getFiltered() {
+  let results = [...PROFILES];
+
+  // Search
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    results = results.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.id.includes(q) ||
+      (p.alias && p.alias.toLowerCase().includes(q)) ||
+      p.facility.toLowerCase().includes(q)
+    );
+  }
+
+  // Type filter
+  if (activeFilter === 'writing') results = results.filter(p => p.types.includes('writing'));
+  if (activeFilter === 'art') results = results.filter(p => p.types.includes('art'));
+  if (activeFilter === 'featured') results = results.filter(p => p.featured);
+
+  // Facility
+  if (facilityFilter) results = results.filter(p => p.facility === facilityFilter);
+
+  // Sort
+  if (sortMode === 'episodes') results.sort((a, b) => b.episodes - a.episodes);
+  if (sortMode === 'name') results.sort((a, b) => a.name.localeCompare(b.name));
+
+  return results;
+}
+
+// ============================================================
+// CARD RENDERER
+// ============================================================
+function initials(name) {
+  return name.split(' ').map(w => w[0]).filter((_, i, a) => i === 0 || i === a.length - 1).join('');
+}
+
+function renderCard(profile, delay) {
+  const hasBoth = profile.types.includes('writing') && profile.types.includes('art');
+  const badges = [];
+  if (profile.featured) badges.push('<span class="badge badge-featured">Featured</span>');
+  if (profile.types.includes('writing')) badges.push('<span class="badge badge-writing">Writing</span>');
+  if (profile.types.includes('art')) badges.push('<span class="badge badge-art">Art</span>');
+
+  const joined = new Date(profile.joined + '-01');
+  const monthsAgo = Math.floor((new Date() - joined) / (1000 * 60 * 60 * 24 * 30));
+  if (monthsAgo <= 2) badges.push('<span class="badge badge-new">New</span>');
+
+  const pagePath = profile.id === '1369313' ? 'NC-1369313.html' : `#`;
+
+  return `
+    <a class="profile-card" href="${pagePath}" style="animation-delay: ${delay}ms">
+      <div class="card-top">
+        <span class="card-id">NC · ${profile.id}</span>
+        <div class="card-badges">${badges.join('')}</div>
+      </div>
+      <div class="card-info">
+        <div class="card-avatar">${initials(profile.name)}</div>
+        <div>
+          <div class="card-name">${profile.name}</div>
+          ${profile.alias ? `<div class="card-alias">"${profile.alias}"</div>` : ''}
+          <div class="card-facility">${profile.facility}</div>
+        </div>
+      </div>
+      <div class="card-excerpt">"${profile.excerpt}"</div>
+      <div class="card-footer">
+        <div class="card-meta">
+          ${profile.episodes > 0 ? `<div class="meta-item"><span class="meta-num">${profile.episodes}</span><span class="meta-label">Episodes</span></div>` : ''}
+          ${profile.artwork > 0 ? `<div class="meta-item"><span class="meta-num">${profile.artwork}</span><span class="meta-label">Artwork</span></div>` : ''}
+        </div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+  `;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const filtered = getFiltered();
+  const total = filtered.length;
+  const totalPages = Math.ceil(total / CARDS_PER_PAGE);
+
+  // Clamp page
+  if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+
+  const start = (currentPage - 1) * CARDS_PER_PAGE;
+  const slice = filtered.slice(start, start + CARDS_PER_PAGE);
+
+  const grid = document.getElementById('profileGrid');
+
+  if (slice.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">No pages found</div>
+        <div class="empty-sub">Try adjusting your search or filters</div>
+      </div>`;
+  } else {
+    grid.innerHTML = slice.map((p, i) => renderCard(p, i * 40)).join('');
+  }
+
+  // Result count
+  document.getElementById('resultCount').textContent =
+    `${total.toLocaleString()} page${total !== 1 ? 's' : ''}`;
+
+  // Pagination
+  renderPagination(totalPages);
+}
+
+// ============================================================
+// PAGINATION
+// ============================================================
+function renderPagination(totalPages) {
+  const pg = document.getElementById('pagination');
+  if (totalPages <= 1) { pg.innerHTML = ''; return; }
+
+  let html = '';
+
+  html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goPage(${currentPage - 1})">← Prev</button>`;
+
+  const pages = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 4) pages.push('...');
+    for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) pages.push(i);
+    if (currentPage < totalPages - 3) pages.push('...');
+    pages.push(totalPages);
+  }
+
+  pages.forEach(p => {
+    if (p === '...') {
+      html += `<span class="page-ellipsis">···</span>`;
+    } else {
+      html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goPage(${p})">${p}</button>`;
+    }
+  });
+
+  html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goPage(${currentPage + 1})">Next →</button>`;
+
+  pg.innerHTML = html;
+}
+
+function goPage(p) {
+  currentPage = p;
+  render();
+  window.scrollTo({ top: document.querySelector('.search-bar').offsetTop - 10, behavior: 'smooth' });
+}
+
+// ============================================================
+// EVENT LISTENERS
+// ============================================================
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  currentPage = 1;
+  render();
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    currentPage = 1;
+    render();
+  });
+});
+
+document.getElementById('facilityFilter').addEventListener('change', e => {
+  facilityFilter = e.target.value;
+  currentPage = 1;
+  render();
+});
+
+document.getElementById('sortFilter').addEventListener('change', e => {
+  sortMode = e.target.value;
+  currentPage = 1;
+  render();
+});
+
+// ============================================================
+// INIT
+// ============================================================
+initStats();
+render();
+</script>
+</body>
+</html>

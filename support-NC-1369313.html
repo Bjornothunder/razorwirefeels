@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support Nicolas Losito — Razor Wire Feels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111;
+    --panel: #161616;
+    --border: #2a2a2a;
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.12);
+    --gold: #b8960c;
+    --green: #27ae60;
+    --text: #d4c9b8;
+    --text-dim: #7a7060;
+    --text-bright: #ede8df;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'Libre Baskerville', serif;
+    --type: 'Special Elite', cursive;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-back {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--red); }
+
+  .nav-id {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+  }
+
+  /* HERO */
+  .support-hero {
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-inner {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .hero-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--black);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+
+  .hero-info { flex: 1; }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-name {
+    font-family: var(--type);
+    font-size: 2rem;
+    color: var(--text-bright);
+    margin-bottom: 0.25rem;
+  }
+
+  .hero-alias {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--red);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-bio {
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    max-width: 500px;
+  }
+
+  .hero-mission {
+    background: var(--red-dim);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.5rem;
+    max-width: 700px;
+  }
+
+  .mission-text {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* BODY */
+  .support-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .support-body { grid-template-columns: 1fr; }
+  }
+
+  /* SECTION */
+  .section-title {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    color: var(--text-bright);
+    letter-spacing: 0.08em;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* SHOP ITEMS */
+  .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .shop-item {
+    background: var(--deep);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: background 0.2s;
+  }
+
+  .shop-item:hover { background: var(--panel); }
+
+  .item-thumb {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--black);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .item-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.2);
+  }
+
+  .item-type-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.4rem;
+    background: var(--black);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .item-title {
+    font-family: var(--type);
+    font-size: 1rem;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+
+  .item-desc {
+    font-style: italic;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .item-price {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .buy-btn {
+    background: var(--red);
+    border: none;
+    color: white;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .buy-btn:hover { background: #a93226; }
+
+  /* COMMISSIONS */
+  .commission-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .commission-title {
+    font-family: var(--display);
+    font-size: 1.2rem;
+    color: var(--text-bright);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .commission-desc {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .commission-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .commission-opt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--black);
+    border: 1px solid var(--border);
+  }
+
+  .co-name {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .co-price {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .co-btn {
+    background: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .co-btn:hover { background: var(--red); color: white; }
+
+  /* SIDEBAR */
+  .sidebar-sticky {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* SUPPORT CARD */
+  .support-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--red);
+    overflow: hidden;
+  }
+
+  .sc-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sc-title {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    color: var(--text-bright);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+
+  .sc-sub {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    font-family: var(--mono);
+  }
+
+  .sc-body { padding: 1.25rem; }
+
+  .tier {
+    border: 1px solid var(--border);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .tier:hover { border-color: var(--red); }
+  .tier.selected { border-color: var(--red); background: var(--red-dim); }
+
+  .tier-amount {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .tier-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .tier-desc {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 0.25rem;
+    line-height: 1.5;
+  }
+
+  .tier-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--gold);
+    color: var(--black);
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .custom-amount {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .custom-input {
+    flex: 1;
+    background: var(--black);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: var(--display);
+    font-size: 1.2rem;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    letter-spacing: 0.05em;
+  }
+
+  .custom-input:focus { border-color: var(--red); }
+
+  .support-btn {
+    width: 100%;
+    background: var(--red);
+    border: none;
+    color: white;
+    font-family: var(--display);
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    padding: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 0.75rem;
+  }
+
+  .support-btn:hover { background: #a93226; }
+
+  .payment-methods {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pm {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.4rem;
+  }
+
+  .commission-note {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+    text-align: center;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* HOW IT WORKS */
+  .how-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+  }
+
+  .how-title {
+    font-family: var(--display);
+    font-size: 1rem;
+    color: var(--text-bright);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .how-step {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .how-num {
+    font-family: var(--display);
+    font-size: 1.2rem;
+    color: var(--red);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    width: 24px;
+    line-height: 1;
+    margin-top: 0.1rem;
+  }
+
+  .how-text {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* BACK TO PAGE */
+  .back-to-page {
+    display: block;
+    text-align: center;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .back-to-page:hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9990;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--green);
+    padding: 2.5rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .modal-icon { font-size: 3rem; }
+
+  .modal-title {
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--text-bright);
+    letter-spacing: 0.1em;
+  }
+
+  .modal-body {
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  .modal-close {
+    background: var(--green);
+    border: none;
+    color: white;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.75rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: #1e8449; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="NC-1369313.html" class="nav-back">← Back to Nicolas Losito's Page</a>
+  <span class="nav-id">NC · 1369313 · Support</span>
+</nav>
+
+<!-- HERO -->
+<div class="support-hero">
+  <div class="hero-inner">
+    <div class="hero-avatar">NL</div>
+    <div class="hero-info">
+      <div class="hero-eyebrow">Supporting · NC · 1369313 · NCDAC</div>
+      <div class="hero-name">Nicolas Losito</div>
+      <div class="hero-alias">"Redbeard the Great"</div>
+      <div class="hero-bio">
+        Memoir writer, comic book creator, musician. Author of <em>Razor Wire Feels</em> — 52 episodes written from solitary confinement and medium custody at Alexander CI, North Carolina.
+      </div>
+    </div>
+  </div>
+  <div class="hero-mission">
+    <p class="mission-text">
+      100% of proceeds from writing and artwork sales go directly to Nicolas. Razor Wire Feels takes a small commission to keep the platform running — so that every person inside can have a page, a voice, and a way to be heard. Thank you for supporting work that matters.
+    </p>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="support-body">
+  <div class="main-col">
+
+    <!-- SHOP: WRITING -->
+    <div class="section-title">WRITING FOR SALE</div>
+    <div class="shop-grid">
+      <div class="shop-item">
+        <div class="item-thumb">
+          📖
+          <span class="item-type-badge">Manuscript</span>
+        </div>
+        <div class="item-title">Razor Wire Feels — Complete Manuscript</div>
+        <div class="item-desc">All 52 episodes. From County Time through The Finale. The complete memoir of 6 years inside, unedited and uncensored.</div>
+        <div class="item-footer">
+          <span class="item-price">$25</span>
+          <button class="buy-btn" onclick="initPurchase('Razor Wire Feels — Complete Manuscript', 25)">Buy PDF →</button>
+        </div>
+      </div>
+
+      <div class="shop-item">
+        <div class="item-thumb">
+          🃏
+          <span class="item-type-badge">Short Story</span>
+        </div>
+        <div class="item-title">The Ridiculous Tale of Henry Savage and Lilith Flowers</div>
+        <div class="item-desc">The Cold Open. Gonzo noir. The prequel to everything. 18+ — handle with care.</div>
+        <div class="item-footer">
+          <span class="item-price">$5</span>
+          <button class="buy-btn" onclick="initPurchase('Henry Savage and Lilith Flowers', 5)">Buy PDF →</button>
+        </div>
+      </div>
+
+      <div class="shop-item">
+        <div class="item-thumb">
+          🦇
+          <span class="item-type-badge">Comic Book</span>
+        </div>
+        <div class="item-title">K-Master K & The Hammer Issue #0</div>
+        <div class="item-desc">26 pages. Stoner comedy. Created with COVID stimulus money in a 6x9 cell. The beginning of Bich Fist Comics.</div>
+        <div class="item-footer">
+          <span class="item-price">$8</span>
+          <button class="buy-btn" onclick="initPurchase('K-Master K & The Hammer Issue #0', 8)">Buy PDF →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMMISSIONS -->
+    <div class="commission-box">
+      <div class="commission-title">COMMISSIONS</div>
+      <p class="commission-desc">
+        Nicolas accepts custom writing commissions. Send a prompt, a topic, a memory you want written — he'll write it from inside and it gets posted to his page and mailed to you. Turnaround is 4–6 weeks depending on mail.
+      </p>
+      <div class="commission-options">
+        <div class="commission-opt">
+          <div>
+            <div class="co-name">Personal Essay (1–3 pages)</div>
+            <div style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem; font-style: italic;">A story, memory, or topic of your choosing</div>
+          </div>
+          <div class="co-price">$15</div>
+          <button class="co-btn" onclick="initPurchase('Commission: Personal Essay', 15)">Order</button>
+        </div>
+        <div class="commission-opt">
+          <div>
+            <div class="co-name">Poem (original, written for you)</div>
+            <div style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem; font-style: italic;">From the man who signs himself Redbeard the Poet</div>
+          </div>
+          <div class="co-price">$10</div>
+          <button class="co-btn" onclick="initPurchase('Commission: Original Poem', 10)">Order</button>
+        </div>
+        <div class="commission-opt">
+          <div>
+            <div class="co-name">Extended Piece (5–10 pages)</div>
+            <div style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem; font-style: italic;">Long-form essay, short story, or memoir piece</div>
+          </div>
+          <div class="co-price">$40</div>
+          <button class="co-btn" onclick="initPurchase('Commission: Extended Piece', 40)">Order</button>
+        </div>
+      </div>
+      <p style="font-style: italic; font-size: 0.75rem; color: var(--text-dim); line-height: 1.7;">
+        All commissions are written by hand, scanned, and published on this page. The original handwritten manuscript is mailed to you after publication. Physical originals are stored for 6 months then archived.
+      </p>
+    </div>
+
+  </div><!-- /main-col -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar-sticky">
+
+    <!-- SUPPORT CARD -->
+    <div class="support-card">
+      <div class="sc-header">
+        <div class="sc-title">SUPPORT NICOLAS</div>
+        <div class="sc-sub">Direct support · Goes to commissary fund</div>
+      </div>
+      <div class="sc-body">
+        <div class="tier selected" onclick="selectTier(this, 5)" data-amount="5">
+          <div class="tier-label">Small but real</div>
+          <div class="tier-amount">$5</div>
+          <div class="tier-desc">Covers a week of coffee. Caffeine is a survival requirement.</div>
+        </div>
+        <div class="tier" onclick="selectTier(this, 15)" data-amount="15">
+          <div class="tier-label">Keeps the ink flowing</div>
+          <div class="tier-amount">$15</div>
+          <div class="tier-badge">Most Popular</div>
+          <div class="tier-desc">Paper, stamps, a new pen. The raw materials of everything you're reading.</div>
+        </div>
+        <div class="tier" onclick="selectTier(this, 30)" data-amount="30">
+          <div class="tier-label">Full supporter</div>
+          <div class="tier-amount">$30</div>
+          <div class="tier-desc">A month of canteen. Means he can eat and write at the same time.</div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.75rem 0; font-family: var(--mono); font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em;">
+          <div style="flex: 1; height: 1px; background: var(--border);"></div>
+          or
+          <div style="flex: 1; height: 1px; background: var(--border);"></div>
+        </div>
+
+        <div class="custom-amount">
+          <span style="font-family: var(--display); font-size: 1.4rem; color: var(--text-dim); align-self: center;">$</span>
+          <input type="number" class="custom-input" id="customAmount" min="1" placeholder="Other" oninput="setCustomAmount(this.value)">
+        </div>
+
+        <button class="support-btn" onclick="initSupport()">SUPPORT NICOLAS →</button>
+
+        <div class="payment-methods">
+          <span class="pm">Venmo</span>
+          <span class="pm">PayPal</span>
+          <span class="pm">Cash App</span>
+          <span class="pm">Credit Card</span>
+        </div>
+
+        <div class="commission-note">
+          Razor Wire Feels retains 15% to keep the platform free for all incarcerated writers. The rest goes directly to Nicolas.
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-card">
+      <div class="how-title">HOW PURCHASES WORK</div>
+      <div class="how-step">
+        <span class="how-num">1</span>
+        <span class="how-text">You purchase writing or artwork through this page via secure checkout.</span>
+      </div>
+      <div class="how-step">
+        <span class="how-num">2</span>
+        <span class="how-text">Digital files (PDFs, scans) are delivered instantly by email.</span>
+      </div>
+      <div class="how-step">
+        <span class="how-num">3</span>
+        <span class="how-text">Original physical manuscripts and artwork are stored for 6 months and can be mailed to you on request.</span>
+      </div>
+      <div class="how-step">
+        <span class="how-num">4</span>
+        <span class="how-text">Commission orders are written from inside and posted to this page first, then mailed to you. 4–6 week turnaround.</span>
+      </div>
+      <div class="how-step">
+        <span class="how-num">5</span>
+        <span class="how-text">Direct support goes to Nicolas's commissary fund via money order at his institution.</span>
+      </div>
+    </div>
+
+    <a href="NC-1369313.html" class="back-to-page">← Read Nicolas's Episodes</a>
+
+  </div><!-- /sidebar -->
+</div><!-- /support-body -->
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon">✊</div>
+    <div class="modal-title">THANK YOU</div>
+    <div class="modal-body" id="modalBody">
+      Your support means more than you know. Every dollar, every purchase, every reader — it tells someone inside that somebody out there gives a damn.
+    </div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+let selectedAmount = 5;
+
+function selectTier(el, amount) {
+  document.querySelectorAll('.tier').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAmount = amount;
+  document.getElementById('customAmount').value = '';
+}
+
+function setCustomAmount(val) {
+  document.querySelectorAll('.tier').forEach(t => t.classList.remove('selected'));
+  selectedAmount = parseFloat(val) || 0;
+}
+
+function initSupport() {
+  if (selectedAmount <= 0) return;
+  // In production: open Stripe/PayPal/Venmo checkout
+  // For now: show thank you modal
+  document.getElementById('modalBody').textContent =
+    `Your $${selectedAmount} support for Nicolas is being processed. This goes directly to his commissary fund. Every single dollar matters.`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function initPurchase(item, price) {
+  // In production: open checkout with item + price
+  document.getElementById('modalBody').textContent =
+    `You're purchasing "${item}" for $${price}. In the full platform, this opens secure checkout. The file will be delivered to your email and a portion goes directly to Nicolas.`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// Close on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>

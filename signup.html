@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Your Free Page — Razor Wire Feels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --deep: #111111;
+    --panel: #161616;
+    --panel2: #1c1c1c;
+    --border: #2a2a2a;
+    --border2: #333;
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.12);
+    --gold: #b8960c;
+    --green: #27ae60;
+    --green-dim: rgba(39,174,96,0.1);
+    --text: #d4c9b8;
+    --text-dim: #7a7060;
+    --text-bright: #ede8df;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'Libre Baskerville', serif;
+    --type: 'Special Elite', cursive;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center; gap: 0.75rem; text-decoration: none;
+  }
+
+  .nav-brand img { height: 36px; width: auto; }
+
+  .nav-brand-text {
+    font-family: var(--display); font-size: 1.2rem;
+    color: var(--text-bright); letter-spacing: 0.1em;
+  }
+
+  .nav-brand-text span { color: var(--red); }
+
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+  /* ═══════════════════════════════════
+     HERO — BIG BOLD NEWSPAPER AD ENERGY
+  ═══════════════════════════════════ */
+  .hero {
+    background: var(--deep);
+    border-bottom: 4px solid var(--red);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Background texture lines */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.015) 40px,
+      rgba(255,255,255,0.015) 41px
+    );
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.65rem; letter-spacing: 0.4em;
+    color: var(--red); text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: inline-flex; align-items: center; gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: ''; width: 40px; height: 1px; background: var(--red);
+  }
+
+  .hero-headline {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    color: var(--text-bright);
+    letter-spacing: 0.03em;
+    line-height: 0.9;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-headline .red { color: var(--red); }
+
+  .hero-sub {
+    font-family: var(--display);
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .hero-rule {
+    width: 80px; height: 3px; background: var(--red);
+    margin: 0 auto 2rem;
+  }
+
+  .hero-tagline {
+    font-family: var(--body);
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text);
+    line-height: 1.8;
+    max-width: 650px;
+    margin: 0 auto 3rem;
+  }
+
+  /* AUDIENCE TOGGLE */
+  .audience-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border2);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .aud-btn {
+    font-family: var(--mono);
+    font-size: 0.68rem; letter-spacing: 0.15em;
+    text-transform: uppercase; padding: 0.75rem 1.75rem;
+    cursor: pointer; transition: all 0.2s;
+    background: transparent; border: none;
+    color: var(--text-dim);
+    border-right: 1px solid var(--border2);
+  }
+
+  .aud-btn:last-child { border-right: none; }
+
+  .aud-btn.active {
+    background: var(--red); color: white;
+  }
+
+  .aud-btn:hover:not(.active) {
+    background: var(--panel2); color: var(--text);
+  }
+
+  .aud-label {
+    font-family: var(--mono); font-size: 0.58rem;
+    letter-spacing: 0.15em; color: var(--text-dim);
+    text-transform: uppercase; display: block;
+    margin-top: 0.5rem;
+  }
+
+  /* ═══════════════════════════════════
+     CONTENT SECTIONS
+  ═══════════════════════════════════ */
+  .content-wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* INSIDE SECTION — for incarcerated individuals */
+  .inside-section {
+    padding: 5rem 0;
+  }
+
+  .section-kicker {
+    font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.35em; color: var(--red);
+    text-transform: uppercase; margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .section-kicker::after {
+    content: ''; flex: 1; max-width: 60px;
+    height: 1px; background: var(--red);
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--text-bright); letter-spacing: 0.05em;
+    line-height: 0.95; margin-bottom: 1.5rem;
+  }
+
+  .section-intro {
+    font-style: italic; font-size: 1.05rem;
+    color: var(--text); line-height: 1.9;
+    max-width: 620px; margin-bottom: 3rem;
+    border-left: 3px solid var(--red);
+    padding-left: 1.25rem;
+  }
+
+  /* ═══════════════════════════════════
+     THE LETTER FORMAT — key visual
+  ═══════════════════════════════════ */
+  .letter-format {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--red);
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .letter-format-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .lf-badge {
+    background: var(--red); color: white;
+    font-family: var(--mono); font-size: 0.55rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+  }
+
+  .lf-title {
+    font-family: var(--display); font-size: 1rem;
+    color: var(--text-bright); letter-spacing: 0.1em;
+  }
+
+  .letter-body {
+    padding: 2rem 2.5rem;
+    font-family: var(--type);
+    font-size: 0.95rem; line-height: 2.1;
+    color: var(--text-bright);
+    background: repeating-linear-gradient(
+      transparent,
+      transparent 41px,
+      rgba(255,255,255,0.03) 41px,
+      rgba(255,255,255,0.03) 42px
+    );
+    min-height: 200px;
+  }
+
+  .letter-field {
+    border-bottom: 1px dashed var(--border2);
+    color: var(--text);
+    display: inline-block; min-width: 200px;
+  }
+
+  .letter-field.filled {
+    color: var(--red); border-bottom-color: var(--red);
+    font-style: italic;
+  }
+
+  .letter-note {
+    background: var(--red-dim); border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--text-dim); letter-spacing: 0.06em; line-height: 1.8;
+  }
+
+  /* ═══════════════════════════════════
+     WHAT YOU GET
+  ═══════════════════════════════════ */
+  .what-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .what-item {
+    background: var(--deep); padding: 1.75rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+
+  .what-icon {
+    font-size: 1.75rem; line-height: 1;
+  }
+
+  .what-title {
+    font-family: var(--display); font-size: 1rem;
+    color: var(--text-bright); letter-spacing: 0.08em;
+  }
+
+  .what-desc {
+    font-style: italic; font-size: 0.8rem;
+    color: var(--text-dim); line-height: 1.7;
+  }
+
+  .what-tag {
+    display: inline-block; margin-top: auto;
+    font-family: var(--mono); font-size: 0.55rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.2rem 0.5rem; border: 1px solid;
+  }
+
+  .tag-free { border-color: var(--green); color: var(--green); }
+  .tag-paid { border-color: var(--gold); color: var(--gold); }
+
+  /* ═══════════════════════════════════
+     PRICING
+  ═══════════════════════════════════ */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+  .pricing-card {
+    background: var(--deep); padding: 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    position: relative;
+  }
+
+  .pricing-card.featured { background: var(--panel); }
+
+  .pricing-badge {
+    position: absolute; top: 1.25rem; right: 1.25rem;
+    background: var(--gold); color: var(--black);
+    font-family: var(--mono); font-size: 0.5rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .pricing-tier {
+    font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.25em; color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .pricing-price {
+    font-family: var(--display);
+    font-size: 3rem; color: var(--text-bright);
+    letter-spacing: 0.05em; line-height: 1;
+  }
+
+  .pricing-price .per {
+    font-size: 1rem; color: var(--text-dim); letter-spacing: 0.1em;
+  }
+
+  .pricing-price.free-color { color: var(--green); }
+  .pricing-price.paid-color { color: var(--gold); }
+
+  .pricing-desc {
+    font-style: italic; font-size: 0.82rem;
+    color: var(--text-dim); line-height: 1.7;
+  }
+
+  .pricing-features {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+
+  .pf-item {
+    display: flex; align-items: flex-start; gap: 0.5rem;
+    font-size: 0.78rem; color: var(--text); line-height: 1.5;
+  }
+
+  .pf-check { color: var(--green); flex-shrink: 0; font-family: var(--mono); }
+  .pf-x { color: var(--text-dim); flex-shrink: 0; font-family: var(--mono); }
+  .pf-dim { color: var(--text-dim); }
+
+  /* ═══════════════════════════════════
+     MAIL ADDRESS — THE KEY INFO
+  ═══════════════════════════════════ */
+  .mail-address-box {
+    background: var(--panel);
+    border: 2px solid var(--red);
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    margin-bottom: 3rem;
+  }
+
+  .mail-address-box::before {
+    content: '✉';
+    position: absolute; top: -1rem; left: 50%;
+    transform: translateX(-50%);
+    background: var(--red); color: white;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+
+  .mab-eyebrow {
+    font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.3em; color: var(--text-dim);
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+
+  .mab-address {
+    font-family: var(--type);
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--text-bright); line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .mab-note {
+    font-family: var(--mono); font-size: 0.62rem;
+    color: var(--text-dim); letter-spacing: 0.08em;
+    line-height: 1.8; max-width: 400px; margin: 0 auto;
+  }
+
+  /* ═══════════════════════════════════
+     STEPS TIMELINE
+  ═══════════════════════════════════ */
+  .steps {
+    display: flex; flex-direction: column;
+    gap: 0; margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute; left: 23px; top: 24px;
+    bottom: 24px; width: 2px; background: var(--border);
+  }
+
+  .step-row {
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    padding: 0 0 2rem;
+    position: relative;
+  }
+
+  .step-row:last-child { padding-bottom: 0; }
+
+  .step-num-circle {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: var(--black); border: 2px solid var(--red);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 1.3rem;
+    color: var(--red); letter-spacing: 0.05em;
+    position: relative; z-index: 1;
+  }
+
+  .step-content { padding-top: 0.4rem; }
+
+  .step-title {
+    font-family: var(--display); font-size: 1.1rem;
+    color: var(--text-bright); letter-spacing: 0.08em;
+    margin-bottom: 0.35rem;
+  }
+
+  .step-desc {
+    font-style: italic; font-size: 0.82rem;
+    color: var(--text-dim); line-height: 1.7;
+    max-width: 520px;
+  }
+
+  .step-note {
+    display: inline-block; margin-top: 0.5rem;
+    font-family: var(--mono); font-size: 0.58rem;
+    letter-spacing: 0.1em; color: var(--text-dim);
+    border-left: 2px solid var(--border);
+    padding-left: 0.5rem;
+  }
+
+  /* ═══════════════════════════════════
+     FAMILY/FRIENDS SECTION
+  ═══════════════════════════════════ */
+  .family-section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    padding: 2.5rem; margin-bottom: 3rem;
+  }
+
+  .fs-eyebrow {
+    font-family: var(--mono); font-size: 0.58rem;
+    letter-spacing: 0.3em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 0.75rem;
+  }
+
+  .fs-title {
+    font-family: var(--display); font-size: 1.8rem;
+    color: var(--text-bright); letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+  }
+
+  .fs-body {
+    font-style: italic; font-size: 0.9rem;
+    color: var(--text); line-height: 1.9;
+    max-width: 580px; margin-bottom: 1.5rem;
+  }
+
+  .fs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .fs-item {
+    background: var(--black); border: 1px solid var(--border);
+    padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;
+  }
+
+  .fs-item-title {
+    font-family: var(--mono); font-size: 0.65rem;
+    letter-spacing: 0.12em; color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .fs-item-desc {
+    font-style: italic; font-size: 0.78rem;
+    color: var(--text-dim); line-height: 1.6;
+  }
+
+  /* ═══════════════════════════════════
+     RELEASE FORM PREVIEW
+  ═══════════════════════════════════ */
+  .release-preview {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .rp-header {
+    padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .rp-title {
+    font-family: var(--display); font-size: 1rem;
+    color: var(--text-bright); letter-spacing: 0.1em;
+  }
+
+  .rp-body {
+    padding: 2rem 2.5rem;
+    font-family: var(--type);
+    font-size: 0.88rem; line-height: 2.2;
+    color: var(--text);
+  }
+
+  .rp-field-row {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-bottom: 0.5rem; align-items: baseline;
+  }
+
+  .rp-label {
+    font-family: var(--mono); font-size: 0.6rem;
+    letter-spacing: 0.12em; color: var(--text-dim);
+    text-transform: uppercase; flex-shrink: 0;
+  }
+
+  .rp-line {
+    border-bottom: 1px solid var(--border2);
+    flex: 1; min-width: 120px;
+  }
+
+  .rp-checkbox-row {
+    display: flex; gap: 0.5rem; align-items: center;
+    margin: 0.5rem 0;
+  }
+
+  .rp-box {
+    width: 14px; height: 14px; border: 1px solid var(--border2);
+    display: inline-block; flex-shrink: 0;
+  }
+
+  .rp-checkbox-label { font-size: 0.82rem; color: var(--text); }
+
+  .rp-legal {
+    background: var(--black); border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    font-family: var(--mono); font-size: 0.58rem;
+    color: var(--text-dim); letter-spacing: 0.05em; line-height: 1.8;
+  }
+
+  /* ═══════════════════════════════════
+     FAQ
+  ═══════════════════════════════════ */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .faq-item:last-child { border-bottom: none; }
+
+  .faq-q {
+    padding: 1.25rem 1.5rem;
+    font-family: var(--mono); font-size: 0.72rem;
+    letter-spacing: 0.08em; color: var(--text-bright);
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: space-between; gap: 1rem;
+    transition: background 0.15s; user-select: none;
+  }
+
+  .faq-q:hover { background: var(--panel2); }
+
+  .faq-q.open { color: var(--red); background: var(--panel); }
+
+  .faq-arrow {
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--text-dim); transition: transform 0.2s; flex-shrink: 0;
+  }
+
+  .faq-q.open .faq-arrow { transform: rotate(90deg); color: var(--red); }
+
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    font-style: italic; font-size: 0.85rem;
+    color: var(--text-dim); line-height: 1.8;
+    background: var(--panel);
+    padding: 0 1.5rem;
+  }
+
+  .faq-a.open {
+    max-height: 300px;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ═══════════════════════════════════
+     MISSION STATEMENT
+  ═══════════════════════════════════ */
+  .mission-block {
+    background: var(--deep);
+    border-top: 4px solid var(--red);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem; text-align: center;
+    margin: 0 -2rem 3rem;
+  }
+
+  .mission-quote {
+    font-family: var(--type);
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    color: var(--text-bright); line-height: 1.7;
+    max-width: 700px; margin: 0 auto 1.5rem;
+  }
+
+  .mission-attr {
+    font-family: var(--mono); font-size: 0.62rem;
+    color: var(--red); letter-spacing: 0.2em; text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════
+     PRINT AD REPLICA
+  ═══════════════════════════════════ */
+  .ad-replica {
+    background: #f5f0e8;
+    border: 3px solid #1a1a1a;
+    padding: 2rem;
+    max-width: 400px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    position: relative;
+    color: #1a1a1a;
+  }
+
+  .ad-replica::before {
+    content: 'AS SEEN IN PRINT';
+    position: absolute; top: -0.8rem; left: 50%; transform: translateX(-50%);
+    background: var(--red); color: white;
+    font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 0.2rem 0.75rem;
+    white-space: nowrap;
+  }
+
+  .ad-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem; letter-spacing: 0.05em;
+    color: #1a1a1a; line-height: 1; margin-bottom: 0.5rem;
+  }
+
+  .ad-headline .ad-red { color: var(--red); }
+
+  .ad-rule { width: 100%; height: 2px; background: #1a1a1a; margin: 0.75rem 0; }
+  .ad-thin-rule { width: 100%; height: 1px; background: #888; margin: 0.5rem 0; }
+
+  .ad-body {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.85rem; line-height: 1.7;
+    color: #333; margin-bottom: 0.75rem;
+  }
+
+  .ad-free {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; color: var(--red);
+    letter-spacing: 0.1em; margin-bottom: 0.5rem;
+  }
+
+  .ad-what {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.05em;
+    color: #333; line-height: 1.8;
+    margin-bottom: 0.75rem;
+  }
+
+  .ad-address-box {
+    background: #1a1a1a; color: #f5f0e8;
+    padding: 0.75rem 1rem; margin: 0.75rem 0;
+    font-family: 'Special Elite', cursive;
+    font-size: 0.92rem; line-height: 1.7;
+  }
+
+  .ad-fine {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.52rem; color: #888;
+    letter-spacing: 0.05em; line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════ */
+  @media (max-width: 768px) {
+    nav { padding: 0 1rem; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+    .content-wrap { padding: 0 1rem; }
+    .inside-section { padding: 3rem 0; }
+    .letter-body { padding: 1.25rem; }
+    .mission-block { padding: 3rem 1rem; margin: 0 -1rem 2rem; }
+    .steps::before { left: 20px; }
+  }
+
+  /* AUDIENCE SECTIONS */
+  .audience-content { display: none; }
+  .audience-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="RWF_Logo_8000px.jpg" alt="Razor Wire Feels"
+      onerror="this.style.display='none'; this.nextSibling.style.display='block'">
+    <span style="display:none" class="nav-brand-text">RAZOR WIRE <span>FEELS</span></span>
+    <span class="nav-brand-text">RAZOR WIRE <span>FEELS</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="rwf-auth-slot"></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">North Carolina · NCDAC · All Facilities</div>
+  <h1 class="hero-headline">
+    GET YOUR<br>
+    <span class="red">FREE PAGE</span>
+  </h1>
+  <div class="hero-sub">Your words. Your art. Your voice.</div>
+  <div class="hero-rule"></div>
+  <p class="hero-tagline">
+    Razor Wire Feels is a publishing platform for incarcerated individuals across North Carolina. Write to us. We'll build your page. Your episodes, your artwork, and your story — published online and permanent.
+  </p>
+
+  <!-- AUDIENCE TOGGLE -->
+  <div style="text-align:center;">
+    <div class="audience-toggle">
+      <button class="aud-btn active" onclick="switchAudience('inside', this)">I'm Inside</button>
+      <button class="aud-btn" onclick="switchAudience('family', this)">I'm Family or Friends</button>
+    </div>
+    <span class="aud-label" id="audLabel">Showing instructions for incarcerated individuals</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CONTENT WRAP
+══════════════════════════════════════ -->
+<div class="content-wrap">
+
+  <!-- ════════════════════════════
+       INSIDE — FOR INCARCERATED INDIVIDUALS
+  ════════════════════════════ -->
+  <div class="audience-content active" id="content-inside">
+
+    <div class="inside-section">
+      <div class="section-kicker">If you're inside</div>
+      <h2 class="section-title">HERE'S EXACTLY<br>WHAT TO DO</h2>
+      <p class="section-intro">
+        You saw our ad. You want a page. Here's all you need to do — write us a letter. That's it. We handle everything else from the outside.
+      </p>
+
+      <!-- THE ADDRESS -->
+      <div class="mail-address-box">
+        <div class="mab-eyebrow">Send your letter to</div>
+        <div class="mab-address">
+          Razor Wire Feels<br>
+          PO Box [NUMBER]<br>
+          [CITY], NC [ZIP]
+        </div>
+        <div class="mab-note">
+          Standard mail only. Include your full legal name, inmate ID, and the facility you're currently housed at. No stamps required for initial inquiry — legal mail postage applies.
+        </div>
+      </div>
+
+      <!-- WHAT TO WRITE -->
+      <div style="margin-bottom:1rem;">
+        <div class="section-kicker" style="font-size:0.55rem;">What to include in your letter</div>
+        <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:1.5rem;">YOUR FIRST LETTER</h3>
+      </div>
+
+      <div class="letter-format">
+        <div class="letter-format-header">
+          <span class="lf-badge">Template</span>
+          <span class="lf-title">What your letter should say</span>
+        </div>
+        <div class="letter-body">
+          <p style="margin-bottom:1rem;">
+            Razor Wire Feels,
+          </p>
+          <p style="margin-bottom:0.75rem;">
+            My name is <span class="letter-field filled">Your Full Legal Name</span>.
+            My inmate ID is <span class="letter-field filled">Your Number</span>.
+            I am currently housed at <span class="letter-field filled">Your Facility</span>.
+          </p>
+          <p style="margin-bottom:0.75rem;">
+            I am writing to request a free page on Razor Wire Feels.
+            I would like to share my
+            <span class="letter-field">writing / artwork / both</span>.
+          </p>
+          <p style="margin-bottom:0.75rem;">
+            I go by <span class="letter-field">your name or alias</span>.
+          </p>
+          <p style="margin-bottom:0.75rem;">
+            Please send me a release form so I can authorize you to publish my work.
+          </p>
+          <p style="margin-bottom:1.5rem;">
+            I would also like <span class="letter-field">family member's name</span>
+            to be able to manage my page. Their email is
+            <span class="letter-field">their email address</span>. *(optional)
+          </p>
+          <p>
+            Thank you,<br><br>
+            <span class="letter-field filled">Your Signature</span>
+          </p>
+        </div>
+        <div class="letter-note">
+          That's the whole letter. Keep it short. We just need your name, ID, facility, and what you want to share. Everything else gets sorted when we send you the release form. You can also include writing or artwork with your first letter if you want — we'll scan it and hold it until your page is set up.
+        </div>
+      </div>
+
+      <!-- HOW IT WORKS STEPS -->
+      <div style="margin-bottom:1.5rem;">
+        <div class="section-kicker" style="font-size:0.55rem;">The full process</div>
+        <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:1.5rem;">WHAT HAPPENS NEXT</h3>
+      </div>
+
+      <div class="steps">
+        <div class="step-row">
+          <div class="step-num-circle">1</div>
+          <div class="step-content">
+            <div class="step-title">YOU WRITE US A LETTER</div>
+            <div class="step-desc">Send it to our PO Box. Tell us your name, ID, facility, and what you want to share — writing, artwork, or both. Include anything you want published with your first letter if you've got it ready.</div>
+            <span class="step-note">Turnaround: we respond within 2 weeks of receiving your letter</span>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num-circle">2</div>
+          <div class="step-content">
+            <div class="step-title">WE SEND YOU A RELEASE FORM</div>
+            <div class="step-desc">We mail you a simple one-page release form authorizing Razor Wire Feels to scan, publish, and manage your work on your behalf. Sign it, mail it back. If you named a family member or friend to manage your page, we'll send them a separate authorization form too.</div>
+            <span class="step-note">We keep originals on file. You retain all rights to your work.</span>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num-circle">3</div>
+          <div class="step-content">
+            <div class="step-title">YOUR PAGE GOES LIVE</div>
+            <div class="step-desc">Once your release form is back, your page is live at razorwirefeels.com/NC/[your-ID]. We scan every letter or artwork you send us, run it through our system, and publish both the original scan and the text. Your page is permanent and public.</div>
+            <span class="step-note">URL format: razorwirefeels.com/NC/1369313</span>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num-circle">4</div>
+          <div class="step-content">
+            <div class="step-title">KEEP SENDING — WE KEEP PUBLISHING</div>
+            <div class="step-desc">Your free page includes 5 episodes or artwork pieces per month. Every time you mail us something, we publish it. People on the outside can subscribe to your page and get an email the moment something new goes up. They can like, comment, and share your work.</div>
+            <span class="step-note">Free tier: 5 pages/month · Paid tier ($10/month): unlimited</span>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num-circle">5</div>
+          <div class="step-content">
+            <div class="step-title">SELL YOUR WORK</div>
+            <div class="step-desc">If you want to sell your writing, artwork, or accept commissions, we set up a store on your page. Every sale goes to you. We hold physical originals for 6 months — buyers can request them mailed directly. We take a 15% platform commission to keep the lights on.</div>
+            <span class="step-note">You set the prices. You keep 85%.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHAT YOU GET -->
+      <div style="margin-bottom:1.5rem;">
+        <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:0.25rem;">WHAT YOU GET</h3>
+        <p style="font-family:var(--mono); font-size:0.62rem; color:var(--text-dim); letter-spacing:0.1em;">On the free tier</p>
+      </div>
+
+      <div class="what-grid">
+        <div class="what-item">
+          <div class="what-icon">📄</div>
+          <div class="what-title">YOUR OWN PAGE</div>
+          <div class="what-desc">A permanent public page at razorwirefeels.com/NC/[your ID]. Yours. With your name, your alias, your bio, and everything you've written or made.</div>
+          <span class="what-tag tag-free">Free</span>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">📝</div>
+          <div class="what-title">5 EPISODES/MONTH</div>
+          <div class="what-desc">Send us up to 5 letters or artwork pieces per month. We scan, OCR, and publish each one — both the original image and the extracted text.</div>
+          <span class="what-tag tag-free">Free</span>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">🔔</div>
+          <div class="what-title">SUBSCRIBER ALERTS</div>
+          <div class="what-desc">Every time you publish, your subscribers get an email bringing them straight to your new piece. Build a readership. Write a serial. People will follow your story.</div>
+          <span class="what-tag tag-free">Free</span>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">♥</div>
+          <div class="what-title">LIKES & COMMENTS</div>
+          <div class="what-desc">Readers can like and comment on everything you post. Your work stays in a conversation with the world. You'll know people are reading.</div>
+          <span class="what-tag tag-free">Free</span>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">🛍</div>
+          <div class="what-title">A STORE</div>
+          <div class="what-desc">Sell your writing, artwork, and commissions. Set your own prices. We handle the transactions and send you the money via money order to your institution.</div>
+          <span class="what-tag tag-free">Free to set up</span>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">∞</div>
+          <div class="what-title">UNLIMITED ON PAID</div>
+          <div class="what-desc">$10/month sent as a money order unlocks unlimited pages per month. For writers who can't stop. Which is the point.</div>
+          <span class="what-tag tag-paid">$10/mo</span>
+        </div>
+      </div>
+
+      <!-- PRICING -->
+      <div style="margin-bottom:1.5rem;">
+        <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:0.25rem;">TIERS</h3>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier">Free Tier</div>
+          <div class="pricing-price free-color">FREE <span class="per">/ always</span></div>
+          <div class="pricing-desc">Start here. No cost. No catch. Just mail us a letter.</div>
+          <div class="pricing-features">
+            <div class="pf-item"><span class="pf-check">✓</span> Your own permanent page</div>
+            <div class="pf-item"><span class="pf-check">✓</span> 5 episodes or artwork/month</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Subscriber email alerts</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Likes, comments</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Store for your work</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Family/friend management</div>
+            <div class="pf-item pf-dim"><span class="pf-x">—</span> More than 5 pages/month</div>
+          </div>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most Productive</div>
+          <div class="pricing-tier">Paid Tier</div>
+          <div class="pricing-price paid-color">$10 <span class="per">/ month</span></div>
+          <div class="pricing-desc">For writers who write every day. Send us as much as you want — we publish all of it.</div>
+          <div class="pricing-features">
+            <div class="pf-item"><span class="pf-check">✓</span> Everything in Free</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Unlimited pages/month</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Priority processing</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Serialized series formatting</div>
+            <div class="pf-item"><span class="pf-check">✓</span> Extended physical archive (12 months)</div>
+            <div style="margin-top:0.75rem; font-family:var(--mono); font-size:0.6rem; color:var(--text-dim); letter-spacing:0.08em;">
+              Pay via money order to PO Box. Include your inmate ID on the memo line.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RELEASE FORM PREVIEW -->
+      <div style="margin-bottom:1.5rem;">
+        <div class="section-kicker" style="font-size:0.55rem;">What we'll send you</div>
+        <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:1.5rem;">THE RELEASE FORM</h3>
+      </div>
+
+      <div class="release-preview">
+        <div class="rp-header">
+          <span class="lf-badge">Form Preview</span>
+          <span class="rp-title">RWF Content Release & Authorization</span>
+        </div>
+        <div class="rp-body">
+          <div style="text-align:center; margin-bottom:1.5rem;">
+            <div style="font-family:var(--display); font-size:1.5rem; letter-spacing:0.1em; color:var(--text-bright);">RAZOR WIRE FEELS</div>
+            <div style="font-family:var(--mono); font-size:0.6rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Content Release & Publication Authorization</div>
+          </div>
+
+          <p style="margin-bottom:1.25rem;">I, <span style="border-bottom:1px dashed #555; min-width:200px; display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>, NCDAC #<span style="border-bottom:1px dashed #555; min-width:120px; display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>, currently housed at <span style="border-bottom:1px dashed #555; min-width:160px; display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>, hereby authorize Razor Wire Feels to:</p>
+
+          <div class="rp-checkbox-row"><div class="rp-box"></div><span class="rp-checkbox-label">Scan, digitize, and publish my handwritten letters and written work</span></div>
+          <div class="rp-checkbox-row"><div class="rp-box"></div><span class="rp-checkbox-label">Scan and publish my original artwork</span></div>
+          <div class="rp-checkbox-row"><div class="rp-box"></div><span class="rp-checkbox-label">Create and maintain a public page on razorwirefeels.com on my behalf</span></div>
+          <div class="rp-checkbox-row"><div class="rp-box"></div><span class="rp-checkbox-label">Accept payment for sales of my work and remit to me via money order</span></div>
+          <div class="rp-checkbox-row"><div class="rp-box"></div><span class="rp-checkbox-label">Allow the following individual to manage my account: <span style="border-bottom:1px dashed #555; min-width:180px; display:inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></div>
+
+          <p style="margin-top:1.25rem; margin-bottom:0.5rem; font-size:0.8rem;">I retain all intellectual property rights to my work. This authorization may be revoked at any time in writing.</p>
+
+          <div class="rp-field-row" style="margin-top:1.5rem;">
+            <span class="rp-label">Signature</span><div class="rp-line"></div>
+            <span class="rp-label">Date</span><div class="rp-line" style="max-width:120px;"></div>
+          </div>
+        </div>
+        <div class="rp-legal">
+          This is a preview. We mail you the actual form after receiving your initial letter. You retain all rights to your work. Razor Wire Feels publishes on your behalf only — we do not claim ownership of any content. Physical originals are stored for 6 months then destroyed unless you request return or extended storage.
+        </div>
+      </div>
+
+    </div><!-- /inside-section -->
+  </div><!-- /content-inside -->
+
+  <!-- ════════════════════════════
+       FAMILY & FRIENDS SECTION
+  ════════════════════════════ -->
+  <div class="audience-content" id="content-family">
+    <div class="inside-section">
+      <div class="section-kicker">For family and friends</div>
+      <h2 class="section-title">SET UP A PAGE<br>FOR SOMEONE INSIDE</h2>
+      <p class="section-intro">
+        If someone you love is incarcerated and you want to help them get their voice out — you can set up and manage their page from the outside. Here's how.
+      </p>
+
+      <div class="family-section">
+        <div class="fs-eyebrow">Family & Friend Account Management</div>
+        <div class="fs-title">YOU CAN RUN THEIR PAGE</div>
+        <p class="fs-body">
+          Razor Wire Feels supports outside management of inmate pages. You scan and upload their letters and artwork, post on their behalf, manage their store, and handle any communication. All they need to do is mail you their work and sign a release form authorizing you.
+        </p>
+        <div class="fs-grid">
+          <div class="fs-item">
+            <div class="fs-item-title">How to Start</div>
+            <div class="fs-item-desc">Create a free supporter account on this site. Then use the contact form below to request a family/friend management authorization for your loved one's page.</div>
+          </div>
+          <div class="fs-item">
+            <div class="fs-item-title">The Release Form</div>
+            <div class="fs-item-desc">We mail a release form to your loved one inside. They sign it authorizing you to manage their page. Mail it back to us and you're live.</div>
+          </div>
+          <div class="fs-item">
+            <div class="fs-item-title">What You Can Do</div>
+            <div class="fs-item-desc">Upload scanned letters and artwork, write episode descriptions, manage their store, respond to their audience, and receive money order instructions for any sales.</div>
+          </div>
+          <div class="fs-item">
+            <div class="fs-item-title">Payment</div>
+            <div class="fs-item-desc">You can pay the $10/month paid tier on their behalf via credit card or PayPal from the outside. Free tier requires no payment from anyone.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTSIDE STEPS -->
+      <div style="margin-bottom:1.5rem;">
+        <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:1.5rem;">HOW TO GET STARTED</h3>
+      </div>
+
+      <div class="steps">
+        <div class="step-row">
+          <div class="step-num-circle">1</div>
+          <div class="step-content">
+            <div class="step-title">CREATE YOUR SUPPORTER ACCOUNT</div>
+            <div class="step-desc">Sign up free at razorwirefeels.com. You'll need an account to manage someone else's page. Click "Join Free" in the top right corner.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num-circle">2</div>
+          <div class="step-content">
+            <div class="step-title">CONTACT US WITH THEIR INFO</div>
+            <div class="step-desc">Email us or fill out the form below with your loved one's full name, inmate ID, and facility. Tell us you'd like to be their page manager.</div>
+            <span class="step-note">Email: pages@razorwirefeels.com</span>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num-circle">3</div>
+          <div class="step-content">
+            <div class="step-title">WE MAIL THEM THE RELEASE FORM</div>
+            <div class="step-desc">We send the authorization form directly to your loved one inside. They sign it, mail it back to us. Once received, you're authorized to manage their page.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num-circle">4</div>
+          <div class="step-content">
+            <div class="step-title">START UPLOADING</div>
+            <div class="step-desc">They mail you letters and artwork. You scan them and upload to their page through your account dashboard. We process and publish. Their subscribers get notified automatically.</div>
+            <span class="step-note">A basic flatbed scanner ($40–60 on Amazon) is all you need. Phone camera scans also work.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div style="background:var(--panel); border:1px solid var(--border); border-top:3px solid var(--gold); padding:2rem; margin-bottom:3rem;">
+        <div style="font-family:var(--display); font-size:1.3rem; color:var(--text-bright); letter-spacing:0.08em; margin-bottom:0.5rem;">REQUEST A PAGE FOR SOMEONE INSIDE</div>
+        <div style="font-family:var(--mono); font-size:0.62rem; color:var(--text-dim); letter-spacing:0.08em; margin-bottom:1.5rem;">Fill this out and we'll handle the rest</div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-bottom:1rem;">
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Your Name</label>
+            <input type="text" placeholder="Your full name" style="background:var(--black); border:1px solid var(--border); color:var(--text-bright); font-family:var(--mono); font-size:0.78rem; padding:0.65rem 0.85rem; outline:none;" onfocus="this.style.borderColor='#b8960c'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Your Email</label>
+            <input type="email" placeholder="your@email.com" style="background:var(--black); border:1px solid var(--border); color:var(--text-bright); font-family:var(--mono); font-size:0.78rem; padding:0.65rem 0.85rem; outline:none;" onfocus="this.style.borderColor='#b8960c'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Inmate Full Name</label>
+            <input type="text" placeholder="Their legal name" style="background:var(--black); border:1px solid var(--border); color:var(--text-bright); font-family:var(--mono); font-size:0.78rem; padding:0.65rem 0.85rem; outline:none;" onfocus="this.style.borderColor='#b8960c'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Inmate ID Number</label>
+            <input type="text" placeholder="e.g. 1369313" style="background:var(--black); border:1px solid var(--border); color:var(--text-bright); font-family:var(--mono); font-size:0.78rem; padding:0.65rem 0.85rem; outline:none;" onfocus="this.style.borderColor='#b8960c'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Current Facility</label>
+            <input type="text" placeholder="e.g. Alexander CI" style="background:var(--black); border:1px solid var(--border); color:var(--text-bright); font-family:var(--mono); font-size:0.78rem; padding:0.65rem 0.85rem; outline:none;" onfocus="this.style.borderColor='#b8960c'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.2em; color:var(--text-dim); text-transform:uppercase;">Relationship</label>
+            <select style="background:var(--black); border:1px solid var(--border); color:var(--text); font-family:var(--mono); font-size:0.75rem; padding:0.65rem 0.85rem; outline:none; cursor:pointer;">
+              <option>Family Member</option>
+              <option>Friend</option>
+              <option>Attorney/Advocate</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="submitFamilyForm()" style="background:var(--gold); border:none; color:var(--black); font-family:var(--mono); font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.85rem 2rem; cursor:pointer; transition:background 0.2s; font-weight:700;" onmouseover="this.style.background='#9a7a0a'" onmouseout="this.style.background='var(--gold)'">
+          Submit Request →
+        </button>
+      </div>
+
+    </div>
+  </div><!-- /content-family -->
+
+  <!-- FAQ — shown for both audiences -->
+  <div style="padding-bottom:5rem;">
+    <div class="section-kicker">Common Questions</div>
+    <h2 style="font-family:var(--display); font-size:2rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:1.5rem;">FAQ</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do I keep the rights to my writing and artwork?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          Yes. Absolutely and completely. You own everything you create. Razor Wire Feels is a publishing platform, not a publisher. We scan and post on your behalf — you retain full intellectual property rights. If a book deal comes from something you posted here, that's yours. We just helped it get seen.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What if I get transferred to a different facility?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          Just write us a letter from your new facility letting us know. Your page stays exactly where it is. Nothing changes except the mailing address we use for you. If you have a family member managing your page from outside, they can update us by email.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can I stay anonymous? Use just my alias?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          Yes. Your page can display your alias as your primary name. Your inmate ID and facility are listed for authenticity — this platform is specifically for incarcerated individuals and that context matters. But you can go by Redbeard the Great, The Quiet Storm, or whatever name you write under. Your legal name is only used for our internal records and the release form.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What if the administration won't let me mail things out?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          Work with a family member or friend on the outside. They can scan and upload physical documents on your behalf once they're authorized. If your mail is being monitored or restricted unfairly, document it — that's exactly the kind of thing Razor Wire Feels exists to push back against.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do I get paid if someone buys my work?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          Sales proceeds (minus our 15% platform fee) are sent to you via money order to your institution, or to a person you designate outside. We process payouts monthly. Minimum payout is $10. If your account balance is under $10 at the end of a month, it rolls over to the next month.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is this connected to NCDAC or the prison system in any way?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          No. Razor Wire Feels has no connection to, affiliation with, or approval from NCDAC or any correctional institution. We are an independent publishing platform. Your participation here is your own business and your constitutional right. We do not share any information with correctional facilities.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What kind of content can I post?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          Writing of any kind — memoir, fiction, poetry, essays, letters, rants, reviews, comedy, philosophy. Artwork — pencil, pen, watercolor, charcoal, whatever you're working with. The content should be your own work. We don't censor political views, strong language, or dark subject matter. We do not publish content that targets or endangers specific individuals.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What happens to my physical letters and artwork after 6 months?
+          <span class="faq-arrow">›</span>
+        </div>
+        <div class="faq-a">
+          We store originals for 6 months. After that, they're securely destroyed unless you've requested them to be mailed somewhere, or you're on the paid tier (which includes 12-month storage). If a buyer purchases a physical original, we mail it directly to them before the storage period ends.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content-wrap -->
+
+<!-- MISSION BLOCK -->
+<div class="mission-block">
+  <div class="mission-quote">
+    "There are a lot of guys in there who think nobody gives a damn about them. That's just not true. Everybody has a voice and deserves to be heard."
+  </div>
+  <div class="mission-attr">— Nicolas Losito "Redbeard the Great" · NC · 1369313 · Founder</div>
+</div>
+
+<!-- PRINT AD REPLICA -->
+<div class="content-wrap" style="padding-bottom:5rem;">
+  <div class="section-kicker">As seen in print</div>
+  <h3 style="font-family:var(--display); font-size:1.5rem; color:var(--text-bright); letter-spacing:0.06em; margin-bottom:1.5rem;">OUR NEWSPAPER AD</h3>
+
+  <div class="ad-replica">
+    <div class="ad-headline">RAZOR WIRE <span class="ad-red">FEELS</span></div>
+    <div class="ad-rule"></div>
+    <div class="ad-free">GET YOUR FREE PAGE</div>
+    <div class="ad-thin-rule"></div>
+    <div class="ad-body">
+      Are you incarcerated in North Carolina?<br>
+      Your writing and artwork deserve to be seen.
+    </div>
+    <div class="ad-what">
+      ✓ Free public page at razorwirefeels.com<br>
+      ✓ We publish your letters & artwork<br>
+      ✓ Subscribers follow your story<br>
+      ✓ Sell your work. Keep 85%.<br>
+      ✓ Family can manage your page
+    </div>
+    <div class="ad-rule"></div>
+    <div style="font-family:'Special Elite',cursive; font-size:0.75rem; color:#555; margin-bottom:0.5rem;">Write to us at:</div>
+    <div class="ad-address-box">
+      Razor Wire Feels<br>
+      PO Box [NUMBER]<br>
+      [CITY], NC [ZIP]
+    </div>
+    <div class="ad-thin-rule"></div>
+    <div class="ad-fine">
+      Include your name, ID number, and facility.<br>
+      We'll send you a release form within 2 weeks.<br>
+      razorwirefeels.com · pages@razorwirefeels.com
+    </div>
+  </div>
+</div>
+
+<footer style="border-top:1px solid var(--border); padding:2rem; text-align:center;">
+  <div style="font-family:var(--mono); font-size:0.58rem; color:var(--text-dim); letter-spacing:0.15em; text-transform:uppercase; line-height:2;">
+    Razor Wire Feels · Independent Publishing Platform · North Carolina<br>
+    razorwirefeels.com · pages@razorwirefeels.com · PO Box [NUMBER], [CITY] NC [ZIP]<br>
+    Not affiliated with NCDAC or any correctional institution.
+  </div>
+</footer>
+
+<script src="rwf-auth.js"></script>
+<script>
+// AUDIENCE TOGGLE
+function switchAudience(id, btn) {
+  document.querySelectorAll('.aud-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.audience-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('content-' + id).classList.add('active');
+  document.getElementById('audLabel').textContent = id === 'inside'
+    ? 'Showing instructions for incarcerated individuals'
+    : 'Showing instructions for family and friends on the outside';
+  window.scrollTo({ top: document.querySelector('.hero').offsetHeight + 60, behavior: 'smooth' });
+}
+
+// FAQ ACCORDION
+function toggleFaq(el) {
+  const answer = el.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  // Open clicked if it was closed
+  if (!isOpen) {
+    el.classList.add('open');
+    answer.classList.add('open');
+  }
+}
+
+// FAMILY FORM SUBMIT
+function submitFamilyForm() {
+  // In production: POST to backend or email service
+  alert('Thank you! We\'ll be in touch within 48 hours to start the process for your loved one\'s page.');
+}
+</script>
+</body>
+</html>
