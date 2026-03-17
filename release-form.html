@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Release Form — Razor Wire Feels</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#080808; --deep:#0f0f0f; --panel:#141414;
+  --border:#242424; --border2:#2e2e2e;
+  --red:#c0160f; --text:#ccc4b4; --dim:#665e50; --bright:#eee8dc;
+  --mono:'IBM Plex Mono',monospace; --display:'Bebas Neue',sans-serif;
+  --body:'Libre Baskerville',serif; --type:'Special Elite',cursive;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:var(--body);min-height:100vh;}
+
+nav{
+  position:sticky;top:0;z-index:500;
+  background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);height:56px;
+  display:flex;align-items:center;padding:0 2rem;gap:2rem;
+}
+.nav-logo{font-family:var(--display);font-size:1.15rem;letter-spacing:0.08em;color:var(--bright);text-decoration:none;}
+.nav-logo span{color:var(--red);}
+.nav-back{margin-left:auto;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;color:var(--dim);text-decoration:none;text-transform:uppercase;}
+.nav-back:hover{color:var(--red);}
+
+.page-wrap{max-width:860px;margin:0 auto;padding:4rem 2rem 6rem;}
+
+.page-kicker{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.35em;color:var(--red);text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.75rem;}
+.page-kicker::after{content:'';width:40px;height:1px;background:var(--red);}
+.page-title{font-family:var(--display);font-size:clamp(2.5rem,6vw,4rem);color:var(--bright);letter-spacing:0.05em;line-height:0.95;margin-bottom:0.5rem;}
+.page-sub{font-style:italic;color:var(--dim);font-size:0.85rem;line-height:1.8;margin-bottom:3rem;max-width:600px;}
+
+/* SCREEN VERSION */
+.form-screen{background:var(--panel);border:1px solid var(--border);border-top:4px solid var(--red);padding:2.5rem;}
+.form-section{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border);}
+.form-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.fs-title{font-family:var(--display);font-size:1.1rem;color:var(--bright);letter-spacing:0.1em;margin-bottom:1.25rem;}
+.field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem;}
+.field{display:flex;flex-direction:column;gap:0.4rem;}
+.field label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.2em;color:var(--dim);text-transform:uppercase;}
+.field input,.field select,.field textarea{
+  background:var(--black);border:1px solid var(--border2);
+  color:var(--bright);font-family:var(--mono);font-size:0.78rem;
+  padding:0.65rem 0.85rem;outline:none;transition:border-color 0.15s;
+  letter-spacing:0.05em;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);}
+.field textarea{resize:vertical;min-height:80px;font-family:var(--type);font-size:0.88rem;letter-spacing:0;}
+
+.check-group{display:flex;flex-direction:column;gap:0.65rem;}
+.check-item{display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;}
+.check-item input[type=checkbox]{
+  width:16px;height:16px;flex-shrink:0;margin-top:2px;
+  accent-color:var(--red);cursor:pointer;
+}
+.check-item .cl{font-size:0.82rem;color:var(--text);line-height:1.6;}
+.check-item .cl strong{color:var(--bright);}
+
+.split-box{
+  background:var(--black);border:2px solid var(--red);
+  padding:1.5rem;margin:1.25rem 0;
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background-color:var(--border);
+}
+.split-side{background:var(--panel);padding:1.25rem;text-align:center;}
+.split-pct{font-family:var(--display);font-size:3rem;letter-spacing:0.04em;line-height:1;}
+.split-pct.yours{color:var(--bright);}
+.split-pct.ours{color:var(--red);}
+.split-who{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-top:0.35rem;}
+
+.legal-block{
+  background:var(--black);border:1px solid var(--border);
+  padding:1.25rem;
+  font-family:var(--mono);font-size:0.6rem;
+  letter-spacing:0.05em;color:var(--dim);line-height:1.9;
+}
+
+.sig-row{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-top:1.5rem;}
+.sig-line{border-bottom:1px solid var(--border2);height:40px;position:relative;}
+.sig-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.15em;color:var(--dim);text-transform:uppercase;margin-top:0.4rem;}
+
+.submit-btn{
+  background:var(--red);border:none;color:white;
+  font-family:var(--mono);font-size:0.7rem;letter-spacing:0.2em;
+  text-transform:uppercase;padding:1rem 2.5rem;
+  cursor:pointer;transition:background 0.15s;margin-top:2rem;
+  display:block;width:100%;
+}
+.submit-btn:hover{background:#e01a12;}
+
+/* PRINT BUTTON */
+.print-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--dim);font-family:var(--mono);font-size:0.6rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  padding:0.6rem 1.25rem;cursor:pointer;
+  transition:all 0.15s;margin-bottom:2rem;
+}
+.print-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* PRINT STYLES — clean black on white */
+@media print {
+  body{background:white;color:#111;}
+  nav,.print-btn,.submit-btn{display:none!important;}
+  .page-wrap{padding:1rem;max-width:100%;}
+  .form-screen{background:white;border:2px solid #111;border-top:4px solid #111;padding:1.5rem;}
+  .form-section{border-bottom:1px solid #ccc;}
+  .fs-title{color:#111;}
+  .field label{color:#555;}
+  .field input,.field select,.field textarea{
+    background:white;border:none;border-bottom:1px solid #888;
+    color:#111;padding:0.25rem 0;
+  }
+  .split-box{background:#ccc;border:2px solid #111;}
+  .split-side{background:white;}
+  .split-pct.yours,.split-pct.ours{color:#111;}
+  .legal-block{background:#f5f5f5;border:1px solid #ccc;color:#333;}
+  .sig-line{border-bottom:1px solid #333;}
+  .page-kicker,.page-kicker::after{color:#111;}
+  .page-title,.page-sub{color:#111;}
+  .check-item .cl,.check-item .cl strong{color:#111;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RAZOR WIRE <span>FEELS</span></a>
+  <a href="index.html" class="nav-back">← Back to Directory</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-kicker">Official Document</div>
+  <h1 class="page-title">CONTENT RELEASE<br>& AUTHORIZATION</h1>
+  <p class="page-sub">This form authorizes Razor Wire Feels to publish your work on your behalf. You retain 100% ownership of everything you create. For commission sales, you keep 80% — we keep 20% to keep the platform running. This form may be completed digitally below or printed and mailed to our PO Box.</p>
+
+  <button class="print-btn" onclick="window.print()">⎙ Print This Form</button>
+
+  <div class="form-screen">
+
+    <!-- SECTION 1: IDENTITY -->
+    <div class="form-section">
+      <div class="fs-title">01 — YOUR INFORMATION</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Full Legal Name</label>
+          <input type="text" placeholder="As it appears on NCDAC records">
+        </div>
+        <div class="field">
+          <label>NCDAC Inmate ID Number</label>
+          <input type="text" placeholder="e.g. 1369313">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Current Facility</label>
+          <input type="text" placeholder="e.g. Central Prison, Raleigh NC">
+        </div>
+        <div class="field">
+          <label>Housing Unit / Block (optional)</label>
+          <input type="text" placeholder="e.g. B-Block, Unit 4">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Publishing Name / Alias (optional)</label>
+          <input type="text" placeholder="The name you write under">
+        </div>
+        <div class="field">
+          <label>Date of This Form</label>
+          <input type="text" placeholder="MM / DD / YYYY">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: OUTSIDE MANAGER -->
+    <div class="form-section">
+      <div class="fs-title">02 — OUTSIDE PAGE MANAGER (optional)</div>
+      <p style="font-style:italic;font-size:0.82rem;color:var(--dim);line-height:1.7;margin-bottom:1.25rem;">If you have a family member or trusted person on the outside who will upload your work and manage your page, list them here. Leave blank if you want us to manage everything directly.</p>
+      <div class="field-row">
+        <div class="field">
+          <label>Manager Full Name</label>
+          <input type="text" placeholder="Person managing your page">
+        </div>
+        <div class="field">
+          <label>Manager Email Address</label>
+          <input type="email" placeholder="their@email.com">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Relationship to You</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Family Member</option>
+            <option>Friend</option>
+            <option>Attorney / Advocate</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Manager Phone (optional)</label>
+          <input type="text" placeholder="For urgent communication">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: AUTHORIZATION -->
+    <div class="form-section">
+      <div class="fs-title">03 — WHAT YOU'RE AUTHORIZING</div>
+      <div class="check-group">
+        <label class="check-item">
+          <input type="checkbox" checked>
+          <span class="cl">Razor Wire Feels may <strong>scan, digitize, and publish</strong> my handwritten letters and written work at razorwirefeels.org</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" checked>
+          <span class="cl">Razor Wire Feels may <strong>scan and publish my original artwork</strong> at razorwirefeels.org</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" checked>
+          <span class="cl">Razor Wire Feels may <strong>create and maintain a public page</strong> on my behalf at razorwirefeels.org/NC/[my ID]</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <span class="cl">Razor Wire Feels may <strong>sell my work</strong> through a store on my page and remit my share to me via money order</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <span class="cl">Razor Wire Feels may <strong>accept commissions on my behalf</strong> and communicate with buyers about my availability and pricing</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox">
+          <span class="cl">The <strong>outside manager listed above</strong> is authorized to upload content, edit my bio, manage my store, and act on my behalf for all platform matters</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- SECTION 4: PROFIT SPLIT -->
+    <div class="form-section">
+      <div class="fs-title">04 — PROFIT SPLIT ON SALES</div>
+      <p style="font-style:italic;font-size:0.82rem;color:var(--dim);line-height:1.7;margin-bottom:1rem;">For every sale made through your page — writing, artwork, commissions — the proceeds are split as follows. You set your own prices. This split is non-negotiable and applies to all transactions.</p>
+      <div class="split-box">
+        <div class="split-side">
+          <div class="split-pct yours">80%</div>
+          <div class="split-who">Goes to you</div>
+        </div>
+        <div class="split-side">
+          <div class="split-pct ours">20%</div>
+          <div class="split-who">Goes to RWF</div>
+        </div>
+      </div>
+      <div class="legal-block">
+        Your 80% is paid via money order to your institution, or to your designated outside manager, within 30 days of the end of each calendar month in which sales occurred. Minimum payout threshold is $10.00 — balances under $10 roll to the following month. The 20% platform fee covers scanning, processing, hosting, and platform maintenance. Razor Wire Feels does not profit from your work — the 20% is operational cost only.
+      </div>
+    </div>
+
+    <!-- SECTION 5: YOUR RIGHTS -->
+    <div class="form-section">
+      <div class="fs-title">05 — YOUR RIGHTS</div>
+      <div class="legal-block" style="font-size:0.65rem; line-height:2;">
+        YOU RETAIN 100% OF THE INTELLECTUAL PROPERTY RIGHTS TO ALL WORK YOU SUBMIT.<br><br>
+        Razor Wire Feels does not claim ownership of any content submitted to this platform. This authorization is a limited license to publish, display, and sell on your behalf — not a transfer of copyright.<br><br>
+        You may revoke this authorization at any time by writing to our PO Box. Upon revocation, your page will be taken down within 14 days. Any pending sales or payouts will be processed and remitted before takedown.<br><br>
+        Physical originals (letters, artwork) are stored for 6 months from receipt, then securely destroyed unless you have requested return shipping or are on the paid tier (12-month storage).<br><br>
+        Razor Wire Feels has no affiliation with NCDAC or any correctional institution. Your participation on this platform is your right and your business. We do not share any information about participants with correctional facilities.
+      </div>
+    </div>
+
+    <!-- SECTION 6: BIO -->
+    <div class="form-section">
+      <div class="fs-title">06 — YOUR BIO (optional)</div>
+      <p style="font-style:italic;font-size:0.82rem;color:var(--dim);line-height:1.7;margin-bottom:1rem;">Write a short bio to appear on your page. Anything you want people to know about you. Where you're from, what you write about, what you care about. Leave blank if you'd rather start with your work.</p>
+      <div class="field">
+        <label>Your Bio</label>
+        <textarea rows="5" placeholder="Tell the world who you are..."></textarea>
+      </div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="form-section">
+      <div class="fs-title">07 — SIGNATURE</div>
+      <p style="font-style:italic;font-size:0.82rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem;">By signing below you confirm that you are the person named above, that the work you submit is your own original work, and that you authorize Razor Wire Feels to publish it on your behalf under the terms stated in this form.</p>
+      <div class="sig-row">
+        <div>
+          <div class="sig-line"></div>
+          <div class="sig-label">Your Signature</div>
+        </div>
+        <div>
+          <div class="sig-line"></div>
+          <div class="sig-label">Date</div>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem;background:var(--black);border:1px solid var(--border);padding:1rem;font-family:var(--mono);font-size:0.6rem;color:var(--dim);letter-spacing:0.06em;line-height:1.9;">
+        If submitting by mail: Print this form, complete it by hand, and mail it along with your first submission to:<br>
+        <span style="color:var(--red);">Razor Wire Feels · PO Box [NUMBER] · [CITY], NC [ZIP]</span><br><br>
+        If submitting digitally: Complete this form and click Submit below. We will send a confirmation to your outside manager's email.
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">Submit Authorization →</button>
+
+  </div><!-- /form-screen -->
+</div><!-- /page-wrap -->
+
+<script>
+function submitForm() {
+  alert('Thank you. Your authorization has been submitted. We will be in touch within 2 weeks to confirm your page is live at razorwirefeels.org/NC/[your ID].');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Razor Wire Feels</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--black:#080808;--deep:#0f0f0f;--panel:#141414;--panel2:#1a1a1a;--border:#242424;--border2:#2e2e2e;--red:#c0160f;--red2:#e01a12;--gold:#b8960c;--text:#ccc4b4;--dim:#665e50;--bright:#eee8dc;--mono:'IBM Plex Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'Libre Baskerville',serif;--type:'Special Elite',cursive;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:var(--body);min-height:100vh;}
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 2rem;gap:2rem;}
+.nav-logo{font-family:var(--display);font-size:1.15rem;letter-spacing:0.08em;color:var(--bright);text-decoration:none;}
+.nav-logo span{color:var(--red);}
+.nav-right{margin-left:auto;display:flex;gap:0;}
+.nav-right a{display:flex;align-items:center;height:56px;padding:0 1rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);text-decoration:none;border-left:1px solid var(--border);transition:all 0.15s;}
+.nav-right a:hover{color:var(--bright);}
+.nav-right a.cta{background:var(--red);color:white;}
+.wrap{max-width:800px;margin:0 auto;padding:5rem 2rem 7rem;}
+.page-kicker{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.4em;color:var(--red);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;}
+.page-kicker::after{content:'';width:40px;height:1px;background:var(--red);}
+.page-title{font-family:var(--display);font-size:clamp(3rem,8vw,5rem);color:var(--bright);letter-spacing:0.04em;line-height:0.9;margin-bottom:1rem;}
+.page-sub{font-style:italic;font-size:0.95rem;color:var(--text);line-height:1.85;margin-bottom:3rem;max-width:540px;}
+
+/* CONTACT METHODS */
+.contact-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem;}
+.cm{background:var(--panel);padding:1.75rem;}
+.cm-icon{font-size:1.75rem;margin-bottom:0.75rem;display:block;}
+.cm-label{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);margin-bottom:0.35rem;}
+.cm-value{font-family:var(--type);font-size:1rem;color:var(--bright);margin-bottom:0.35rem;}
+.cm-note{font-style:italic;font-size:0.75rem;color:var(--dim);line-height:1.65;}
+
+/* FORM */
+.form-wrap{background:var(--panel);border:1px solid var(--border);border-top:4px solid var(--red);padding:2.5rem;}
+.form-title{font-family:var(--display);font-size:1.3rem;color:var(--bright);letter-spacing:0.08em;margin-bottom:1.5rem;}
+.field{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+@media(max-width:500px){.field-row{grid-template-columns:1fr;}}
+.field label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);}
+.field input,.field select,.field textarea{background:var(--black);border:1px solid var(--border2);color:var(--bright);font-family:var(--mono);font-size:0.78rem;padding:0.65rem 0.85rem;outline:none;transition:border-color 0.15s;letter-spacing:0.05em;}
+.field textarea{resize:vertical;min-height:120px;font-family:var(--body);font-size:0.88rem;letter-spacing:0;line-height:1.7;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);}
+.submit-btn{background:var(--red);border:none;color:white;font-family:var(--mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding:1rem 2.5rem;cursor:pointer;transition:background 0.15s;width:100%;}
+.submit-btn:hover{background:var(--red2);}
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--mono);font-size:0.55rem;color:var(--dim);letter-spacing:0.1em;line-height:2;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">RAZOR WIRE <span>FEELS</span></a>
+  <div class="nav-right">
+    <a href="index.html">Directory</a>
+    <a href="submit.html">Submit</a>
+    <a href="subscribe.html">Support</a>
+    <a href="family.html" class="cta">Family &amp; Friends</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="page-kicker">Get in touch</div>
+  <h1 class="page-title">CONTACT</h1>
+  <p class="page-sub">Questions about the platform, a page request, a press inquiry, a legal question, or just something on your mind — reach out. We read everything.</p>
+
+  <div class="contact-methods">
+    <div class="cm">
+      <span class="cm-icon">✉️</span>
+      <div class="cm-label">Email</div>
+      <div class="cm-value">pages@razorwirefeels.org</div>
+      <div class="cm-note">For page requests, family management, and general questions. Response within 48 hours.</div>
+    </div>
+    <div class="cm">
+      <span class="cm-icon">📬</span>
+      <div class="cm-label">Physical Mail</div>
+      <div class="cm-value">PO Box [NUMBER]<br>[CITY], NC [ZIP]</div>
+      <div class="cm-note">For inmate submissions, release forms, and letters. This is the primary address for all mail from inside.</div>
+    </div>
+    <div class="cm">
+      <span class="cm-icon">📰</span>
+      <div class="cm-label">Press &amp; Media</div>
+      <div class="cm-value">press@razorwirefeels.org</div>
+      <div class="cm-note">Journalists, documentarians, researchers. We're open to coverage that serves the mission.</div>
+    </div>
+  </div>
+
+  <div class="form-wrap">
+    <div class="form-title">SEND A MESSAGE</div>
+    <div class="field-row">
+      <div class="field"><label>Your Name</label><input type="text" placeholder="Your name"></div>
+      <div class="field"><label>Your Email</label><input type="email" placeholder="your@email.com"></div>
+    </div>
+    <div class="field">
+      <label>What's This About</label>
+      <select>
+        <option>General Question</option>
+        <option>Page Request</option>
+        <option>Family / Friend Management</option>
+        <option>Press / Media</option>
+        <option>Legal</option>
+        <option>Technical Issue</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="field"><label>Message</label><textarea placeholder="What's on your mind..."></textarea></div>
+    <button class="submit-btn" onclick="submitContact()">Send Message →</button>
+  </div>
+</div>
+
+<footer>razorwirefeels.org · North Carolina · Not affiliated with NCDAC<br>Founded by Nicolas Losito "Redbeard the Great" · ID 1369313</footer>
+
+<script>
+function submitContact() {
+  alert('Message sent. We\'ll be in touch within 48 hours.');
+}
+</script>
+</body>
+</html>

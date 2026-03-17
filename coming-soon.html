@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Soon — Razor Wire Feels</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--black:#080808;--deep:#0f0f0f;--panel:#141414;--border:#242424;--border2:#2e2e2e;--red:#c0160f;--text:#ccc4b4;--dim:#665e50;--bright:#eee8dc;--mono:'IBM Plex Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'Libre Baskerville',serif;--type:'Special Elite',cursive;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:var(--body);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;}
+
+.cs-logo{font-family:var(--display);font-size:1.1rem;letter-spacing:0.08em;color:var(--bright);text-decoration:none;margin-bottom:4rem;display:block;}
+.cs-logo span{color:var(--red);}
+
+.cs-eyebrow{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.4em;color:var(--red);text-transform:uppercase;margin-bottom:1rem;display:inline-flex;align-items:center;gap:0.75rem;}
+.cs-eyebrow::before,.cs-eyebrow::after{content:'';width:30px;height:1px;background:var(--red);}
+
+.cs-title{font-family:var(--display);font-size:clamp(4rem,12vw,9rem);color:var(--bright);letter-spacing:0.03em;line-height:0.88;margin-bottom:1rem;}
+.cs-title span{color:var(--red);}
+
+.cs-sub{font-style:italic;font-size:1rem;color:var(--text);line-height:1.85;max-width:500px;margin:0 auto 3rem;}
+
+/* NOTIFY FORM */
+.notify-form{display:flex;gap:1px;max-width:460px;width:100%;margin:0 auto 3rem;background:var(--border);}
+.notify-input{flex:1;background:var(--panel);border:none;outline:none;font-family:var(--mono);font-size:0.75rem;color:var(--bright);padding:0.85rem 1.1rem;letter-spacing:0.06em;}
+.notify-input::placeholder{color:var(--dim);}
+.notify-btn{background:var(--red);border:none;color:white;font-family:var(--mono);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;padding:0 1.5rem;cursor:pointer;white-space:nowrap;}
+.notify-btn:hover{background:#e01a12;}
+
+/* WHAT'S COMING */
+.coming-items{display:flex;flex-direction:column;gap:0.5rem;max-width:420px;width:100%;margin:0 auto 4rem;}
+.ci{display:flex;align-items:center;gap:0.75rem;background:var(--panel);border:1px solid var(--border);padding:0.85rem 1.25rem;text-align:left;}
+.ci-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ci-dot.soon{background:var(--red);}
+.ci-dot.building{background:var(--dim);}
+.ci-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--text);flex:1;}
+.ci-status{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);}
+.ci-status.live{color:var(--red);}
+
+.cs-back{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color 0.15s;}
+.cs-back:hover{color:var(--red);}
+</style>
+</head>
+<body>
+<a href="index.html" class="cs-logo">RAZOR WIRE <span>FEELS</span></a>
+
+<div class="cs-eyebrow">Building Now</div>
+<h1 class="cs-title">COMING<br><span>SOON</span></h1>
+<p class="cs-sub">We're building something. Drop your email and we'll let you know the moment it goes live.</p>
+
+<div class="notify-form">
+  <input class="notify-input" id="notify-email" type="email" placeholder="your@email.com">
+  <button class="notify-btn" onclick="notifyMe()">Notify Me →</button>
+</div>
+
+<div class="coming-items">
+  <div class="ci"><div class="ci-dot live"></div><span class="ci-label">The Directory</span><span class="ci-status live">Live Now</span></div>
+  <div class="ci"><div class="ci-dot live"></div><span class="ci-label">Inmate Pages</span><span class="ci-status live">Live Now</span></div>
+  <div class="ci"><div class="ci-dot live"></div><span class="ci-label">Submit / How to Get a Page</span><span class="ci-status live">Live Now</span></div>
+  <div class="ci"><div class="ci-dot soon"></div><span class="ci-label">Stripe Payment Integration</span><span class="ci-status">Coming Soon</span></div>
+  <div class="ci"><div class="ci-dot soon"></div><span class="ci-label">The Book — Pre-Order</span><span class="ci-status">Coming Soon</span></div>
+  <div class="ci"><div class="ci-dot soon"></div><span class="ci-label">Merch Store</span><span class="ci-status">Coming Soon</span></div>
+  <div class="ci"><div class="ci-dot building"></div><span class="ci-label">Subscriber Accounts</span><span class="ci-status">Building</span></div>
+  <div class="ci"><div class="ci-dot building"></div><span class="ci-label">More NC Inmate Pages</span><span class="ci-status">Building</span></div>
+</div>
+
+<a href="index.html" class="cs-back">← Back to razorwirefeels.org</a>
+
+<script>
+function notifyMe() {
+  var email = document.getElementById('notify-email').value;
+  if (email && email.includes('@')) {
+    alert('You\'re on the list. We\'ll email you at ' + email + ' the moment it goes live.');
+    document.getElementById('notify-email').value = '';
+  } else {
+    alert('Please enter a valid email address.');
+  }
+}
+</script>
+</body>
+</html>

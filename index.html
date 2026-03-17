@@ -1,968 +1,832 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Razor Wire Feels</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --black: #080808;
-      --deep: #0e0e0e;
-      --red: #c0160f;
-      --blood: #8b0000;
-      --paper: #e8dfc8;
-      --smoke: #a09a8e;
-      --wire: #3a3a3a;
-      --white: #f0ece2;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Razor Wire Feels — Voices from Inside North Carolina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:   #080808;
+  --deep:    #0f0f0f;
+  --panel:   #141414;
+  --panel2:  #1a1a1a;
+  --border:  #242424;
+  --border2: #2e2e2e;
+  --red:     #c0160f;
+  --red2:    #e01a12;
+  --red-dim: rgba(192,22,15,0.1);
+  --gold:    #b8960c;
+  --text:    #ccc4b4;
+  --dim:     #665e50;
+  --bright:  #eee8dc;
+  --mono:    'IBM Plex Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body:    'Libre Baskerville', serif;
+  --type:    'Special Elite', cursive;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+/* GRAIN OVERLAY */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999;
+}
 
-    html { scroll-behavior: smooth; }
+/* ── NAV ──────────────────────────────── */
+nav {
+  position:sticky; top:0; z-index:500;
+  background: rgba(8,8,8,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: 56px;
+  display:flex; align-items:center;
+  padding: 0 2rem;
+  gap: 2rem;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 1.15rem; letter-spacing: 0.08em;
+  color: var(--bright); text-decoration:none;
+  flex-shrink:0;
+}
+.nav-logo span { color: var(--red); }
+.nav-links {
+  display:flex; gap:0; list-style:none;
+  margin-left: auto;
+}
+.nav-links a {
+  display:block; padding: 0 1rem; height:56px;
+  display:flex; align-items:center;
+  font-family: var(--mono); font-size:0.6rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color: var(--dim); text-decoration:none;
+  border-left: 1px solid var(--border);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color:var(--bright); background: var(--panel); }
+.nav-links a.active { color:var(--red); }
+.nav-cta {
+  background: var(--red) !important;
+  color: white !important;
+  border-left: none !important;
+}
+.nav-cta:hover { background: var(--red2) !important; }
 
-    body {
-      background-color: var(--black);
-      color: var(--white);
-      font-family: 'Courier Prime', monospace;
-      overflow-x: hidden;
-      cursor: crosshair;
-    }
+/* ── MISSION STRIP ────────────────────── */
+.mission {
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+  padding: 5rem 2rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+@media(max-width:900px){ .mission { grid-template-columns:1fr; gap:2rem; padding:3rem 1.5rem; } }
 
-    /* GRAIN OVERLAY */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.4;
-    }
+.mission-left {}
+.mission-kicker {
+  font-family: var(--mono); font-size:0.58rem;
+  letter-spacing:0.35em; color:var(--red);
+  text-transform:uppercase; margin-bottom:1rem;
+  display:flex; align-items:center; gap:0.75rem;
+}
+.mission-kicker::after { content:''; width:40px; height:1px; background:var(--red); }
+.mission-headline {
+  font-family: var(--display);
+  font-size: clamp(3rem,6vw,5.5rem);
+  line-height: 0.92; color:var(--bright);
+  letter-spacing:0.02em; margin-bottom:1.5rem;
+}
+.mission-headline .r { color:var(--red); }
+.mission-body {
+  font-style:italic; font-size:1rem;
+  line-height:1.95; color:var(--text);
+  max-width:480px;
+}
+.mission-body p + p { margin-top:1rem; }
 
-    /* === 18+ WARNING GATE === */
-    #age-gate {
-      position: fixed;
-      inset: 0;
-      background: var(--black);
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-      animation: fadeIn 0.5s ease;
-    }
+.mission-right {
+  display:flex; flex-direction:column;
+  justify-content:center; gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  align-self:center;
+}
+.stat-row {
+  background:var(--panel);
+  padding:1.5rem 2rem;
+  display:flex; align-items:baseline; gap:1rem;
+}
+.stat-num {
+  font-family: var(--display);
+  font-size:3rem; color:var(--bright);
+  letter-spacing:0.04em; line-height:1;
+}
+.stat-num.red { color:var(--red); }
+.stat-label {
+  font-family:var(--mono); font-size:0.6rem;
+  letter-spacing:0.12em; color:var(--dim);
+  text-transform:uppercase; line-height:1.5;
+}
 
-    #age-gate .gate-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 10vw, 7rem);
-      color: var(--red);
-      letter-spacing: 0.05em;
-      line-height: 1;
-      text-shadow: 0 0 40px rgba(192,22,15,0.5);
-    }
+/* ── SECTION HEADER ───────────────────── */
+.sec-head {
+  display:flex; align-items:baseline;
+  justify-content:space-between;
+  padding: 0 0 1.25rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom:1.75rem;
+}
+.sec-title {
+  font-family:var(--display);
+  font-size:1.5rem; color:var(--bright);
+  letter-spacing:0.08em;
+}
+.sec-title span { color:var(--red); }
+.sec-link {
+  font-family:var(--mono); font-size:0.58rem;
+  letter-spacing:0.15em; color:var(--dim);
+  text-decoration:none; text-transform:uppercase;
+  transition:color 0.15s;
+}
+.sec-link:hover { color:var(--red); }
 
-    #age-gate .gate-sub {
-      font-family: 'Special Elite', cursive;
-      color: var(--smoke);
-      font-size: clamp(0.8rem, 2vw, 1.1rem);
-      margin: 1rem 0 2.5rem;
-      max-width: 500px;
-      line-height: 1.6;
-    }
+/* ── FEATURED SCROLL STRIP ────────────── */
+.featured-section {
+  padding: 3.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.featured-inner { max-width:1400px; margin:0 auto; padding:0 2rem; }
 
-    #age-gate .gate-warning {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.75rem;
-      color: var(--wire);
-      margin-top: 2rem;
-      max-width: 400px;
-      line-height: 1.7;
-    }
+.cards-scroll {
+  display:flex; gap:1px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+.cards-scroll::-webkit-scrollbar { display:none; }
 
-    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.feat-card {
+  background:var(--panel);
+  min-width:260px; max-width:260px;
+  padding:1.5rem;
+  display:flex; flex-direction:column; gap:0.75rem;
+  cursor:pointer; transition:background 0.15s;
+  text-decoration:none; color:inherit;
+  flex-shrink:0;
+}
+.feat-card:hover { background:var(--panel2); }
 
-    .btn-enter {
-      background: var(--red);
-      color: var(--white);
-      border: none;
-      padding: 1rem 3rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      transition: all 0.2s;
-      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-    }
-    .btn-enter:hover { background: #e01a12; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(192,22,15,0.5); }
+.fc-tag {
+  font-family:var(--mono); font-size:0.52rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--red); display:flex; align-items:center; gap:0.5rem;
+}
+.fc-tag::before {
+  content:''; width:18px; height:1px; background:var(--red);
+}
+.fc-name {
+  font-family:var(--display); font-size:1.1rem;
+  color:var(--bright); letter-spacing:0.06em; line-height:1.1;
+}
+.fc-excerpt {
+  font-style:italic; font-size:0.78rem;
+  color:var(--dim); line-height:1.7;
+  display:-webkit-box; -webkit-line-clamp:3;
+  -webkit-box-orient:vertical; overflow:hidden;
+}
+.fc-meta {
+  margin-top:auto;
+  font-family:var(--mono); font-size:0.55rem;
+  letter-spacing:0.1em; color:var(--dim);
+  display:flex; justify-content:space-between;
+  padding-top:0.75rem; border-top:1px solid var(--border);
+}
 
-    .btn-leave {
-      background: transparent;
-      color: var(--smoke);
-      border: 1px solid var(--wire);
-      padding: 1rem 2rem;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-leave:hover { color: var(--white); border-color: var(--smoke); }
+/* ── DIRECTORY SECTION ────────────────── */
+.dir-section {
+  max-width:1400px; margin:0 auto;
+  padding: 3.5rem 2rem 6rem;
+}
 
-    /* === MAIN SITE (hidden until age gate cleared) === */
-    #site { display: none; }
+/* SEARCH BAR */
+.search-bar {
+  display:flex; gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:1.5rem;
+}
+.search-input {
+  flex:1; background:var(--panel);
+  border:none; outline:none;
+  font-family:var(--mono); font-size:0.78rem;
+  color:var(--bright); padding:0.85rem 1.25rem;
+  letter-spacing:0.06em;
+}
+.search-input::placeholder { color:var(--dim); }
+.search-btn {
+  background:var(--red); border:none;
+  color:white; font-family:var(--mono);
+  font-size:0.6rem; letter-spacing:0.2em;
+  text-transform:uppercase; padding:0 1.5rem;
+  cursor:pointer; transition:background 0.15s; white-space:nowrap;
+}
+.search-btn:hover { background:var(--red2); }
 
-    /* NAVBAR */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 3rem;
-      background: linear-gradient(to bottom, rgba(8,8,8,0.98), transparent);
-      border-bottom: 1px solid rgba(192,22,15,0.15);
-    }
+/* FILTERS */
+.filters {
+  display:flex; gap:0.5rem; flex-wrap:wrap;
+  margin-bottom:2rem;
+}
+.filter-btn {
+  font-family:var(--mono); font-size:0.58rem;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:0.45rem 0.9rem; background:transparent;
+  border:1px solid var(--border2); color:var(--dim);
+  cursor:pointer; transition:all 0.15s;
+}
+.filter-btn:hover { border-color:var(--red); color:var(--text); }
+.filter-btn.on { background:var(--red); border-color:var(--red); color:white; }
 
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 0.12em;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .nav-logo span { color: var(--red); }
+/* SORT ROW */
+.sort-row {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;
+}
+.sort-count {
+  font-family:var(--mono); font-size:0.6rem;
+  letter-spacing:0.12em; color:var(--dim);
+}
+.sort-count span { color:var(--red); }
+.sort-select {
+  background:var(--panel); border:1px solid var(--border2);
+  color:var(--text); font-family:var(--mono); font-size:0.6rem;
+  letter-spacing:0.1em; padding:0.4rem 0.75rem; cursor:pointer;
+  outline:none;
+}
 
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-family: 'Special Elite', cursive;
-      color: var(--smoke);
-      text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--red); }
+/* INMATE GRID */
+.inmate-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap:1px; background:var(--border);
+  border:1px solid var(--border);
+  margin-bottom:2rem;
+}
 
-    /* HERO */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
+.inmate-card {
+  background:var(--panel);
+  padding:1.5rem;
+  display:flex; flex-direction:column; gap:0.9rem;
+  text-decoration:none; color:inherit;
+  transition:background 0.15s;
+  position:relative;
+}
+.inmate-card:hover { background:var(--panel2); }
 
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,0,0,0.12) 0%, transparent 70%),
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 60px,
-          rgba(255,255,255,0.012) 60px,
-          rgba(255,255,255,0.012) 61px
-        ),
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 60px,
-          rgba(255,255,255,0.012) 60px,
-          rgba(255,255,255,0.012) 61px
-        );
-    }
+/* Status indicator */
+.inmate-card::before {
+  content:'';
+  position:absolute; top:0; left:0;
+  width:3px; height:100%;
+  background:var(--border);
+}
+.inmate-card.has-page::before { background:var(--red); }
+.inmate-card.featured::before { background:var(--gold); }
 
-    /* Razor wire SVG decoration */
-    .wire-line {
-      position: absolute;
-      width: 100%;
-      left: 0;
-      opacity: 0.15;
-    }
-    .wire-line.top { top: 15%; }
-    .wire-line.bottom { bottom: 15%; }
+.ic-top { display:flex; gap:1rem; align-items:flex-start; }
+.ic-avatar {
+  width:52px; height:52px; flex-shrink:0;
+  background:var(--panel2);
+  border:1px solid var(--border2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--display); font-size:1.4rem;
+  color:var(--dim); letter-spacing:0.05em;
+  overflow:hidden; position:relative;
+}
+.ic-avatar img {
+  width:100%; height:100%; object-fit:cover;
+  position:absolute; inset:0;
+}
+.ic-info { flex:1; min-width:0; }
+.ic-name {
+  font-family:var(--display); font-size:1.1rem;
+  color:var(--bright); letter-spacing:0.06em;
+  line-height:1.1; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.ic-alias {
+  font-family:var(--type); font-size:0.72rem;
+  color:var(--red); margin-top:0.15rem;
+}
+.ic-id {
+  font-family:var(--mono); font-size:0.55rem;
+  letter-spacing:0.15em; color:var(--dim);
+  margin-top:0.25rem;
+}
 
-    .hero-eyebrow {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      animation: slideUp 1s ease 0.2s both;
-    }
+.ic-stats {
+  display:flex; gap:0; border:1px solid var(--border);
+  background:var(--black);
+}
+.ic-stat {
+  flex:1; padding:0.4rem 0.5rem; text-align:center;
+  border-right:1px solid var(--border);
+}
+.ic-stat:last-child { border-right:none; }
+.ic-stat-num {
+  font-family:var(--display); font-size:0.95rem;
+  color:var(--bright); letter-spacing:0.04em; display:block;
+}
+.ic-stat-lbl {
+  font-family:var(--mono); font-size:0.45rem;
+  letter-spacing:0.12em; color:var(--dim);
+  text-transform:uppercase; display:block;
+  margin-top:0.1rem;
+}
 
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 18vw, 16rem);
-      line-height: 0.85;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      text-shadow:
-        4px 4px 0 var(--blood),
-        8px 8px 0 rgba(139,0,0,0.3),
-        0 0 100px rgba(192,22,15,0.2);
-      animation: slideUp 1s ease 0.4s both;
-      position: relative;
-    }
+.ic-tags { display:flex; flex-wrap:wrap; gap:0.35rem; }
+.ic-tag {
+  font-family:var(--mono); font-size:0.5rem;
+  letter-spacing:0.12em; text-transform:uppercase;
+  padding:0.2rem 0.45rem; border:1px solid var(--border2);
+  color:var(--dim);
+}
+.ic-tag.writing { border-color:var(--red); color:var(--red); }
+.ic-tag.art { border-color:#3a7bd5; color:#3a7bd5; }
+.ic-tag.music { border-color:var(--gold); color:var(--gold); }
+.ic-tag.new { background:var(--red); border-color:var(--red); color:white; }
 
-    .hero-title .red { color: var(--red); display: block; }
+.ic-facility {
+  font-family:var(--mono); font-size:0.55rem;
+  letter-spacing:0.1em; color:var(--dim);
+  margin-top:auto; padding-top:0.75rem;
+  border-top:1px solid var(--border);
+  display:flex; justify-content:space-between;
+  align-items:center;
+}
+.ic-cta {
+  font-family:var(--mono); font-size:0.52rem;
+  letter-spacing:0.12em; color:var(--red);
+  text-transform:uppercase;
+}
 
-    .hero-subtitle {
-      font-family: 'Special Elite', cursive;
-      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-      color: var(--smoke);
-      margin-top: 2rem;
-      max-width: 600px;
-      line-height: 1.7;
-      animation: slideUp 1s ease 0.6s both;
-    }
+/* NO PAGE CARD */
+.inmate-card.no-page {
+  opacity:0.45;
+}
+.inmate-card.no-page .ic-cta { color:var(--dim); }
 
-    .hero-cta {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 3rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: slideUp 1s ease 0.8s both;
-    }
+/* PAGINATION */
+.pagination {
+  display:flex; gap:1px;
+  background:var(--border); border:1px solid var(--border);
+  width:fit-content;
+}
+.page-btn {
+  background:var(--panel); border:none;
+  font-family:var(--mono); font-size:0.6rem;
+  letter-spacing:0.1em; color:var(--dim);
+  padding:0.65rem 1rem; cursor:pointer;
+  transition:all 0.15s;
+}
+.page-btn:hover { background:var(--panel2); color:var(--text); }
+.page-btn.active { background:var(--red); color:white; }
 
-    .cta-primary {
-      background: var(--red);
-      color: var(--white);
-      padding: 1rem 2.5rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 0.1em;
-      text-decoration: none;
-      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-      transition: all 0.2s;
-    }
-    .cta-primary:hover { background: #e01a12; transform: translateY(-3px); box-shadow: 0 10px 40px rgba(192,22,15,0.4); }
+/* ── GET YOUR PAGE BANNER ─────────────── */
+.get-page-banner {
+  background: var(--red);
+  padding:3rem 2rem;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.gpb-headline {
+  font-family:var(--display); font-size:clamp(2rem,5vw,3.5rem);
+  color:white; letter-spacing:0.05em; margin-bottom:0.75rem;
+}
+.gpb-sub {
+  font-style:italic; color:rgba(255,255,255,0.75);
+  font-size:1rem; line-height:1.7; margin-bottom:1.5rem;
+}
+.gpb-btn {
+  display:inline-block; background:white; color:var(--red);
+  font-family:var(--mono); font-size:0.7rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  padding:0.9rem 2.5rem; text-decoration:none;
+  transition:background 0.15s; font-weight:700;
+}
+.gpb-btn:hover { background:var(--bright); }
 
-    .cta-secondary {
-      border: 1px solid var(--wire);
-      color: var(--smoke);
-      padding: 1rem 2.5rem;
-      font-family: 'Special Elite', cursive;
-      font-size: 0.95rem;
-      letter-spacing: 0.06em;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .cta-secondary:hover { border-color: var(--red); color: var(--white); }
+/* ── FOOTER ───────────────────────────── */
+footer {
+  border-top:1px solid var(--border);
+  padding:2.5rem 2rem;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:1rem;
+  max-width:1400px; margin:0 auto;
+}
+.footer-brand {
+  font-family:var(--display); font-size:1.1rem;
+  color:var(--bright); letter-spacing:0.08em;
+}
+.footer-brand span { color:var(--red); }
+.footer-meta {
+  font-family:var(--mono); font-size:0.55rem;
+  letter-spacing:0.1em; color:var(--dim); line-height:1.9;
+  text-align:right;
+}
 
-    .scroll-hint {
-      position: absolute;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      animation: slideUp 1s ease 1.2s both;
-    }
-    .scroll-hint span {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      color: var(--wire);
-    }
-    .scroll-hint .arrow {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, var(--wire), transparent);
-      animation: pulse 2s infinite;
-    }
-
-    /* DIVIDER */
-    .section-divider {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 0 4rem;
-      margin: 1rem 0;
-    }
-    .section-divider::before,
-    .section-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--wire), transparent);
-    }
-    .section-divider span {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.25em;
-      color: var(--red);
-    }
-
-    /* === ABOUT SECTION === */
-    #about {
-      padding: 8rem 2rem;
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: center;
-    }
-
-    .about-text { }
-
-    .section-label {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
-
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 6vw, 5rem);
-      line-height: 0.9;
-      color: var(--white);
-      margin-bottom: 2rem;
-    }
-    .section-title span { color: var(--red); }
-
-    .about-body {
-      font-family: 'Special Elite', cursive;
-      color: var(--smoke);
-      font-size: 1rem;
-      line-height: 1.9;
-    }
-    .about-body p + p { margin-top: 1.2rem; }
-
-    .about-stat-block {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-
-    .stat-card {
-      border-left: 3px solid var(--red);
-      padding: 1.5rem 2rem;
-      background: rgba(255,255,255,0.02);
-      position: relative;
-      overflow: hidden;
-    }
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(192,22,15,0.05) 0%, transparent 60%);
-    }
-
-    .stat-number {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.5rem;
-      color: var(--red);
-      line-height: 1;
-    }
-    .stat-label {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      color: var(--smoke);
-      margin-top: 0.3rem;
-    }
-
-    /* === CHAPTERS / PARTS === */
-    #manuscript {
-      padding: 8rem 2rem;
-      background: var(--deep);
-      position: relative;
-    }
-
-    #manuscript::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--blood), transparent);
-    }
-
-    .manuscript-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .manuscript-header {
-      text-align: center;
-      margin-bottom: 5rem;
-    }
-
-    .parts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .part-card {
-      border: 1px solid var(--wire);
-      padding: 2.5rem;
-      position: relative;
-      transition: all 0.3s;
-      background: rgba(0,0,0,0.3);
-      overflow: hidden;
-    }
-    .part-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(192,22,15,0.06), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .part-card:hover { border-color: var(--blood); transform: translateY(-4px); }
-    .part-card:hover::before { opacity: 1; }
-
-    .part-number {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 5rem;
-      color: rgba(192,22,15,0.12);
-      line-height: 1;
-      position: absolute;
-      top: 1rem;
-      right: 1.5rem;
-    }
-
-    .part-tag {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .part-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      color: var(--white);
-      letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-      line-height: 1.1;
-    }
-    .part-desc {
-      font-family: 'Special Elite', cursive;
-      font-size: 0.85rem;
-      color: var(--smoke);
-      line-height: 1.7;
-    }
-    .part-years {
-      margin-top: 1.5rem;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.7rem;
-      color: var(--wire);
-      letter-spacing: 0.15em;
-    }
-
-    /* === COMIC SECTION === */
-    #comic {
-      padding: 8rem 2rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .comic-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    .comic-mockup {
-      position: relative;
-      aspect-ratio: 3/4;
-      background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
-      border: 2px solid var(--wire);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .comic-mockup::before {
-      content: 'K-MASTER K\A&\A THE HAMMER';
-      white-space: pre;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem;
-      color: var(--red);
-      text-align: center;
-      line-height: 1.2;
-      text-shadow: 0 0 40px rgba(192,22,15,0.6);
-      letter-spacing: 0.05em;
-    }
-    .comic-mockup::after {
-      content: 'ISSUE #0';
-      position: absolute;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.3em;
-      color: var(--smoke);
-      border-top: 1px solid var(--wire);
-      padding-top: 0.8rem;
-      width: 80%;
-      text-align: center;
-    }
-
-    .comic-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--red);
-      color: var(--white);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      padding: 0.3rem 0.7rem;
-      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-    }
-
-    .comic-info { }
-
-    .comic-desc {
-      font-family: 'Special Elite', cursive;
-      color: var(--smoke);
-      font-size: 1rem;
-      line-height: 1.9;
-      margin-bottom: 2rem;
-    }
-
-    .comic-cta-group {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* === LETTERS / UPDATES === */
-    #dispatches {
-      padding: 8rem 2rem;
-      background: var(--deep);
-      position: relative;
-    }
-    #dispatches::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--blood), transparent);
-    }
-
-    .dispatches-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .letter-stack {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 4rem;
-    }
-
-    .letter-card {
-      background: rgba(232,223,200,0.04);
-      border: 1px solid rgba(232,223,200,0.08);
-      padding: 2rem;
-      transition: all 0.3s;
-      position: relative;
-    }
-    .letter-card:hover { background: rgba(232,223,200,0.07); border-color: rgba(232,223,200,0.15); transform: translateY(-3px); }
-
-    .letter-date {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      color: var(--red);
-      margin-bottom: 1rem;
-    }
-    .letter-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 0.06em;
-      color: var(--white);
-      margin-bottom: 0.8rem;
-      line-height: 1.1;
-    }
-    .letter-excerpt {
-      font-family: 'Special Elite', cursive;
-      font-size: 0.85rem;
-      color: var(--smoke);
-      line-height: 1.7;
-    }
-    .letter-tag {
-      display: inline-block;
-      margin-top: 1.2rem;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      color: var(--wire);
-      border: 1px solid var(--wire);
-      padding: 0.2rem 0.6rem;
-    }
-
-    /* === FOOTER === */
-    footer {
-      padding: 5rem 2rem 3rem;
-      text-align: center;
-      border-top: 1px solid var(--wire);
-      position: relative;
-    }
-
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-    }
-    .footer-logo span { color: var(--red); }
-
-    .footer-tagline {
-      font-family: 'Special Elite', cursive;
-      font-size: 0.9rem;
-      color: var(--smoke);
-      margin-bottom: 3rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2.5rem;
-      justify-content: center;
-      list-style: none;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-    .footer-links a {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      color: var(--wire);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: var(--red); }
-
-    .footer-copy {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.65rem;
-      color: var(--wire);
-      letter-spacing: 0.1em;
-    }
-
-    /* === ANIMATIONS === */
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-
-    /* Intersection Observer animation class */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* MOBILE */
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      #about, .comic-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .about-stat-block { flex-direction: row; flex-wrap: wrap; }
-      .stat-card { flex: 1; min-width: 120px; }
-    }
-  </style>
+/* RESPONSIVE */
+@media(max-width:640px){
+  nav { padding:0 1rem; gap:1rem; }
+  .nav-links { display:none; }
+  .dir-section { padding:2rem 1rem 4rem; }
+  .featured-inner { padding:0 1rem; }
+  .get-page-banner { padding:2.5rem 1rem; }
+}
+</style>
 </head>
 <body>
 
-  <!-- AGE GATE -->
-  <div id="age-gate">
-    <div class="gate-title">RAZOR<br>WIRE<br>FEELS</div>
-    <p class="gate-sub">
-      This site contains mature themes including violence, adult content, and frank depictions of incarceration. You must be 18 or older to enter.
-    </p>
-    <div class="btn-group">
-      <button class="btn-enter" onclick="enterSite()">I AM 18+ — ENTER</button>
-      <button class="btn-leave" onclick="window.location.href='https://www.google.com'">I AM UNDER 18</button>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">RAZOR WIRE <span>FEELS</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Directory</a></li>
+    <li><a href="signup.html">Get Your Page</a></li>
+    <li><a href="release-form.html">Release Form</a></li>
+    <li><a href="NC-1369313.html">Redbeard</a></li>
+    <li><a href="signup.html" class="nav-cta">Submit Work</a></li>
+  </ul>
+</nav>
+
+<!-- MISSION -->
+<div style="background:var(--deep); border-bottom:1px solid var(--border);">
+  <div class="mission">
+    <div class="mission-left">
+      <div class="mission-kicker">North Carolina · NCDAC · Est. 2026</div>
+      <h1 class="mission-headline">32,000<br>PEOPLE.<br>ONE <span class="r">VOICE</span><br>EACH.</h1>
+      <div class="mission-body">
+        <p>There are approximately 32,000 people incarcerated in North Carolina state prisons right now. Most of them will never be heard. Not because they have nothing to say — but because no one built them a place to say it.</p>
+        <p>Razor Wire Feels is that place. A permanent public page for every incarcerated person in NC who wants one. Their writing. Their art. Their story. Published, preserved, and open to the world.</p>
+        <p>Every page on this platform was created by someone on the inside. Every word was written behind a wall. We just made sure it got out.</p>
+      </div>
     </div>
-    <p class="gate-warning">
-      RAZOR WIRE FEELS is a memoir project.<br>
-      All events depicted are based on true events.<br>
-      Names may have been changed.
-    </p>
+    <div class="mission-right">
+      <div class="stat-row">
+        <div class="stat-num red" id="stat-inmates">32,000</div>
+        <div class="stat-label">people currently<br>incarcerated in NC</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-num" id="stat-pages">1</div>
+        <div class="stat-label">active pages<br>on this platform</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-num" id="stat-pieces">8</div>
+        <div class="stat-label">pieces of writing<br>published</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-num">55+</div>
+        <div class="stat-label">NCDAC facilities<br>across NC</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED: BEST OF THIS WEEK -->
+<div class="featured-section">
+  <div class="featured-inner">
+    <div class="sec-head">
+      <div class="sec-title">BEST OF <span>THIS WEEK</span></div>
+      <a href="#directory" class="sec-link">View all →</a>
+    </div>
+    <div class="cards-scroll" id="week-cards">
+      <a class="feat-card has-page" href="NC-1369313.html">
+        <div class="fc-tag">Writing · Part V</div>
+        <div class="fc-name">Redbeard the Astronomer</div>
+        <div class="fc-excerpt">"The Final Letter. Allan Sandage once said the biggest question is whether the universe is finite or infinite. Lying here I wonder the same about time..."</div>
+        <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison</span></div>
+      </a>
+      <a class="feat-card has-page" href="NC-1369313.html">
+        <div class="fc-tag">Writing · Part IV</div>
+        <div class="fc-name">Redbeard the Regressor</div>
+        <div class="fc-excerpt">"I learned a card trick today from a book I found on the block. Called it Redbeard the Regressor. Going backwards feels like going somewhere..."</div>
+        <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison</span></div>
+      </a>
+      <div class="feat-card" style="opacity:0.4; cursor:default;">
+        <div class="fc-tag">Your work here</div>
+        <div class="fc-name">Get Your Page</div>
+        <div class="fc-excerpt">Write to us at our PO Box and your work could be featured here. Free pages for every incarcerated person in NC.</div>
+        <div class="fc-meta"><span>razorwirefeels.org</span><span>NC</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED: BEST OF THIS MONTH -->
+<div class="featured-section">
+  <div class="featured-inner">
+    <div class="sec-head">
+      <div class="sec-title">BEST OF <span>THIS MONTH</span></div>
+      <a href="#directory" class="sec-link">View all →</a>
+    </div>
+    <div class="cards-scroll">
+      <a class="feat-card has-page" href="NC-1369313.html">
+        <div class="fc-tag">Writing · Part III</div>
+        <div class="fc-name">The Cold Open</div>
+        <div class="fc-excerpt">"Six miles from where I grew up. I could see a window — sandblasted so you couldn't see through it. There were grates on it. I stared at it for a year."</div>
+        <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison · Solitary</span></div>
+      </a>
+      <a class="feat-card has-page" href="NC-1369313.html">
+        <div class="fc-tag">Writing · Part IV</div>
+        <div class="fc-name">COVID Through a Radio</div>
+        <div class="fc-excerpt">"The world went into lockdown March 2020. I'd been locked down since May 2019. I heard the whole pandemic through a transistor radio. Glenn Beck. Rush. NPR."</div>
+        <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison · Solitary</span></div>
+      </a>
+      <div class="feat-card" style="opacity:0.4; cursor:default;">
+        <div class="fc-tag">Your work here</div>
+        <div class="fc-name">Get Your Page</div>
+        <div class="fc-excerpt">Mail us your writing or artwork. We scan it, publish it, and your readers get notified the moment it goes live.</div>
+        <div class="fc-meta"><span>razorwirefeels.org</span><span>NC</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED: MOST VIEWED -->
+<div class="featured-section">
+  <div class="featured-inner">
+    <div class="sec-head">
+      <div class="sec-title"><span>MOST</span> VIEWED</div>
+      <a href="#directory" class="sec-link">View all →</a>
+    </div>
+    <div class="cards-scroll">
+      <a class="feat-card has-page" href="NC-1369313.html">
+        <div class="fc-tag">Writing · Origin Episode</div>
+        <div class="fc-name">Redbeard the Great</div>
+        <div class="fc-excerpt">"12/12/20. I am officially Redbeard the Regressor. Teaching myself card tricks in a cell six miles from where I was born. This is how you go backwards to move forward."</div>
+        <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>834 views</span></div>
+      </a>
+      <div class="feat-card" style="opacity:0.4; cursor:default;">
+        <div class="fc-tag">Coming soon</div>
+        <div class="fc-name">More pages loading</div>
+        <div class="fc-excerpt">As more writers and artists get their pages, the most viewed section will fill up. Every voice deserves to be read.</div>
+        <div class="fc-meta"><span>razorwirefeels.org</span><span>NC</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED: NEWEST -->
+<div class="featured-section">
+  <div class="featured-inner">
+    <div class="sec-head">
+      <div class="sec-title">NEWEST <span>EPISODES</span></div>
+      <a href="#directory" class="sec-link">View all →</a>
+    </div>
+    <div class="cards-scroll">
+      <a class="feat-card has-page" href="NC-1369313.html">
+        <div class="fc-tag">Latest · 10/26/23</div>
+        <div class="fc-name">The Final Letter</div>
+        <div class="fc-excerpt">"Redbeard the Astronomer. a.o.T.D — The Allan Sandage quote got me thinking about what's finite and what isn't. I think I finally know."</div>
+        <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Just added</span></div>
+      </a>
+      <div class="feat-card" style="opacity:0.4; cursor:default;">
+        <div class="fc-tag">Yours could be next</div>
+        <div class="fc-name">Submit your work</div>
+        <div class="fc-excerpt">New submissions processed weekly. Mail us your letters or artwork and we'll have them live within 2 weeks of receiving them.</div>
+        <div class="fc-meta"><span>PO Box — coming soon</span><span>NC</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<div class="dir-section" id="directory">
+  <div class="sec-head">
+    <div class="sec-title">THE <span>DIRECTORY</span></div>
+    <span class="sec-link">All NCDAC · North Carolina</span>
   </div>
 
-  <!-- MAIN SITE -->
-  <div id="site">
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <input class="search-input" id="searchInput" type="text"
+      placeholder="Search by name or inmate ID number..." autocomplete="off">
+    <button class="search-btn" onclick="doSearch()">Search →</button>
+  </div>
 
-    <!-- NAV -->
-    <nav>
-      <a href="#hero" class="nav-logo">RAZOR<span>WIRE</span>FEELS</a>
-      <ul class="nav-links">
-        <li><a href="#about">THE STORY</a></li>
-        <li><a href="#manuscript">THE BOOK</a></li>
-        <li><a href="#comic">THE COMIC</a></li>
-        <li><a href="#dispatches">DISPATCHES</a></li>
-      </ul>
-    </nav>
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn on" onclick="setFilter(this,'all')">All</button>
+    <button class="filter-btn" onclick="setFilter(this,'page')">Has a Page</button>
+    <button class="filter-btn" onclick="setFilter(this,'writing')">Writing</button>
+    <button class="filter-btn" onclick="setFilter(this,'art')">Artwork</button>
+    <button class="filter-btn" onclick="setFilter(this,'new')">New This Month</button>
+  </div>
 
-    <!-- HERO -->
-    <section id="hero">
-      <svg class="wire-line top" viewBox="0 0 1440 20" fill="none" preserveAspectRatio="none">
-        <path d="M0 10 Q 180 0 360 10 Q 540 20 720 10 Q 900 0 1080 10 Q 1260 20 1440 10" stroke="#c0160f" stroke-width="1.5" fill="none"/>
-        <circle cx="360" cy="10" r="4" fill="#c0160f"/>
-        <circle cx="720" cy="10" r="4" fill="#c0160f"/>
-        <circle cx="1080" cy="10" r="4" fill="#c0160f"/>
-      </svg>
+  <!-- SORT -->
+  <div class="sort-row">
+    <div class="sort-count">Showing <span id="show-count">1</span> active page · <span style="color:var(--dim)">32,000 seats available</span></div>
+    <select class="sort-select" onchange="sortGrid(this.value)">
+      <option value="recent">Most Recent</option>
+      <option value="views">Most Viewed</option>
+      <option value="alpha">A – Z</option>
+      <option value="id">By ID Number</option>
+    </select>
+  </div>
 
-      <div class="hero-eyebrow">A TRUE STORY FROM BEHIND THE WIRE</div>
-      <h1 class="hero-title">
-        RAZOR WIRE
-        <span class="red">FEELS</span>
-      </h1>
-      <p class="hero-subtitle">
-        A memoir of incarceration, survival, and the absurd.<br>
-        Written letter by letter from inside a box.
-      </p>
-      <div class="hero-cta">
-        <a href="#manuscript" class="cta-primary">READ THE BOOK</a>
-        <a href="#comic" class="cta-secondary">GET THE COMIC</a>
-      </div>
+  <!-- GRID -->
+  <div class="inmate-grid" id="inmateGrid">
 
-      <svg class="wire-line bottom" viewBox="0 0 1440 20" fill="none" preserveAspectRatio="none">
-        <path d="M0 10 Q 180 20 360 10 Q 540 0 720 10 Q 900 20 1080 10 Q 1260 0 1440 10" stroke="#3a3a3a" stroke-width="1" fill="none"/>
-        <circle cx="360" cy="10" r="3" fill="#3a3a3a"/>
-        <circle cx="720" cy="10" r="3" fill="#3a3a3a"/>
-        <circle cx="1080" cy="10" r="3" fill="#3a3a3a"/>
-      </svg>
-
-      <div class="scroll-hint">
-        <span>SCROLL</span>
-        <div class="arrow"></div>
-      </div>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="section-divider"><span>///</span></div>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="about-text reveal">
-        <p class="section-label">// THE STORY</p>
-        <h2 class="section-title">COUSIN,<br>BLOOD OF<br><span>MY BLOOD.</span></h2>
-        <div class="about-body">
-          <p>
-            What started as handwritten letters smuggled through the system became something else entirely — a raw, unfiltered document of life inside.
-          </p>
-          <p>
-            From county lockup to state time, this is the story no prison memoir has told: equal parts gut-punch and dark comedy, gonzo journalism meets jailhouse philosophy.
-          </p>
-          <p>
-            52 episodes. 5 years. One voice that refused to go quiet.
-          </p>
+    <!-- NICOLAS — THE ONLY REAL PAGE RIGHT NOW -->
+    <a class="inmate-card has-page featured" href="NC-1369313.html"
+      data-name="nicolas losito" data-id="1369313"
+      data-type="writing" data-facility="central prison" data-new="true">
+      <div class="ic-top">
+        <div class="ic-avatar">RL</div>
+        <div class="ic-info">
+          <div class="ic-name">Nicolas Losito</div>
+          <div class="ic-alias">"Redbeard the Great"</div>
+          <div class="ic-id">ID: 1369313 · NCDAC</div>
         </div>
       </div>
-      <div class="about-stat-block reveal">
-        <div class="stat-card">
-          <div class="stat-number">52</div>
-          <div class="stat-label">// EPISODES</div>
+      <div class="ic-stats">
+        <div class="ic-stat">
+          <span class="ic-stat-num">52</span>
+          <span class="ic-stat-lbl">Episodes</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">5</div>
-          <div class="stat-label">// PARTS OF THE MEMOIR</div>
+        <div class="ic-stat">
+          <span class="ic-stat-num">1</span>
+          <span class="ic-stat-lbl">Comic</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">2017</div>
-          <div class="stat-label">// FIRST LETTER WRITTEN</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">26</div>
-          <div class="stat-label">// PAGES IN ISSUE #0</div>
+        <div class="ic-stat">
+          <span class="ic-stat-num">7</span>
+          <span class="ic-stat-lbl">Aliases</span>
         </div>
       </div>
-    </section>
+      <div class="ic-tags">
+        <span class="ic-tag writing">Writing</span>
+        <span class="ic-tag art">Comic</span>
+        <span class="ic-tag new">Featured</span>
+      </div>
+      <div class="ic-facility">
+        <span>Central Prison · Raleigh, NC</span>
+        <span class="ic-cta">View Page →</span>
+      </div>
+    </a>
 
-    <!-- MANUSCRIPT PARTS -->
-    <section id="manuscript">
-      <div class="manuscript-inner">
-        <div class="manuscript-header reveal">
-          <p class="section-label">// THE BOOK</p>
-          <h2 class="section-title">THE MANUSCRIPT</h2>
-        </div>
-        <div class="parts-grid">
-
-          <div class="part-card reveal">
-            <div class="part-number">I</div>
-            <p class="part-tag">// PART ONE</p>
-            <h3 class="part-title">THE COLD OPEN</h3>
-            <p class="part-desc">The 72 hours before everything collapsed. A fictional-yet-true prequel. The last night of freedom — told the way it actually felt.</p>
-            <p class="part-years">PRE-ARREST // 2017</p>
-          </div>
-
-          <div class="part-card reveal">
-            <div class="part-number">II</div>
-            <p class="part-tag">// PART TWO</p>
-            <h3 class="part-title">COUNTY TIME</h3>
-            <p class="part-desc">The first letters. The first episodes. Learning the rhythms of a world with no horizon. Christmas in a cage, 2017.</p>
-            <p class="part-years">2017 – 2018</p>
-          </div>
-
-          <div class="part-card reveal">
-            <div class="part-number">III</div>
-            <p class="part-tag">// PART THREE</p>
-            <h3 class="part-title">STATE PROPERTY</h3>
-            <p class="part-desc">Sentenced. Transferred. The real machine begins. Where absurdity and brutality share a cell and you learn to laugh or lose it.</p>
-            <p class="part-years">2019 – 2020</p>
-          </div>
-
-          <div class="part-card reveal">
-            <div class="part-number">IV</div>
-            <p class="part-tag">// PART FOUR</p>
-            <h3 class="part-title">PANDEMIC INSIDE</h3>
-            <p class="part-desc">COVID hits the yard. The stimulus check arrives. A comic book is born. The world outside stops — but inside, nothing changes.</p>
-            <p class="part-years">2020 – 2021</p>
-          </div>
-
-          <div class="part-card reveal">
-            <div class="part-number">V</div>
-            <p class="part-tag">// PART FIVE</p>
-            <h3 class="part-title">GETTING OUT</h3>
-            <p class="part-desc">The count down. The exit. The strange unreality of reentry. And the question every person asks when the gate opens: now what?</p>
-            <p class="part-years">2022 – 2023</p>
-          </div>
-
+    <!-- PLACEHOLDER CARDS — "seats available" -->
+    <div class="inmate-card no-page" data-name="" data-id="" data-type="" data-new="false">
+      <div class="ic-top">
+        <div class="ic-avatar" style="font-size:1.8rem; color:var(--border2);">+</div>
+        <div class="ic-info">
+          <div class="ic-name" style="color:var(--border2);">Your Name Here</div>
+          <div class="ic-id" style="color:var(--border2); margin-top:0.5rem;">This page is unclaimed</div>
         </div>
       </div>
-    </section>
+      <div class="ic-facility" style="border-top:1px solid var(--border); padding-top:0.75rem; margin-top:auto;">
+        <span style="color:var(--border2);">NCDAC · North Carolina</span>
+        <a href="signup.html" style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.12em; color:var(--red); text-transform:uppercase; text-decoration:none;">Claim it →</a>
+      </div>
+    </div>
 
-    <!-- COMIC SECTION -->
-    <section id="comic">
-      <div class="comic-inner">
-        <div class="comic-mockup reveal">
-          <div class="comic-badge">ISSUE #0</div>
-        </div>
-        <div class="comic-info reveal">
-          <p class="section-label">// THE COMIC</p>
-          <h2 class="section-title">K-MASTER K<br>& THE<br><span>HAMMER</span></h2>
-          <p class="comic-desc">
-            Created from scratch with a COVID stimulus check during lockdown. 26 pages of pure, unhinged energy — the Kissmobile, Couch Pizza, and a philosophical debate about the foundations of human civilization.
-          </p>
-          <p class="comic-desc">
-            This isn't a prison comic. This is what happens when you refuse to let the walls close in on your imagination.
-          </p>
-          <div class="comic-cta-group">
-            <a href="#" class="cta-primary">BUY ON ITCH.IO</a>
-            <a href="#" class="cta-secondary">READ FREE</a>
-          </div>
+    <div class="inmate-card no-page" data-name="" data-id="" data-type="" data-new="false">
+      <div class="ic-top">
+        <div class="ic-avatar" style="font-size:1.8rem; color:var(--border2);">+</div>
+        <div class="ic-info">
+          <div class="ic-name" style="color:var(--border2);">Your Name Here</div>
+          <div class="ic-id" style="color:var(--border2); margin-top:0.5rem;">This page is unclaimed</div>
         </div>
       </div>
-    </section>
+      <div class="ic-facility" style="border-top:1px solid var(--border); padding-top:0.75rem; margin-top:auto;">
+        <span style="color:var(--border2);">NCDAC · North Carolina</span>
+        <a href="signup.html" style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.12em; color:var(--red); text-transform:uppercase; text-decoration:none;">Claim it →</a>
+      </div>
+    </div>
 
-    <!-- DISPATCHES / LETTERS -->
-    <section id="dispatches">
-      <div class="dispatches-inner">
-        <div class="manuscript-header reveal">
-          <p class="section-label">// FROM THE INSIDE</p>
-          <h2 class="section-title">DISPATCHES<br><span style="color:var(--red)">FROM THE WIRE</span></h2>
-        </div>
-        <div class="letter-stack">
-
-          <div class="letter-card reveal">
-            <p class="letter-date">// CHRISTMAS 2017</p>
-            <h3 class="letter-title">THE FIRST LETTER</h3>
-            <p class="letter-excerpt">Where the story begins. County. The holidays. The strange comfort of a pen and paper when everything else is stripped away.</p>
-            <span class="letter-tag">EPISODE 001</span>
-          </div>
-
-          <div class="letter-card reveal">
-            <p class="letter-date">// JUNE 2020</p>
-            <h3 class="letter-title">COUSIN, BLOOD OF MY BLOOD</h3>
-            <p class="letter-excerpt">One of the defining letters of the collection. Written during the early pandemic months — when the outside world finally caught a taste of what inside already knew.</p>
-            <span class="letter-tag">EPISODE 032</span>
-          </div>
-
-          <div class="letter-card reveal">
-            <p class="letter-date">// 2021</p>
-            <h3 class="letter-title">THE STIMULUS CHECK ISSUE</h3>
-            <p class="letter-excerpt">How one check became a comic book. The origin story of K-Master K. Art made under maximum constraint is always the most honest art.</p>
-            <span class="letter-tag">EPISODE 041</span>
-          </div>
-
+    <div class="inmate-card no-page" data-name="" data-id="" data-type="" data-new="false">
+      <div class="ic-top">
+        <div class="ic-avatar" style="font-size:1.8rem; color:var(--border2);">+</div>
+        <div class="ic-info">
+          <div class="ic-name" style="color:var(--border2);">Your Name Here</div>
+          <div class="ic-id" style="color:var(--border2); margin-top:0.5rem;">This page is unclaimed</div>
         </div>
       </div>
-    </section>
+      <div class="ic-facility" style="border-top:1px solid var(--border); padding-top:0.75rem; margin-top:auto;">
+        <span style="color:var(--border2);">NCDAC · North Carolina</span>
+        <a href="signup.html" style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.12em; color:var(--red); text-transform:uppercase; text-decoration:none;">Claim it →</a>
+      </div>
+    </div>
 
-    <!-- FOOTER -->
-    <footer>
-      <div class="footer-logo">RAZOR<span>WIRE</span>FEELS</div>
-      <p class="footer-tagline">A true story. Written in blood and ballpoint.</p>
-      <ul class="footer-links">
-        <li><a href="#about">THE STORY</a></li>
-        <li><a href="#manuscript">THE BOOK</a></li>
-        <li><a href="#comic">THE COMIC</a></li>
-        <li><a href="#dispatches">DISPATCHES</a></li>
-        <li><a href="/cdn-cgi/l/email-protection#debdb1b0aabfbdaa9eacbfa4b1aca9b7acbbb8bbbbb2adf0bdb1b3">CONTACT</a></li>
-      </ul>
-      <p class="footer-copy">© 2024 RAZORWIREFEELS.COM — ALL RIGHTS RESERVED</p>
-    </footer>
+  </div><!-- /grid -->
 
-  </div><!-- /#site -->
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn" style="color:var(--dim); cursor:not-allowed;">2</button>
+      <button class="page-btn" style="color:var(--dim); cursor:not-allowed;">···</button>
+    </div>
+    <div style="font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:0.1em;">
+      31,999 pages still unclaimed — <a href="signup.html" style="color:var(--red); text-decoration:none;">help us fill them</a>
+    </div>
+  </div>
+</div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    function enterSite() {
-      const gate = document.getElementById('age-gate');
-      const site = document.getElementById('site');
-      gate.style.transition = 'opacity 0.5s ease';
-      gate.style.animation = 'none';
-      setTimeout(() => {
-        gate.style.opacity = '0';
-      }, 10);
-      setTimeout(() => {
-        gate.style.display = 'none';
-        site.style.display = 'block';
-        initReveal();
-      }, 520);
+<!-- GET YOUR PAGE BANNER -->
+<div class="get-page-banner">
+  <div class="gpb-headline">ARE YOU INSIDE?<br>THIS IS YOUR PAGE.</div>
+  <div class="gpb-sub">Free for every incarcerated person in North Carolina.<br>Write to us. We build your page. Your words reach the world.</div>
+  <a href="signup.html" class="gpb-btn">Get Your Free Page →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">RAZOR WIRE <span>FEELS</span></div>
+  <div class="footer-meta">
+    razorwirefeels.org · North Carolina<br>
+    Not affiliated with NCDAC or any correctional institution.<br>
+    Founded by Nicolas Losito "Redbeard the Great" · ID 1369313
+  </div>
+</footer>
+
+<script>
+// SEARCH
+function doSearch() {
+  var q = document.getElementById('searchInput').value.toLowerCase().trim();
+  var cards = document.querySelectorAll('#inmateGrid .inmate-card');
+  cards.forEach(function(card) {
+    var name = (card.dataset.name || '').toLowerCase();
+    var id = (card.dataset.id || '').toLowerCase();
+    if (!q || name.includes(q) || id.includes(q)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
     }
+  });
+}
 
-    function initReveal() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add('visible');
-            }, 100);
-            observer.unobserve(entry.target);
-          }
- 
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doSearch();
+});
+
+// FILTER
+var activeFilter = 'all';
+function setFilter(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  activeFilter = type;
+  var cards = document.querySelectorAll('#inmateGrid .inmate-card');
+  cards.forEach(function(card) {
+    if (type === 'all') { card.style.display = ''; return; }
+    if (type === 'page' && card.classList.contains('has-page')) { card.style.display = ''; return; }
+    if (type === 'new' && card.dataset.new === 'true') { card.style.display = ''; return; }
+    if (type === 'writing' && card.dataset.type && card.dataset.type.includes('writing')) { card.style.display = ''; return; }
+    if (type === 'art' && card.dataset.type && card.dataset.type.includes('art')) { card.style.display = ''; return; }
+    card.style.display = 'none';
+  });
+}
+
+// SORT (cosmetic for now — real sort when db is live)
+function sortGrid(val) {
+  // placeholder
+}
+
+// COUNT ANIMATION
+function animateCount(el, target, duration) {
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function() {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = Math.floor(start).toLocaleString();
+  }, 16);
+}
+
+var observed = false;
+var observer = new IntersectionObserver(function(entries) {
+  if (entries[0].isIntersecting && !observed) {
+    observed = true;
+    animateCount(document.getElementById('stat-inmates'), 32000, 1800);
+    animateCount(document.getElementById('stat-pages'), 1, 400);
+    animateCount(document.getElementById('stat-pieces'), 8, 600);
+  }
+}, { threshold: 0.3 });
+observer.observe(document.querySelector('.mission-right'));
+</script>
+</body>
+</html>

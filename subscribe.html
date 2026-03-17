@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscribe &amp; Support — Razor Wire Feels</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--black:#080808;--deep:#0f0f0f;--panel:#141414;--panel2:#1a1a1a;--border:#242424;--border2:#2e2e2e;--red:#c0160f;--red2:#e01a12;--gold:#b8960c;--green:#27ae60;--text:#ccc4b4;--dim:#665e50;--bright:#eee8dc;--mono:'IBM Plex Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'Libre Baskerville',serif;--type:'Special Elite',cursive;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:var(--body);min-height:100vh;}
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 2rem;gap:2rem;}
+.nav-logo{font-family:var(--display);font-size:1.15rem;letter-spacing:0.08em;color:var(--bright);text-decoration:none;}
+.nav-logo span{color:var(--red);}
+.nav-right{margin-left:auto;display:flex;gap:0;}
+.nav-right a{display:flex;align-items:center;height:56px;padding:0 1rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);text-decoration:none;border-left:1px solid var(--border);transition:all 0.15s;}
+.nav-right a:hover{color:var(--bright);}
+.nav-right a.cta{background:var(--red);color:white;}
+.hero{background:var(--deep);border-bottom:4px solid var(--red);padding:4rem 2rem;text-align:center;}
+.hero-kicker{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.4em;color:var(--red);text-transform:uppercase;margin-bottom:1rem;display:inline-flex;align-items:center;gap:0.75rem;}
+.hero-kicker::before,.hero-kicker::after{content:'';width:30px;height:1px;background:var(--red);}
+.hero-title{font-family:var(--display);font-size:clamp(3rem,8vw,6rem);color:var(--bright);letter-spacing:0.04em;line-height:0.9;margin-bottom:1rem;}
+.hero-title span{color:var(--red);}
+.hero-sub{font-style:italic;font-size:1rem;color:var(--text);line-height:1.85;max-width:580px;margin:0 auto;}
+.wrap{max-width:1100px;margin:0 auto;padding:4rem 2rem 6rem;}
+.section-kicker{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.35em;color:var(--red);text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:0.75rem;}
+.section-kicker::after{content:'';width:40px;height:1px;background:var(--red);}
+.section-title{font-family:var(--display);font-size:2.5rem;color:var(--bright);letter-spacing:0.05em;margin-bottom:2rem;}
+
+/* PLAN CARDS */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:5rem;}
+.plan{background:var(--panel);padding:2rem;display:flex;flex-direction:column;gap:0.75rem;position:relative;}
+.plan.featured{background:var(--panel2);border-top:3px solid var(--red);}
+.plan-badge{position:absolute;top:-1px;right:1.5rem;background:var(--red);color:white;font-family:var(--mono);font-size:0.48rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;}
+.plan-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--dim);}
+.plan-price{font-family:var(--display);font-size:2.5rem;color:var(--bright);letter-spacing:0.04em;line-height:1;}
+.plan-per{font-family:var(--mono);font-size:0.65rem;color:var(--dim);}
+.plan-desc{font-style:italic;font-size:0.8rem;color:var(--dim);line-height:1.65;}
+.plan-features{display:flex;flex-direction:column;gap:0.45rem;padding-top:1rem;border-top:1px solid var(--border);margin-top:auto;}
+.pf{display:flex;gap:0.5rem;font-size:0.78rem;color:var(--text);line-height:1.5;align-items:flex-start;}
+.pf-check{color:var(--green);font-family:var(--mono);flex-shrink:0;}
+.plan-btn{display:block;text-align:center;background:var(--red);color:white;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.85rem;text-decoration:none;transition:background 0.15s;margin-top:1rem;border:none;cursor:pointer;width:100%;}
+.plan-btn:hover{background:var(--red2);}
+.plan-btn.outline{background:transparent;border:1px solid var(--border2);color:var(--dim);}
+.plan-btn.outline:hover{border-color:var(--red);color:var(--red);}
+
+/* BOOK/MERCH/DONATE */
+.support-section{margin-bottom:5rem;}
+.support-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);}
+.support-card{background:var(--panel);padding:2rem;display:flex;flex-direction:column;gap:1rem;}
+.sc-icon{font-size:2.5rem;line-height:1;}
+.sc-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--red);}
+.sc-title{font-family:var(--display);font-size:1.5rem;color:var(--bright);letter-spacing:0.06em;line-height:1.1;}
+.sc-body{font-style:italic;font-size:0.82rem;color:var(--dim);line-height:1.75;}
+.sc-price{font-family:var(--display);font-size:2rem;color:var(--bright);letter-spacing:0.04em;}
+.sc-btn{display:block;background:var(--red);color:white;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.85rem;text-align:center;text-decoration:none;transition:background 0.15s;margin-top:auto;}
+.sc-btn:hover{background:var(--red2);}
+.sc-btn.gold{background:var(--gold);color:var(--black);}
+.sc-btn.gold:hover{background:#9a7a0a;}
+.sc-btn.outline{background:transparent;border:1px solid var(--border2);color:var(--dim);}
+.sc-btn.outline:hover{border-color:var(--green);color:var(--green);}
+
+/* DONATE AMOUNTS */
+.donate-amounts{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;}
+.da-btn{background:transparent;border:1px solid var(--border2);color:var(--dim);font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;padding:0.5rem 1rem;cursor:pointer;transition:all 0.15s;}
+.da-btn:hover,.da-btn.selected{background:var(--green);border-color:var(--green);color:white;}
+.custom-amount{background:var(--black);border:1px solid var(--border2);color:var(--bright);font-family:var(--mono);font-size:0.75rem;padding:0.5rem 0.75rem;width:100%;outline:none;margin-bottom:0.75rem;}
+.custom-amount:focus{border-color:var(--green);}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--mono);font-size:0.55rem;color:var(--dim);letter-spacing:0.1em;line-height:2;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">RAZOR WIRE <span>FEELS</span></a>
+  <div class="nav-right">
+    <a href="index.html">Directory</a>
+    <a href="submit.html">Submit</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html" class="cta">Browse</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-kicker">Subscribe &amp; Support</div>
+  <h1 class="hero-title">SUPPORT THE<br><span>CAUSE</span></h1>
+  <p class="hero-sub">Subscribe to follow writers, support the platform, buy the book, or donate directly. Everything here helps keep Razor Wire Feels running and keeps incarcerated voices in the world.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- SUBSCRIPTIONS -->
+  <div class="section-kicker">Reader Plans</div>
+  <h2 class="section-title">SUBSCRIPTIONS</h2>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-label">Free Reader</div>
+      <div class="plan-price">FREE <span class="plan-per">/ always</span></div>
+      <div class="plan-desc">Follow writers, read everything, get notified when new episodes drop.</div>
+      <div class="plan-features">
+        <div class="pf"><span class="pf-check">✓</span> Read all public episodes</div>
+        <div class="pf"><span class="pf-check">✓</span> Follow writers, get email alerts</div>
+        <div class="pf"><span class="pf-check">✓</span> Like and comment</div>
+        <div class="pf"><span class="pf-check">✓</span> Browse the full directory</div>
+      </div>
+      <button class="plan-btn outline">Create Free Account</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-label">Supporter</div>
+      <div class="plan-price">$5 <span class="plan-per">/ month</span></div>
+      <div class="plan-desc">Support the platform directly. 80% of every dollar goes to the writers you support.</div>
+      <div class="plan-features">
+        <div class="pf"><span class="pf-check">✓</span> Everything in Free</div>
+        <div class="pf"><span class="pf-check">✓</span> Support specific writers monthly</div>
+        <div class="pf"><span class="pf-check">✓</span> Supporter badge on your profile</div>
+        <div class="pf"><span class="pf-check">✓</span> Early access to new episodes</div>
+      </div>
+      <button class="plan-btn" onclick="alert('Stripe integration coming soon. Check back shortly.')">Subscribe — $5/mo</button>
+    </div>
+    <div class="plan">
+      <div class="plan-label">Patron</div>
+      <div class="plan-price">$10 <span class="plan-per">/ month</span></div>
+      <div class="plan-desc">For people who believe in this work and want to put real weight behind it.</div>
+      <div class="plan-features">
+        <div class="pf"><span class="pf-check">✓</span> Everything in Supporter</div>
+        <div class="pf"><span class="pf-check">✓</span> Patron badge</div>
+        <div class="pf"><span class="pf-check">✓</span> Name in site credits</div>
+        <div class="pf"><span class="pf-check">✓</span> Direct line to founder</div>
+      </div>
+      <button class="plan-btn outline" onclick="alert('Stripe integration coming soon. Check back shortly.')">Become a Patron</button>
+    </div>
+  </div>
+
+  <!-- BOOK / MERCH / DONATE -->
+  <div class="section-kicker">Buy &amp; Support</div>
+  <h2 class="section-title">THE STORE</h2>
+  <div class="support-grid">
+
+    <!-- BOOK -->
+    <div class="support-card">
+      <div class="sc-icon">📖</div>
+      <div class="sc-label">The Book</div>
+      <div class="sc-title">RAZOR WIRE FEELS<br>THE BEST OF</div>
+      <div class="sc-body">The curated collection of Nicolas Losito's best writing from inside North Carolina's prison system. Memoir, letters, essays, and episodes from 2017–2023. By Redbeard the Great.</div>
+      <div class="sc-price">$25</div>
+      <a href="coming-soon.html" class="sc-btn">Pre-Order Now →</a>
+    </div>
+
+    <!-- MERCH -->
+    <div class="support-card">
+      <div class="sc-icon">👕</div>
+      <div class="sc-label">Merch</div>
+      <div class="sc-title">RAZOR WIRE<br>FEELS GEAR</div>
+      <div class="sc-body">Tees, hats, and prints. Wear the platform. Every purchase helps fund new pages for incarcerated writers across North Carolina.</div>
+      <div class="sc-price">From $20</div>
+      <a href="coming-soon.html" class="sc-btn">Shop Merch →</a>
+    </div>
+
+    <!-- DONATE -->
+    <div class="support-card">
+      <div class="sc-icon">❤️</div>
+      <div class="sc-label">Donate</div>
+      <div class="sc-title">SUPPORT<br>THE CAUSE</div>
+      <div class="sc-body">Every dollar donated helps us process more mail, publish more pages, and get more incarcerated voices heard. No amount too small.</div>
+      <div class="donate-amounts">
+        <button class="da-btn selected" onclick="selectAmount(this,'5')">$5</button>
+        <button class="da-btn" onclick="selectAmount(this,'10')">$10</button>
+        <button class="da-btn" onclick="selectAmount(this,'25')">$25</button>
+        <button class="da-btn" onclick="selectAmount(this,'50')">$50</button>
+      </div>
+      <input class="custom-amount" id="custom-amount" type="text" placeholder="Or enter custom amount">
+      <a href="#" class="sc-btn outline" style="color:var(--green);border-color:var(--green);" onclick="donate()">Donate Now →</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>razorwirefeels.org · North Carolina · Not affiliated with NCDAC<br>Founded by Nicolas Losito "Redbeard the Great" · ID 1369313</footer>
+
+<script>
+var selectedAmount = '5';
+function selectAmount(btn, val) {
+  document.querySelectorAll('.da-btn').forEach(function(b){ b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  selectedAmount = val;
+  document.getElementById('custom-amount').value = '';
+}
+function donate() {
+  var amt = document.getElementById('custom-amount').value || selectedAmount;
+  alert('Thank you! Stripe payment integration coming soon. Donation of $' + amt + ' will be processed shortly.');
+}
+</script>
+</body>
+</html>

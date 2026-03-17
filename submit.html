@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Submit — Razor Wire Feels</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--black:#080808;--deep:#0f0f0f;--panel:#141414;--panel2:#1a1a1a;--border:#242424;--border2:#2e2e2e;--red:#c0160f;--red2:#e01a12;--red-dim:rgba(192,22,15,0.12);--gold:#b8960c;--text:#ccc4b4;--dim:#665e50;--bright:#eee8dc;--mono:'IBM Plex Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'Libre Baskerville',serif;--type:'Special Elite',cursive;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:var(--body);min-height:100vh;}
+
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 2rem;gap:2rem;}
+.nav-logo{font-family:var(--display);font-size:1.15rem;letter-spacing:0.08em;color:var(--bright);text-decoration:none;}
+.nav-logo span{color:var(--red);}
+.nav-right{margin-left:auto;display:flex;gap:0;}
+.nav-right a{display:flex;align-items:center;height:56px;padding:0 1rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);text-decoration:none;border-left:1px solid var(--border);transition:all 0.15s;}
+.nav-right a:hover{color:var(--bright);background:var(--panel);}
+.nav-right a.cta{background:var(--red);color:white;}
+
+.hero{background:var(--deep);border-bottom:4px solid var(--red);padding:4rem 2rem 3.5rem;text-align:center;}
+.hero-kicker{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.4em;color:var(--red);text-transform:uppercase;margin-bottom:1rem;display:inline-flex;align-items:center;gap:0.75rem;}
+.hero-kicker::before,.hero-kicker::after{content:'';width:30px;height:1px;background:var(--red);}
+.hero-title{font-family:var(--display);font-size:clamp(3rem,8vw,6rem);color:var(--bright);letter-spacing:0.04em;line-height:0.9;margin-bottom:1rem;}
+.hero-title span{color:var(--red);}
+.hero-sub{font-style:italic;font-size:1rem;color:var(--text);line-height:1.85;max-width:580px;margin:0 auto;}
+
+.wrap{max-width:1000px;margin:0 auto;padding:4rem 2rem 6rem;}
+
+/* DISCLAIMER BOX — THIS IS THE ONE */
+.disclaimer-box{background:var(--red);padding:2.5rem;margin-bottom:4rem;position:relative;overflow:hidden;}
+.disclaimer-box::before{content:'⚠';position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:8rem;opacity:0.08;line-height:1;}
+.disc-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:0.75rem;}
+.disc-title{font-family:var(--display);font-size:2rem;color:white;letter-spacing:0.06em;margin-bottom:1rem;}
+.disc-body{font-family:var(--type);font-size:1rem;color:rgba(255,255,255,0.9);line-height:1.9;max-width:680px;}
+.disc-body p+p{margin-top:0.85rem;}
+
+/* NO SEX OFFENDERS */
+.hard-rule{background:var(--panel);border:2px solid var(--red);padding:2rem;margin-bottom:4rem;display:flex;gap:1.5rem;align-items:flex-start;}
+.hr-icon{font-size:2.5rem;flex-shrink:0;line-height:1;}
+.hr-content{}
+.hr-title{font-family:var(--display);font-size:1.5rem;color:var(--bright);letter-spacing:0.08em;margin-bottom:0.5rem;}
+.hr-body{font-style:italic;font-size:0.88rem;color:var(--text);line-height:1.85;}
+
+/* STEPS */
+.steps-section{margin-bottom:4rem;}
+.section-kicker{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.35em;color:var(--red);text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:0.75rem;}
+.section-kicker::after{content:'';width:40px;height:1px;background:var(--red);}
+.section-title{font-family:var(--display);font-size:2.5rem;color:var(--bright);letter-spacing:0.05em;margin-bottom:2rem;}
+
+.step-list{display:flex;flex-direction:column;gap:0;position:relative;}
+.step-list::before{content:'';position:absolute;left:23px;top:24px;bottom:24px;width:2px;background:var(--border);}
+.step{display:flex;gap:1.5rem;align-items:flex-start;padding-bottom:2.5rem;position:relative;}
+.step:last-child{padding-bottom:0;}
+.step-num{width:48px;height:48px;flex-shrink:0;background:var(--black);border:2px solid var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1.3rem;color:var(--red);position:relative;z-index:1;}
+.step-body{padding-top:0.4rem;}
+.step-title{font-family:var(--display);font-size:1.2rem;color:var(--bright);letter-spacing:0.08em;margin-bottom:0.4rem;}
+.step-desc{font-style:italic;font-size:0.85rem;color:var(--text);line-height:1.85;max-width:560px;}
+.step-note{display:inline-block;margin-top:0.6rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;color:var(--dim);border-left:2px solid var(--border);padding-left:0.6rem;}
+
+/* ADDRESS BOX */
+.address-box{background:var(--panel);border:2px solid var(--red);padding:2.5rem;text-align:center;margin:2rem 0;position:relative;}
+.address-box::before{content:'✉';position:absolute;top:-1rem;left:50%;transform:translateX(-50%);background:var(--red);color:white;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.addr-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.3em;color:var(--dim);text-transform:uppercase;margin-bottom:1rem;}
+.addr-text{font-family:var(--type);font-size:1.6rem;color:var(--bright);line-height:1.8;}
+.addr-note{font-family:var(--mono);font-size:0.6rem;color:var(--dim);letter-spacing:0.08em;line-height:1.8;margin-top:1rem;max-width:400px;margin-left:auto;margin-right:auto;}
+
+/* WHAT TO INCLUDE */
+.letter-template{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--red);margin:2rem 0;}
+.lt-header{padding:0.85rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;}
+.lt-badge{background:var(--red);color:white;font-family:var(--mono);font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.2rem 0.6rem;}
+.lt-title{font-family:var(--display);font-size:0.95rem;color:var(--bright);letter-spacing:0.1em;}
+.lt-body{padding:2rem 2.5rem;font-family:var(--type);font-size:0.95rem;line-height:2.2;color:var(--bright);background:repeating-linear-gradient(transparent,transparent 41px,rgba(255,255,255,0.025) 41px,rgba(255,255,255,0.025) 42px);}
+.lt-field{border-bottom:1px dashed var(--border2);color:var(--red);font-style:italic;display:inline-block;min-width:160px;}
+.lt-note{background:var(--black);border-top:1px solid var(--border);padding:1rem 1.5rem;font-family:var(--mono);font-size:0.6rem;color:var(--dim);letter-spacing:0.05em;line-height:1.8;}
+
+/* TIERS */
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:4rem;}
+@media(max-width:600px){.tiers{grid-template-columns:1fr;}}
+.tier{background:var(--panel);padding:2rem;}
+.tier.featured{background:var(--panel2);}
+.tier-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem;}
+.tier-price{font-family:var(--display);font-size:3rem;line-height:1;letter-spacing:0.04em;margin-bottom:0.5rem;}
+.tier-price.free{color:var(--bright);}
+.tier-price.paid{color:var(--gold);}
+.tier-per{font-family:var(--mono);font-size:0.7rem;color:var(--dim);}
+.tier-features{margin-top:1.25rem;display:flex;flex-direction:column;gap:0.5rem;padding-top:1.25rem;border-top:1px solid var(--border);}
+.tf{display:flex;gap:0.5rem;font-size:0.8rem;color:var(--text);line-height:1.5;align-items:flex-start;}
+.tf-check{color:#27ae60;font-family:var(--mono);flex-shrink:0;}
+.tf-x{color:var(--dim);font-family:var(--mono);flex-shrink:0;}
+
+/* FAMILY SECTION */
+.family-section{background:var(--panel);border:1px solid var(--border);border-left:4px solid var(--gold);padding:2.5rem;margin-bottom:4rem;}
+.fs-kicker{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:0.6rem;}
+.fs-title{font-family:var(--display);font-size:2rem;color:var(--bright);letter-spacing:0.06em;margin-bottom:0.75rem;}
+.fs-body{font-style:italic;font-size:0.88rem;color:var(--text);line-height:1.9;margin-bottom:1.5rem;max-width:600px;}
+.fs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}
+.fs-item{background:var(--black);border:1px solid var(--border);padding:1.25rem;}
+.fs-item-title{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;}
+.fs-item-body{font-style:italic;font-size:0.78rem;color:var(--dim);line-height:1.65;}
+.fs-cta{display:inline-block;margin-top:1.5rem;background:var(--gold);color:var(--black);font-family:var(--mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.8rem 2rem;text-decoration:none;font-weight:700;}
+
+/* FAQ */
+.faq{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);margin-bottom:4rem;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{padding:1.25rem 1.5rem;font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);cursor:pointer;display:flex;justify-content:space-between;gap:1rem;user-select:none;transition:background 0.15s;}
+.faq-q:hover{background:var(--panel2);}
+.faq-q.open{color:var(--red);}
+.faq-arrow{color:var(--dim);transition:transform 0.2s;flex-shrink:0;}
+.faq-q.open .faq-arrow{transform:rotate(90deg);color:var(--red);}
+.faq-a{max-height:0;overflow:hidden;font-style:italic;font-size:0.85rem;color:var(--dim);line-height:1.8;background:var(--panel);transition:max-height 0.3s ease,padding 0.3s ease;padding:0 1.5rem;}
+.faq-a.open{max-height:300px;padding:1.25rem 1.5rem;border-top:1px solid var(--border);}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--mono);font-size:0.55rem;color:var(--dim);letter-spacing:0.1em;line-height:2;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">RAZOR WIRE <span>FEELS</span></a>
+  <div class="nav-right">
+    <a href="index.html">Directory</a>
+    <a href="family.html">Family &amp; Friends</a>
+    <a href="contact.html">Contact</a>
+    <a href="release-form.html" class="cta">Release Form</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-kicker">For Incarcerated Individuals</div>
+  <h1 class="hero-title">GET YOUR<br><span>FREE PAGE</span></h1>
+  <p class="hero-sub">Every incarcerated person in North Carolina gets a free public page. Your writing. Your art. Your voice. Permanent and public. Mail us a letter — we handle the rest.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer-box">
+    <div class="disc-label">Before You Submit — Read This</div>
+    <div class="disc-title">YO. THE POLICE ARE GONNA READ THIS.</div>
+    <div class="disc-body">
+      <p>This platform is public. That means the entire internet can see it — including correctional officers, wardens, prosecutors, parole boards, and anyone else with a browser. I'm not going to sugarcoat that.</p>
+      <p>I strongly suggest you keep what you post clean and legal. Don't give anybody new material to work with. This is meant to be your voice, not another case on your hands. This shit is out for the whole world to see. Top flight.</p>
+      <p>That said — you have every right to speak your truth, write your story, share your art, and be heard. That's exactly what this platform is for. Just be smart about it.</p>
+    </div>
+  </div>
+
+  <!-- HARD RULE -->
+  <div class="hard-rule">
+    <div class="hr-icon">🚫</div>
+    <div class="hr-content">
+      <div class="hr-title">ONE HARD RULE. NON-NEGOTIABLE.</div>
+      <div class="hr-body">
+        This platform will not publish content from anyone convicted of sex offenses against children or women — and will not publish any content of a sexual nature involving minors or non-consenting individuals. Period. No exceptions. No appeals.<br><br>
+        This is my corner of the internet. I built it. I set the rules. If that applies to you — go find your own corner. Every other offense, every other story, every other voice is welcome here. Not that one.
+        <br><br>
+        <em>— Nicolas Losito "Redbeard the Great" · Founder · ID 1369313</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO SUBMIT -->
+  <div class="steps-section">
+    <div class="section-kicker">Step by step</div>
+    <h2 class="section-title">HOW IT WORKS</h2>
+
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">WRITE US A LETTER</div>
+          <div class="step-desc">Send a letter to our PO Box. Tell us your name, your ID number, your facility, and what you want to share — writing, artwork, or both. Include anything you want published with your first letter. We'll hold it until your page is set up.</div>
+          <span class="step-note">See the letter template below for exactly what to write</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">WE SEND YOU A RELEASE FORM</div>
+          <div class="step-desc">We mail you a one-page release form to sign. It authorizes us to scan and publish your work on your behalf. You keep 100% of the intellectual property rights to everything you create. If you want to sell your work, the split is 80% to you, 20% to the platform.</div>
+          <span class="step-note">Response time: within 2 weeks of receiving your letter</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">YOUR PAGE GOES LIVE</div>
+          <div class="step-desc">Once your signed release form is back, your page is live at razorwirefeels.org/NC/[your ID]. We scan everything you send, publish it, and your subscribers get notified automatically. Your page is permanent and public.</div>
+          <span class="step-note">URL: razorwirefeels.org/NC/1369313 (your ID goes here)</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">KEEP SENDING — WE KEEP PUBLISHING</div>
+          <div class="step-desc">Every letter or artwork piece you mail us gets scanned and published. Free accounts get 5 pages per month. Paid accounts ($10/month by money order) get unlimited. We process mail weekly.</div>
+          <span class="step-note">Free tier: 5 pages/month · Paid: unlimited · $10/mo via money order</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE ADDRESS -->
+  <div class="address-box">
+    <div class="addr-label">Send everything to</div>
+    <div class="addr-text">
+      Razor Wire Feels<br>
+      PO Box [NUMBER]<br>
+      [CITY], NC [ZIP]
+    </div>
+    <div class="addr-note">Include your full legal name, NCDAC ID number, and current facility in every letter. Write it at the top of the first page so we can match it to your account.</div>
+  </div>
+
+  <!-- LETTER TEMPLATE -->
+  <div class="letter-template">
+    <div class="lt-header">
+      <span class="lt-badge">Template</span>
+      <span class="lt-title">Copy this for your first letter</span>
+    </div>
+    <div class="lt-body">
+      <p style="margin-bottom:1rem;">Razor Wire Feels,</p>
+      <p style="margin-bottom:0.75rem;">My name is <span class="lt-field">Your Full Legal Name</span>. My NCDAC ID is <span class="lt-field">Your Number</span>. I am currently housed at <span class="lt-field">Your Facility</span>.</p>
+      <p style="margin-bottom:0.75rem;">I am writing to request a free page. I want to share my <span class="lt-field">writing / artwork / both</span>. I go by <span class="lt-field">your alias (optional)</span>.</p>
+      <p style="margin-bottom:0.75rem;">Please send me a release form.</p>
+      <p style="margin-bottom:1.5rem;">*(Optional) I would like <span class="lt-field">family member name</span> (email: <span class="lt-field">their email</span>) to manage my page from the outside.</p>
+      <p>Thank you,<br><br><span class="lt-field">Your Signature</span></p>
+    </div>
+    <div class="lt-note">That's it. Keep it short. You can also include writing or artwork with this first letter — we'll hold it until your release form is back and then publish it.</div>
+  </div>
+
+  <!-- TIERS -->
+  <div class="section-kicker" style="margin-top:4rem;">What you get</div>
+  <h2 class="section-title">FREE OR PAID</h2>
+  <div class="tiers">
+    <div class="tier">
+      <div class="tier-label">Free Tier</div>
+      <div class="tier-price free">FREE <span class="tier-per">/ always</span></div>
+      <div style="font-style:italic;font-size:0.82rem;color:var(--dim);margin-top:0.5rem;">Start here. No catch. No card.</div>
+      <div class="tier-features">
+        <div class="tf"><span class="tf-check">✓</span> Your own permanent public page</div>
+        <div class="tf"><span class="tf-check">✓</span> 5 episodes or artwork pieces/month</div>
+        <div class="tf"><span class="tf-check">✓</span> Subscriber email notifications</div>
+        <div class="tf"><span class="tf-check">✓</span> Likes and comments from readers</div>
+        <div class="tf"><span class="tf-check">✓</span> Store for selling your work</div>
+        <div class="tf"><span class="tf-check">✓</span> Family/friend outside management</div>
+        <div class="tf"><span class="tf-x">—</span> More than 5 pages/month</div>
+      </div>
+    </div>
+    <div class="tier featured">
+      <div class="tier-label">Paid Tier</div>
+      <div class="tier-price paid">$10 <span class="tier-per">/ month</span></div>
+      <div style="font-style:italic;font-size:0.82rem;color:var(--dim);margin-top:0.5rem;">For writers who can't stop. Which is the point.</div>
+      <div class="tier-features">
+        <div class="tf"><span class="tf-check">✓</span> Everything in Free</div>
+        <div class="tf"><span class="tf-check">✓</span> Unlimited pages per month</div>
+        <div class="tf"><span class="tf-check">✓</span> Priority processing</div>
+        <div class="tf"><span class="tf-check">✓</span> 12-month physical archive</div>
+        <div class="tf"><span class="tf-check">✓</span> Series/serial formatting</div>
+        <div style="margin-top:0.75rem;font-family:var(--mono);font-size:0.58rem;color:var(--dim);letter-spacing:0.06em;">Pay via money order to PO Box. Write your ID on the memo line.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAMILY SECTION -->
+  <div class="family-section">
+    <div class="fs-kicker">For Family &amp; Friends on the Outside</div>
+    <div class="fs-title">YOU CAN RUN THEIR PAGE</div>
+    <div class="fs-body">If someone you love is inside and you want to help get their voice out, you can manage their page from the outside. Upload their letters and artwork, handle their store, and we'll authorize you once they sign a release form naming you as their manager.</div>
+    <div class="fs-grid">
+      <div class="fs-item">
+        <div class="fs-item-title">How to Start</div>
+        <div class="fs-item-body">Go to the Family &amp; Friends page and fill out the request form. We'll mail the release form to your loved one inside.</div>
+      </div>
+      <div class="fs-item">
+        <div class="fs-item-title">What You Can Do</div>
+        <div class="fs-item-body">Upload scans of letters and artwork, write episode notes, manage their store, and handle all financial transactions on their behalf.</div>
+      </div>
+      <div class="fs-item">
+        <div class="fs-item-title">Payment for Paid Tier</div>
+        <div class="fs-item-body">Family members can pay the $10/month on their loved one's behalf by card or PayPal from the outside.</div>
+      </div>
+      <div class="fs-item">
+        <div class="fs-item-title">Scanner Recommendation</div>
+        <div class="fs-item-body">A basic flatbed scanner ($40–60 on Amazon) is all you need. Phone camera photos also work in a pinch.</div>
+      </div>
+    </div>
+    <a href="family.html" class="fs-cta">Family &amp; Friends Page →</a>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section-kicker">Common Questions</div>
+  <h2 class="section-title">FAQ</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do I keep the rights to my writing and artwork? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Yes. 100%. You own everything you create. Razor Wire Feels publishes on your behalf — we don't claim ownership of anything. If a publisher comes calling about something you posted here, that deal is yours.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I use an alias instead of my real name? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Yes. Your page can display your alias as your main name. Your legal name and ID are used for our internal records only. Write under whatever name you choose.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What if I get transferred to another facility? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Your page stays exactly where it is. Just write us a letter from your new facility letting us know your new address. Nothing changes on your page.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is this connected to NCDAC in any way? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">No. Razor Wire Feels has no affiliation with NCDAC, the state of North Carolina, or any correctional facility. We are an independent platform. We do not share participant information with correctional institutions.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I get paid if someone buys my work? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Your 80% cut is sent via money order to your institution or to a designated outside person. We process payouts monthly for balances of $10 or more. Under $10 rolls to the following month.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What kind of content can I post? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Anything you create — memoir, fiction, poetry, essays, letters, comedy, philosophy, artwork, comics. Strong language, dark themes, and political views are all fine. The one hard rule: no sexual content involving minors or non-consenting adults, and no pages for those convicted of sex offenses against children or women. That's the only line.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  razorwirefeels.org · North Carolina · Not affiliated with NCDAC<br>
+  Founded by Nicolas Losito "Redbeard the Great" · ID 1369313
+</footer>
+
+<script>
+function toggleFaq(el) {
+  var a = el.nextElementSibling;
+  var isOpen = a.classList.contains('open');
+  document.querySelectorAll('.faq-q').forEach(function(q){ q.classList.remove('open'); });
+  document.querySelectorAll('.faq-a').forEach(function(ans){ ans.classList.remove('open'); });
+  if (!isOpen) { el.classList.add('open'); a.classList.add('open'); }
+}
+</script>
+</body>
+</html>

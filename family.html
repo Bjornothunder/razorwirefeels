@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family &amp; Friends — Razor Wire Feels</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--black:#080808;--deep:#0f0f0f;--panel:#141414;--panel2:#1a1a1a;--border:#242424;--border2:#2e2e2e;--red:#c0160f;--red2:#e01a12;--gold:#b8960c;--text:#ccc4b4;--dim:#665e50;--bright:#eee8dc;--mono:'IBM Plex Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'Libre Baskerville',serif;--type:'Special Elite',cursive;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:var(--body);min-height:100vh;}
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 2rem;gap:2rem;}
+.nav-logo{font-family:var(--display);font-size:1.15rem;letter-spacing:0.08em;color:var(--bright);text-decoration:none;}
+.nav-logo span{color:var(--red);}
+.nav-right{margin-left:auto;display:flex;gap:0;}
+.nav-right a{display:flex;align-items:center;height:56px;padding:0 1rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);text-decoration:none;border-left:1px solid var(--border);transition:all 0.15s;}
+.nav-right a:hover{color:var(--bright);}
+.nav-right a.cta{background:var(--red);color:white;}
+.hero{background:var(--deep);border-bottom:4px solid var(--gold);padding:4rem 2rem;text-align:center;}
+.hero-kicker{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;display:inline-flex;align-items:center;gap:0.75rem;}
+.hero-kicker::before,.hero-kicker::after{content:'';width:30px;height:1px;background:var(--gold);}
+.hero-title{font-family:var(--display);font-size:clamp(3rem,8vw,6rem);color:var(--bright);letter-spacing:0.04em;line-height:0.9;margin-bottom:1rem;}
+.hero-title span{color:var(--gold);}
+.hero-sub{font-style:italic;font-size:1rem;color:var(--text);line-height:1.85;max-width:580px;margin:0 auto;}
+.wrap{max-width:1000px;margin:0 auto;padding:4rem 2rem 6rem;}
+.section-kicker{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:0.6rem;display:flex;align-items:center;gap:0.75rem;}
+.section-kicker::after{content:'';width:40px;height:1px;background:var(--gold);}
+.section-title{font-family:var(--display);font-size:2.5rem;color:var(--bright);letter-spacing:0.05em;margin-bottom:2rem;}
+
+/* HOW IT WORKS GRID */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:4rem;}
+.how-item{background:var(--panel);padding:1.75rem;display:flex;flex-direction:column;gap:0.75rem;}
+.hi-num{font-family:var(--display);font-size:3rem;color:var(--red);letter-spacing:0.04em;line-height:1;}
+.hi-title{font-family:var(--display);font-size:1rem;color:var(--bright);letter-spacing:0.08em;}
+.hi-body{font-style:italic;font-size:0.8rem;color:var(--dim);line-height:1.7;}
+
+/* FORM */
+.form-wrap{background:var(--panel);border:1px solid var(--border);border-top:4px solid var(--gold);padding:2.5rem;margin-bottom:4rem;}
+.form-title{font-family:var(--display);font-size:1.5rem;color:var(--bright);letter-spacing:0.08em;margin-bottom:0.5rem;}
+.form-sub{font-style:italic;font-size:0.82rem;color:var(--dim);line-height:1.7;margin-bottom:2rem;}
+.field-group{margin-bottom:1.5rem;}
+.fg-title{font-family:var(--display);font-size:0.9rem;color:var(--bright);letter-spacing:0.1em;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem;}
+.field{display:flex;flex-direction:column;gap:0.4rem;}
+.field label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.2em;color:var(--dim);text-transform:uppercase;}
+.field input,.field select,.field textarea{background:var(--black);border:1px solid var(--border2);color:var(--bright);font-family:var(--mono);font-size:0.78rem;padding:0.65rem 0.85rem;outline:none;transition:border-color 0.15s;letter-spacing:0.05em;}
+.field input:focus,.field select:focus{border-color:var(--gold);}
+.check-item{display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;margin-bottom:0.65rem;}
+.check-item input{width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--gold);}
+.check-item span{font-size:0.82rem;color:var(--text);line-height:1.6;}
+.submit-btn{background:var(--gold);border:none;color:var(--black);font-family:var(--mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding:1rem 2.5rem;cursor:pointer;transition:background 0.15s;width:100%;font-weight:700;margin-top:1rem;}
+.submit-btn:hover{background:#9a7a0a;}
+
+/* WHAT YOU CAN DO */
+.can-do{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:4rem;}
+@media(max-width:600px){.can-do{grid-template-columns:1fr;}}
+.cd-item{background:var(--panel);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;}
+.cd-icon{font-size:1.5rem;flex-shrink:0;}
+.cd-title{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.35rem;}
+.cd-body{font-style:italic;font-size:0.8rem;color:var(--dim);line-height:1.65;}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--mono);font-size:0.55rem;color:var(--dim);letter-spacing:0.1em;line-height:2;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">RAZOR WIRE <span>FEELS</span></a>
+  <div class="nav-right">
+    <a href="index.html">Directory</a>
+    <a href="submit.html">Submit</a>
+    <a href="subscribe.html">Subscribe</a>
+    <a href="contact.html" class="cta">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-kicker">For Family &amp; Friends</div>
+  <h1 class="hero-title">HELP THEM<br><span>BE HEARD</span></h1>
+  <p class="hero-sub">If someone you love is incarcerated and has a story to tell, you can set up and run their page from the outside. Here's how.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="section-kicker">How it works</div>
+  <h2 class="section-title">THE PROCESS</h2>
+  <div class="how-grid">
+    <div class="how-item"><div class="hi-num">01</div><div class="hi-title">FILL OUT THIS FORM</div><div class="hi-body">Give us your loved one's name, ID, facility, and your contact info. Tell us you want to be their page manager.</div></div>
+    <div class="how-item"><div class="hi-num">02</div><div class="hi-title">WE MAIL THEM</div><div class="hi-body">We send a release form directly to your loved one inside. They sign it naming you as their outside manager and mail it back to us.</div></div>
+    <div class="how-item"><div class="hi-num">03</div><div class="hi-title">YOU'RE AUTHORIZED</div><div class="hi-body">Once we receive the signed form, you're set up as their manager. You get access to upload content and manage their page.</div></div>
+    <div class="how-item"><div class="hi-num">04</div><div class="hi-title">START PUBLISHING</div><div class="hi-body">They mail you their writing and artwork. You scan it and upload it to their page. Their readers get notified automatically.</div></div>
+  </div>
+
+  <div class="section-kicker">What you can do</div>
+  <h2 class="section-title">YOUR ROLE</h2>
+  <div class="can-do">
+    <div class="cd-item"><div class="cd-icon">📄</div><div><div class="cd-title">Upload Content</div><div class="cd-body">Scan their handwritten letters and artwork and upload them directly to their page. Phone camera works fine, flatbed scanner is better.</div></div></div>
+    <div class="cd-item"><div class="cd-icon">🛍</div><div><div class="cd-title">Manage Their Store</div><div class="cd-body">Set prices for their work, manage commissions, and handle the financial side of their page on their behalf.</div></div></div>
+    <div class="cd-item"><div class="cd-icon">💳</div><div><div class="cd-title">Handle Payments</div><div class="cd-body">Pay their $10/month paid tier by card or PayPal. Receive their 80% sales share and forward it to them via money order to their institution.</div></div></div>
+    <div class="cd-item"><div class="cd-icon">📬</div><div><div class="cd-title">Stay Connected</div><div class="cd-body">Get email notifications when readers comment or purchase. Be the bridge between your loved one and the people reading their work.</div></div></div>
+  </div>
+
+  <div class="section-kicker">Request access</div>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">SET UP A PAGE</h2>
+  <p style="font-style:italic;font-size:0.88rem;color:var(--dim);line-height:1.8;margin-bottom:2rem;max-width:580px;">Fill this out and we'll mail a release form to your loved one within the week. Once it comes back signed, their page goes live and you're in control.</p>
+
+  <div class="form-wrap">
+    <div class="form-title">FAMILY / FRIEND PAGE REQUEST</div>
+    <div class="form-sub">All fields required unless marked optional. We use this to mail the release form to your loved one.</div>
+
+    <div class="field-group">
+      <div class="fg-title">YOUR INFORMATION</div>
+      <div class="field-row">
+        <div class="field"><label>Your Full Name</label><input type="text" placeholder="Your name"></div>
+        <div class="field"><label>Your Email Address</label><input type="email" placeholder="your@email.com"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Your Phone (optional)</label><input type="text" placeholder="For urgent communication"></div>
+        <div class="field"><label>Your Relationship to Them</label>
+          <select>
+            <option>Select...</option>
+            <option>Parent</option>
+            <option>Spouse / Partner</option>
+            <option>Sibling</option>
+            <option>Child</option>
+            <option>Friend</option>
+            <option>Attorney / Advocate</option>
+            <option>Other Family</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="fg-title">THEIR INFORMATION (the incarcerated person)</div>
+      <div class="field-row">
+        <div class="field"><label>Their Full Legal Name</label><input type="text" placeholder="As it appears on NCDAC records"></div>
+        <div class="field"><label>Their NCDAC ID Number</label><input type="text" placeholder="e.g. 1369313"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Current Facility</label><input type="text" placeholder="e.g. Central Prison, Raleigh NC"></div>
+        <div class="field"><label>Their Publishing Alias (optional)</label><input type="text" placeholder="The name they write under"></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="fg-title">AUTHORIZATION</div>
+      <label class="check-item"><input type="checkbox"><span>I confirm that the person listed above knows I am submitting this request on their behalf</span></label>
+      <label class="check-item"><input type="checkbox"><span>I understand that a release form will be mailed directly to the incarcerated person for their signature</span></label>
+      <label class="check-item"><input type="checkbox"><span>I understand that I will be responsible for uploading content and handling financial transactions on their behalf</span></label>
+      <label class="check-item"><input type="checkbox"><span>I have read and agree to the platform rules, including the one hard rule about content eligibility</span></label>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">Submit Request →</button>
+  </div>
+
+</div>
+
+<footer>razorwirefeels.org · North Carolina · Not affiliated with NCDAC<br>Founded by Nicolas Losito "Redbeard the Great" · ID 1369313</footer>
+
+<script>
+function submitForm() {
+  alert('Request submitted. We will mail a release form to your loved one within 7 days. Watch your email for confirmation.');
+}
+</script>
+</body>
+</html>
