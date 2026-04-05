@@ -3,1638 +3,1607 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Razor Wire Feels</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Bebas+Neue&family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+<title>RWF Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --deep: #111;
-    --panel: #161616;
-    --panel2: #1c1c1c;
-    --border: #2a2a2a;
-    --border2: #333;
-    --red: #c0392b;
-    --red-dim: rgba(192,57,43,0.15);
-    --gold: #b8960c;
-    --green: #27ae60;
-    --green-dim: rgba(39,174,96,0.15);
-    --text: #d4c9b8;
-    --text-dim: #7a7060;
-    --text-bright: #ede8df;
-    --mono: 'IBM Plex Mono', monospace;
-    --display: 'Bebas Neue', sans-serif;
-    --body: 'Libre Baskerville', serif;
-    --type: 'Special Elite', cursive;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; }
-
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ── LOGIN SCREEN ── */
-  #loginScreen {
-    position: fixed;
-    inset: 0;
-    background: var(--black);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    gap: 2rem;
-  }
-
-  .login-logo {
-    font-family: var(--display);
-    font-size: 3rem;
-    color: var(--text-bright);
-    letter-spacing: 0.1em;
-    text-align: center;
-  }
-
-  .login-logo span { color: var(--red); }
-
-  .login-subtitle {
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    text-align: center;
-    margin-top: -1.5rem;
-  }
-
-  .login-box {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-top: 3px solid var(--red);
-    padding: 2.5rem;
-    width: 360px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .login-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.25em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-  }
-
-  .login-input {
-    width: 100%;
-    background: var(--black);
-    border: 1px solid var(--border);
-    color: var(--text-bright);
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    padding: 0.75rem 1rem;
-    outline: none;
-    transition: border-color 0.2s;
-    letter-spacing: 0.1em;
-  }
-
-  .login-input:focus { border-color: var(--red); }
-
-  .login-btn {
-    background: var(--red);
-    border: none;
-    color: white;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 0.85rem;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 0.5rem;
-  }
-
-  .login-btn:hover { background: #a93226; }
-
-  .login-error {
-    color: var(--red);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-align: center;
-    display: none;
-  }
-
-  /* ── LAYOUT ── */
-  #adminApp {
-    display: none;
-    flex: 1;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  /* TOP BAR */
-  .topbar {
-    background: var(--deep);
-    border-bottom: 1px solid var(--border);
-    padding: 0 1.5rem;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-
-  .topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .topbar-brand {
-    font-family: var(--display);
-    font-size: 1.2rem;
-    color: var(--text-bright);
-    letter-spacing: 0.1em;
-  }
-
-  .topbar-brand span { color: var(--red); }
-
-  .topbar-badge {
-    background: var(--red);
-    color: white;
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.5rem;
-  }
-
-  .topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .topbar-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.1rem;
-  }
-
-  .ts-num {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--text-bright);
-  }
-
-  .ts-label {
-    font-size: 0.5rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-
-  .topbar-divider {
-    width: 1px;
-    height: 24px;
-    background: var(--border);
-  }
-
-  .logout-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.35rem 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .logout-btn:hover { border-color: var(--red); color: var(--red); }
-
-  /* MAIN BODY */
-  .admin-body {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* SIDEBAR */
-  .sidebar {
-    width: 220px;
-    background: var(--deep);
-    border-right: 1px solid var(--border);
-    flex-shrink: 0;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .sidebar-section {
-    padding: 1.25rem 1rem 0.5rem;
-  }
-
-  .sidebar-heading {
-    font-size: 0.55rem;
-    letter-spacing: 0.25em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.5rem 0.5rem;
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.15s;
-    border-left: 2px solid transparent;
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-  }
-
-  .sidebar-item:hover { color: var(--text); background: var(--panel); }
-
-  .sidebar-item.active {
-    color: var(--text-bright);
-    border-left-color: var(--red);
-    background: var(--red-dim);
-  }
-
-  .sidebar-icon { width: 16px; text-align: center; font-size: 0.8rem; }
-
-  .sidebar-badge {
-    margin-left: auto;
-    background: var(--red);
-    color: white;
-    font-size: 0.5rem;
-    padding: 0.1rem 0.35rem;
-    border-radius: 0;
-  }
-
-  /* MAIN CONTENT */
-  .main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  /* PANELS */
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-  }
-
-  .panel-header {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .panel-title {
-    font-family: var(--display);
-    font-size: 1.1rem;
-    color: var(--text-bright);
-    letter-spacing: 0.08em;
-  }
-
-  .panel-subtitle {
-    font-size: 0.6rem;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-  }
-
-  .panel-body { padding: 1.25rem; }
-
-  /* ── UPLOAD ZONE ── */
-  .upload-zone {
-    border: 2px dashed var(--border2);
-    background: var(--black);
-    padding: 3rem 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .upload-zone:hover, .upload-zone.dragover {
-    border-color: var(--red);
-    background: var(--red-dim);
-  }
-
-  .upload-zone input[type="file"] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
-
-  .upload-icon { font-size: 2.5rem; opacity: 0.4; }
-
-  .upload-title {
-    font-family: var(--display);
-    font-size: 1.2rem;
-    color: var(--text-bright);
-    letter-spacing: 0.1em;
-  }
-
-  .upload-sub {
-    font-size: 0.65rem;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-    line-height: 1.8;
-  }
-
-  .upload-formats {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 0.25rem;
-  }
-
-  .format-tag {
-    border: 1px solid var(--border2);
-    color: var(--text-dim);
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    padding: 0.2rem 0.5rem;
-    text-transform: uppercase;
-  }
-
-  /* ── PIPELINE STEPS ── */
-  .pipeline {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
-
-  .step {
-    background: var(--panel);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    position: relative;
-  }
-
-  .step.active { background: var(--panel2); }
-  .step.complete { background: var(--green-dim); }
-
-  .step-num {
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-
-  .step.active .step-num { color: var(--red); }
-  .step.complete .step-num { color: var(--green); }
-
-  .step-name {
-    font-family: var(--display);
-    font-size: 0.95rem;
-    color: var(--text-dim);
-    letter-spacing: 0.08em;
-  }
-
-  .step.active .step-name { color: var(--text-bright); }
-  .step.complete .step-name { color: var(--green); }
-
-  .step-status {
-    font-size: 0.6rem;
-    color: var(--text-dim);
-  }
-
-  .step.active .step-status { color: var(--text-dim); }
-  .step.complete .step-status { color: var(--green); }
-
-  /* ── INMATE LOOKUP ── */
-  .inmate-lookup {
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-end;
-    flex-wrap: wrap;
-  }
-
-  .field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .field-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-
-  .field-input {
-    background: var(--black);
-    border: 1px solid var(--border);
-    color: var(--text-bright);
-    font-family: var(--mono);
-    font-size: 0.8rem;
-    padding: 0.6rem 0.85rem;
-    outline: none;
-    transition: border-color 0.2s;
-    letter-spacing: 0.05em;
-  }
-
-  .field-input:focus { border-color: var(--red); }
-
-  .field-select {
-    background: var(--black);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    padding: 0.6rem 0.85rem;
-    outline: none;
-    cursor: pointer;
-    min-width: 180px;
-  }
-
-  .field-select:focus { border-color: var(--red); }
-
-  .lookup-result {
-    background: var(--black);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--green);
-    padding: 0.75rem 1rem;
-    display: none;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 0.75rem;
-  }
-
-  .lookup-result.visible { display: flex; }
-
-  .lr-name {
-    font-family: var(--type);
-    font-size: 0.95rem;
-    color: var(--text-bright);
-  }
-
-  .lr-id {
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-  }
-
-  .lr-facility {
-    font-size: 0.6rem;
-    color: var(--green);
-    letter-spacing: 0.1em;
-  }
-
-  .lr-episodes {
-    margin-left: auto;
-    font-size: 0.65rem;
-    color: var(--text-dim);
-  }
-
-  /* ── OCR AREA ── */
-  .ocr-workspace {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  @media (max-width: 1100px) {
-    .ocr-workspace { grid-template-columns: 1fr; }
-  }
-
-  .ocr-preview {
-    position: relative;
-    background: var(--black);
-    border: 1px solid var(--border);
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .ocr-preview img {
-    max-width: 100%;
-    max-height: 500px;
-    object-fit: contain;
-    display: block;
-  }
-
-  .ocr-placeholder {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .ocr-progress-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 3px;
-    background: var(--red);
-    transition: width 0.3s;
-    width: 0%;
-  }
-
-  .ocr-progress-label {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-    white-space: nowrap;
-    background: var(--black);
-    padding: 0.2rem 0.5rem;
-  }
-
-  .ocr-text-area {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .ocr-toolbar {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .ocr-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.4rem 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .ocr-btn:hover { border-color: var(--text-dim); color: var(--text); }
-  .ocr-btn.primary { background: var(--red); border-color: var(--red); color: white; }
-  .ocr-btn.primary:hover { background: #a93226; }
-  .ocr-btn.success { background: var(--green); border-color: var(--green); color: white; }
-
-  .ocr-confidence {
-    margin-left: auto;
-    font-size: 0.6rem;
-    color: var(--text-dim);
-  }
-
-  .ocr-confidence span { color: var(--text-bright); font-weight: 700; }
-
-  textarea.ocr-output {
-    background: var(--black);
-    border: 1px solid var(--border);
-    color: var(--text-bright);
-    font-family: var(--type);
-    font-size: 0.85rem;
-    line-height: 1.8;
-    padding: 1rem;
-    resize: vertical;
-    min-height: 360px;
-    outline: none;
-    width: 100%;
-    transition: border-color 0.2s;
-  }
-
-  textarea.ocr-output:focus { border-color: var(--red); }
-
-  /* ── EPISODE META ── */
-  .meta-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-
-  .meta-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  /* ── PUBLISH PANEL ── */
-  .publish-checklist {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .check-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-  }
-
-  .check-icon { font-size: 0.9rem; width: 20px; text-align: center; }
-  .check-item.done { color: var(--green); }
-  .check-item.done .check-icon::before { content: '✓'; color: var(--green); }
-  .check-item.pending .check-icon::before { content: '○'; color: var(--border2); }
-  .check-item.warn .check-icon::before { content: '⚠'; color: var(--gold); }
-
-  .publish-btn {
-    width: 100%;
-    background: var(--red);
-    border: none;
-    color: white;
-    font-family: var(--display);
-    font-size: 1.4rem;
-    letter-spacing: 0.15em;
-    padding: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-  }
-
-  .publish-btn:hover { background: #a93226; }
-  .publish-btn:disabled { background: var(--border); cursor: not-allowed; }
-
-  /* ── QUEUE TABLE ── */
-  .queue-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .queue-table th {
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    text-align: left;
-    padding: 0.6rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--black);
-  }
-
-  .queue-table td {
-    padding: 0.75rem;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.72rem;
-    vertical-align: middle;
-  }
-
-  .queue-table tr:hover td { background: var(--panel2); }
-
-  .status-pill {
-    display: inline-block;
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.5rem;
-    border: 1px solid;
-  }
-
-  .status-pill.live { border-color: var(--green); color: var(--green); }
-  .status-pill.pending { border-color: var(--gold); color: var(--gold); }
-  .status-pill.draft { border-color: var(--border2); color: var(--text-dim); }
-
-  /* ── NOTIFICATION ── */
-  .notification {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--green);
-    padding: 1rem 1.5rem;
-    font-size: 0.72rem;
-    color: var(--text-bright);
-    letter-spacing: 0.05em;
-    z-index: 9998;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s ease;
-    max-width: 320px;
-  }
-
-  .notification.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  .notification.error { border-left-color: var(--red); }
-
-  /* ── CONTENT TYPE TOGGLE ── */
-  .type-toggle {
-    display: flex;
-    gap: 0;
-  }
-
-  .type-opt {
-    flex: 1;
-    text-align: center;
-    padding: 0.6rem;
-    border: 1px solid var(--border);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    cursor: pointer;
-    color: var(--text-dim);
-    transition: all 0.2s;
-    margin-right: -1px;
-  }
-
-  .type-opt.selected {
-    background: var(--red);
-    border-color: var(--red);
-    color: white;
-    z-index: 1;
-    position: relative;
-  }
-
-  /* SECTION TABS */
-  .section-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    background: var(--deep);
-    padding: 0 2rem;
-    flex-shrink: 0;
-  }
-
-  .section-tab {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    padding: 0.85rem 1.25rem;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    margin-bottom: -1px;
-  }
-
-  .section-tab:hover { color: var(--text); }
-  .section-tab.active { color: var(--text-bright); border-bottom-color: var(--red); }
-
-  /* PAGE SECTIONS */
-  .page-section { display: none; }
-  .page-section.active { display: flex; flex-direction: column; gap: 1.5rem; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: var(--border2); }
+:root {
+  --bg: #0d0d0d;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --surface3: #2e2e2e;
+  --border: #333;
+  --border-light: #444;
+  --text: #e0e0e0;
+  --text-dim: #888;
+  --text-muted: #555;
+  --accent: #ff3333;
+  --accent-dim: #cc2222;
+  --accent-glow: rgba(255, 51, 51, 0.15);
+  --green: #33cc66;
+  --green-dim: rgba(51, 204, 102, 0.15);
+  --yellow: #ffcc33;
+  --yellow-dim: rgba(255, 204, 51, 0.15);
+  --font-display: 'Permanent Marker', cursive;
+  --font-body: 'Courier Prime', monospace;
+  --radius: 4px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── LOGIN SCREEN ── */
+#login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.login-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 3rem 2.5rem;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-box h1 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+  letter-spacing: 2px;
+}
+
+.login-box .subtitle {
+  color: var(--text-dim);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 2rem;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  margin-bottom: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-box input:focus {
+  border-color: var(--accent);
+}
+
+.login-box input::placeholder { color: var(--text-muted); }
+
+.login-box .repo-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.login-box .repo-row input { margin-bottom: 0; }
+
+.login-error {
+  color: var(--accent);
+  font-size: 12px;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+  color: #fff;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 11px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--surface2);
+  border-color: var(--border);
+}
+
+.btn-danger {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: transparent;
+}
+
+.btn-danger:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── APP LAYOUT ── */
+#app { display: none; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header .logo {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.app-header .logo span {
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-left: 12px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-actions .user-info {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+/* ── DASHBOARD ── */
+.dashboard {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dash-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--text);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+}
+
+.search-bar input:focus { border-color: var(--accent); }
+
+.stats-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  flex: 1;
+  min-width: 140px;
+}
+
+.stat-card .stat-num {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--accent);
+}
+
+.stat-card .stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* ── CONTRIBUTOR GRID ── */
+.contributor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.contributor-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.contributor-card:hover {
+  border-color: var(--accent);
+  background: var(--surface2);
+}
+
+.contributor-card .card-id {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.contributor-card .card-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.contributor-card .card-facility {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.contributor-card .card-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 2px 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid;
+}
+
+.card-badge.live {
+  color: var(--green);
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+
+.card-badge.draft {
+  color: var(--yellow);
+  border-color: var(--yellow);
+  background: var(--yellow-dim);
+}
+
+/* ── EDITOR VIEW ── */
+#editor-view { display: none; }
+
+.editor-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.editor-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-section h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+}
+
+.form-group select option { background: var(--bg); }
+
+/* ── CONTENT ITEMS ── */
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.content-item {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.content-item .item-type {
+  padding: 4px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.content-item .item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-item .item-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.content-item .item-preview {
+  font-size: 12px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content-item .item-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ── ADD CONTENT MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 2rem;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.modal h3 {
+  font-family: var(--font-display);
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.modal .form-group { margin-bottom: 1rem; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── IMAGE UPLOAD ── */
+.upload-zone {
+  border: 2px dashed var(--border);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.upload-zone:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.upload-zone p {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.upload-zone .upload-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.image-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.image-preview-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 12px 20px;
+  background: var(--green);
+  color: #000;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 300;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.toast.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.error { background: var(--accent); color: #fff; }
+
+/* ── LOADING ── */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.loading-overlay.active { display: flex; }
+.loading-overlay .spinner { width: 32px; height: 32px; border-width: 3px; }
+.loading-overlay p { color: var(--text-dim); font-size: 13px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .dashboard { padding: 1rem; }
+  .contributor-grid { grid-template-columns: 1fr; }
+  .form-row { flex-direction: column; }
+  .dash-header { flex-direction: column; align-items: flex-start; }
+  .search-bar { max-width: 100%; width: 100%; }
+}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     LOGIN SCREEN
-══════════════════════════════════════ -->
-<div id="loginScreen">
-  <div>
-    <div class="login-logo">RAZOR WIRE <span>FEELS</span></div>
-    <div class="login-subtitle">Admin Dashboard · Restricted Access</div>
-  </div>
+<!-- ════════════ LOGIN ════════════ -->
+<div id="login-screen">
   <div class="login-box">
-    <div>
-      <div class="login-label">Username</div>
-      <input type="text" class="login-input" id="loginUser" placeholder="admin" autocomplete="off">
+    <h1>RWF</h1>
+    <div class="subtitle">Admin Panel</div>
+    <input type="password" id="token-input" placeholder="GitHub Personal Access Token" autocomplete="off">
+    <div class="repo-row">
+      <input type="text" id="owner-input" placeholder="Owner" value="bjornothunder">
+      <input type="text" id="repo-input" placeholder="Repo" value="razorwirefeels">
     </div>
-    <div>
-      <div class="login-label">Password</div>
-      <input type="password" class="login-input" id="loginPass" placeholder="••••••••"
-        onkeydown="if(event.key==='Enter') doLogin()">
-    </div>
-    <button class="login-btn" onclick="doLogin()">→ Enter Dashboard</button>
-    <div class="login-error" id="loginError">Invalid credentials. Try again.</div>
+    <div class="login-error" id="login-error"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Connect</button>
+    <p style="margin-top:1.5rem;font-size:11px;color:var(--text-muted)">
+      Requires a GitHub token with <strong>repo</strong> scope.<br>
+      <a href="https://github.com/settings/tokens/new?scopes=repo&description=RWF+Admin" target="_blank" style="color:var(--accent)">Generate token →</a>
+    </p>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     ADMIN APP
-══════════════════════════════════════ -->
-<div id="adminApp">
-
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-brand">RAZOR WIRE <span>FEELS</span></div>
-      <div class="topbar-badge">Admin</div>
-    </div>
-    <div class="topbar-right">
-      <div class="topbar-stat">
-        <span class="ts-num" id="topTotal">0</span>
-        <span class="ts-label">Active Pages</span>
-      </div>
-      <div class="topbar-divider"></div>
-      <div class="topbar-stat">
-        <span class="ts-num" id="topPublished">0</span>
-        <span class="ts-label">Episodes Live</span>
-      </div>
-      <div class="topbar-divider"></div>
-      <div class="topbar-stat">
-        <span class="ts-num" id="topQueue">0</span>
-        <span class="ts-label">In Queue</span>
-      </div>
-      <div class="topbar-divider"></div>
-      <button class="logout-btn" onclick="doLogout()">Log Out</button>
+<!-- ════════════ APP ════════════ -->
+<div id="app">
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="logo">RWF <span>Admin</span></div>
+    <div class="header-actions">
+      <span class="user-info" id="user-info"></span>
+      <button class="btn btn-small btn-ghost" onclick="logout()">Logout</button>
     </div>
   </div>
 
-  <!-- SECTION TABS -->
-  <div class="section-tabs">
-    <div class="section-tab active" onclick="switchSection('upload', this)">Upload & Publish</div>
-    <div class="section-tab" onclick="switchSection('queue', this)">Content Queue</div>
-    <div class="section-tab" onclick="switchSection('inmates', this)">Inmate Pages</div>
-    <div class="section-tab" onclick="switchSection('settings', this)">Settings</div>
+  <!-- DASHBOARD -->
+  <div id="dashboard-view">
+    <div class="dashboard">
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-label">Contributors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-content">0</div>
+          <div class="stat-label">Content Items</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-files">0</div>
+          <div class="stat-label">Repo Files</div>
+        </div>
+      </div>
+
+      <div class="dash-header">
+        <h2>Contributors</h2>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search by name, ID, or facility..." oninput="filterContributors()">
+        </div>
+        <button class="btn btn-primary" onclick="openNewContributor()">+ New Contributor</button>
+      </div>
+
+      <div class="contributor-grid" id="contributor-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
   </div>
 
-  <!-- MAIN BODY -->
-  <div class="admin-body">
-    <div class="main-content">
-
-      <!-- ── UPLOAD & PUBLISH ── -->
-      <div class="page-section active" id="section-upload">
-
-        <!-- PIPELINE PROGRESS -->
-        <div class="pipeline">
-          <div class="step active" id="step1">
-            <span class="step-num">Step 01</span>
-            <span class="step-name">Upload Scan</span>
-            <span class="step-status">Awaiting file</span>
-          </div>
-          <div class="step" id="step2">
-            <span class="step-num">Step 02</span>
-            <span class="step-name">Assign Inmate</span>
-            <span class="step-status">Waiting</span>
-          </div>
-          <div class="step" id="step3">
-            <span class="step-num">Step 03</span>
-            <span class="step-name">OCR + Review</span>
-            <span class="step-status">Waiting</span>
-          </div>
-          <div class="step" id="step4">
-            <span class="step-num">Step 04</span>
-            <span class="step-name">Publish</span>
-            <span class="step-status">Waiting</span>
-          </div>
+  <!-- EDITOR -->
+  <div id="editor-view">
+    <div class="editor-container">
+      <div class="editor-header">
+        <div>
+          <button class="btn btn-small btn-ghost" onclick="backToDashboard()">← Back</button>
+          <h2 id="editor-title" style="display:inline;margin-left:12px">Edit Contributor</h2>
         </div>
-
-        <!-- UPLOAD ZONE -->
-        <div class="panel" id="uploadPanel">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">SCAN UPLOAD</div>
-              <div class="panel-subtitle">Drag and drop or click to select. Supports JPG, PNG, PDF, TIFF, HEIC.</div>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="upload-zone" id="uploadZone">
-              <input type="file" id="fileInput" accept="image/*,.pdf,.tiff,.heic"
-                onchange="handleFileUpload(this.files[0])">
-              <div class="upload-icon">📄</div>
-              <div class="upload-title">DROP SCAN HERE</div>
-              <div class="upload-sub">
-                Physical letter scanned from your scanner<br>
-                or uploaded from your phone camera
-              </div>
-              <div class="upload-formats">
-                <span class="format-tag">JPG</span>
-                <span class="format-tag">PNG</span>
-                <span class="format-tag">PDF</span>
-                <span class="format-tag">TIFF</span>
-                <span class="format-tag">HEIC</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- INMATE ASSIGNMENT -->
-        <div class="panel" id="assignPanel" style="display:none">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">ASSIGN TO INMATE</div>
-              <div class="panel-subtitle">Link this scan to an existing page or create a new one</div>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="inmate-lookup">
-              <div class="field-group">
-                <label class="field-label">Inmate ID</label>
-                <input type="text" class="field-input" id="inmateIdInput" placeholder="e.g. 1369313"
-                  style="width: 160px" oninput="lookupInmate(this.value)">
-              </div>
-              <div class="field-group">
-                <label class="field-label">Or Search by Name</label>
-                <input type="text" class="field-input" id="inmateNameInput" placeholder="Last name..."
-                  style="width: 220px" oninput="searchInmateName(this.value)">
-              </div>
-              <div class="field-group">
-                <label class="field-label">Content Type</label>
-                <div class="type-toggle">
-                  <div class="type-opt selected" onclick="selectType('writing', this)">Writing</div>
-                  <div class="type-opt" onclick="selectType('art', this)">Artwork</div>
-                  <div class="type-opt" onclick="selectType('letter', this)">Letter</div>
-                </div>
-              </div>
-            </div>
-            <div class="lookup-result" id="lookupResult">
-              <div>
-                <div class="lr-name" id="lrName">—</div>
-                <div class="lr-id" id="lrId">NC · —</div>
-              </div>
-              <div class="lr-facility" id="lrFacility">—</div>
-              <div class="lr-episodes" id="lrEpisodes">— episodes published</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- OCR WORKSPACE -->
-        <div class="panel" id="ocrPanel" style="display:none">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">OCR + REVIEW</div>
-              <div class="panel-subtitle">Extracted text is editable — fix OCR errors before publishing</div>
-            </div>
-          </div>
-          <div class="panel-body">
-            <div class="ocr-workspace">
-              <!-- LEFT: Image preview -->
-              <div>
-                <div class="field-label" style="margin-bottom: 0.5rem">Original Scan</div>
-                <div class="ocr-preview" id="ocrPreview">
-                  <div class="ocr-placeholder">No image loaded</div>
-                  <div class="ocr-progress-bar" id="ocrProgressBar"></div>
-                  <div class="ocr-progress-label" id="ocrProgressLabel" style="display:none"></div>
-                </div>
-              </div>
-              <!-- RIGHT: Text output -->
-              <div class="ocr-text-area">
-                <div class="field-label">Extracted Text (Editable)</div>
-                <div class="ocr-toolbar">
-                  <button class="ocr-btn primary" onclick="runOCR()">↻ Re-run OCR</button>
-                  <button class="ocr-btn" onclick="clearOCR()">✕ Clear</button>
-                  <button class="ocr-btn" onclick="copyOCR()">⎘ Copy</button>
-                  <div class="ocr-confidence" id="ocrConfidence"></div>
-                </div>
-                <textarea class="ocr-output" id="ocrOutput"
-                  placeholder="OCR text will appear here after scanning...&#10;&#10;You can edit it directly — fix any misread words, correct formatting, or clean up line breaks."></textarea>
-                <div class="field-label" style="margin-top: 0.5rem">Episode Title</div>
-                <input type="text" class="field-input" id="episodeTitle"
-                  placeholder="e.g. The Longest Year" style="width: 100%">
-                <div class="meta-grid" style="margin-top: 0.75rem">
-                  <div class="meta-field">
-                    <label class="field-label">Date Written</label>
-                    <input type="date" class="field-input" id="episodeDate">
-                  </div>
-                  <div class="meta-field">
-                    <label class="field-label">Alias Used</label>
-                    <input type="text" class="field-input" id="episodeAlias"
-                      placeholder="e.g. Redbeard the Astronomer">
-                  </div>
-                  <div class="meta-field">
-                    <label class="field-label">Part</label>
-                    <select class="field-select" id="episodePart">
-                      <option value="">— Select Part —</option>
-                      <option value="1">Part I: The Cold Open</option>
-                      <option value="2">Part II: County Time</option>
-                      <option value="3">Part III: State Property</option>
-                      <option value="4">Part IV: Pandemic Inside</option>
-                      <option value="5">Part V: Getting Out</option>
-                    </select>
-                  </div>
-                  <div class="meta-field">
-                    <label class="field-label">Addressed To</label>
-                    <input type="text" class="field-input" id="episodeTo"
-                      placeholder="e.g. Squeaky Pip">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PUBLISH -->
-        <div class="panel" id="publishPanel" style="display:none">
-          <div class="panel-header">
-            <div class="panel-title">PUBLISH</div>
-          </div>
-          <div class="panel-body">
-            <div class="publish-checklist" id="publishChecklist">
-              <div class="check-item pending" id="chk-file">
-                <span class="check-icon"></span>Scan uploaded
-              </div>
-              <div class="check-item pending" id="chk-inmate">
-                <span class="check-icon"></span>Inmate assigned
-              </div>
-              <div class="check-item pending" id="chk-text">
-                <span class="check-icon"></span>Text extracted
-              </div>
-              <div class="check-item pending" id="chk-title">
-                <span class="check-icon"></span>Episode title set
-              </div>
-            </div>
-            <button class="publish-btn" id="publishBtn" onclick="publishEpisode()" disabled>
-              PUBLISH EPISODE →
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ── CONTENT QUEUE ── -->
-      <div class="page-section" id="section-queue">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">CONTENT QUEUE</div>
-            <div class="panel-subtitle">All uploaded content and publish status</div>
-          </div>
-          <div class="panel-body" style="padding: 0; overflow-x: auto;">
-            <table class="queue-table">
-              <thead>
-                <tr>
-                  <th>Inmate</th>
-                  <th>ID</th>
-                  <th>Episode Title</th>
-                  <th>Type</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="queueBody">
-                <tr>
-                  <td colspan="7" style="text-align:center; color: var(--text-dim); padding: 3rem;">
-                    No content uploaded yet
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="editor-actions">
+          <button class="btn btn-small" onclick="previewPage()">Preview</button>
+          <button class="btn btn-small btn-primary" onclick="savePage()">Save & Push</button>
         </div>
       </div>
 
-      <!-- ── INMATE PAGES ── -->
-      <div class="page-section" id="section-inmates">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">INMATE PAGES</div>
-            <div class="panel-subtitle">Manage all registered profiles</div>
+      <!-- Profile Section -->
+      <div class="form-section">
+        <h3>Profile</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" id="ed-name" placeholder="e.g. Redbeard The Great">
           </div>
-          <div class="panel-body" style="padding: 0; overflow-x: auto;">
-            <table class="queue-table" id="inmateTable">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>ID</th>
-                  <th>Facility</th>
-                  <th>Episodes</th>
-                  <th>Artwork</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="inmateTableBody"></tbody>
-            </table>
+          <div class="form-group">
+            <label>ID Number</label>
+            <input type="text" id="ed-id" placeholder="e.g. 1369313">
           </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Facility</label>
+            <input type="text" id="ed-facility" placeholder="e.g. Central Prison, Raleigh">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="ed-status">
+              <option value="live">Live</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Page Filename</label>
+          <input type="text" id="ed-filename" placeholder="e.g. contributor-redbeard.html">
+        </div>
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea id="ed-bio" rows="4" placeholder="Contributor biography..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tagline / Quote</label>
+          <input type="text" id="ed-tagline" placeholder='e.g. "We were exiled from society..."'>
         </div>
       </div>
 
-      <!-- ── SETTINGS ── -->
-      <div class="page-section" id="section-settings">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">SETTINGS</div>
-          </div>
-          <div class="panel-body">
-            <div class="meta-grid">
-              <div class="meta-field">
-                <label class="field-label">PO Box Address</label>
-                <input type="text" class="field-input" placeholder="PO Box 000, City, NC 00000">
-              </div>
-              <div class="meta-field">
-                <label class="field-label">Admin Email</label>
-                <input type="email" class="field-input" placeholder="admin@razorwirefeels.com">
-              </div>
-              <div class="meta-field">
-                <label class="field-label">Content Retention Period</label>
-                <select class="field-select">
-                  <option>6 months (default)</option>
-                  <option>12 months</option>
-                  <option>Indefinite</option>
-                </select>
-              </div>
-              <div class="meta-field">
-                <label class="field-label">OCR Language</label>
-                <select class="field-select">
-                  <option>English</option>
-                  <option>Spanish</option>
-                  <option>English + Spanish</option>
-                </select>
-              </div>
-            </div>
-            <div style="margin-top: 1.5rem;">
-              <label class="field-label">Change Admin Password</label>
-              <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem; flex-wrap: wrap;">
-                <input type="password" class="field-input" id="newPass" placeholder="New password">
-                <input type="password" class="field-input" id="newPass2" placeholder="Confirm">
-                <button class="ocr-btn primary" onclick="changePassword()">Update</button>
-              </div>
-            </div>
-          </div>
+      <!-- Profile Image -->
+      <div class="form-section">
+        <h3>Profile Image</h3>
+        <div class="upload-zone" onclick="document.getElementById('profile-img-upload').click()">
+          <div class="upload-icon">📷</div>
+          <p>Click to upload profile image</p>
+          <input type="file" id="profile-img-upload" accept="image/*" style="display:none" onchange="handleProfileImage(event)">
+        </div>
+        <div id="profile-img-preview" style="text-align:center"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="form-section">
+        <h3>Content</h3>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;gap:8px">
+          <button class="btn btn-small" onclick="openAddContent('writing')">+ Writing</button>
+          <button class="btn btn-small" onclick="openAddContent('art')">+ Art</button>
+          <button class="btn btn-small" onclick="openAddContent('poem')">+ Poem</button>
+          <button class="btn btn-small" onclick="openAddContent('letter')">+ Letter</button>
+        </div>
+        <div class="content-list" id="content-list">
+          <p style="color:var(--text-muted);text-align:center;padding:2rem">No content yet. Add writings, art, poems, or letters above.</p>
         </div>
       </div>
 
-    </div><!-- /main-content -->
-  </div><!-- /admin-body -->
-</div><!-- /adminApp -->
+      <!-- Danger Zone -->
+      <div class="form-section" id="danger-zone" style="display:none">
+        <h3 style="color:var(--accent)">Danger Zone</h3>
+        <p style="color:var(--text-dim);font-size:12px;margin-bottom:1rem">Permanently delete this contributor page from the repo.</p>
+        <button class="btn btn-small btn-danger" onclick="deletePage()">Delete Page</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- NOTIFICATION -->
-<div class="notification" id="notification"></div>
+<!-- ════════════ ADD CONTENT MODAL ════════════ -->
+<div class="modal-overlay" id="content-modal">
+  <div class="modal">
+    <h3 id="modal-title">Add Content</h3>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="modal-content-title" placeholder="Title of the piece">
+    </div>
+    <div class="form-group">
+      <label>Type</label>
+      <select id="modal-content-type">
+        <option value="writing">Writing</option>
+        <option value="poem">Poem</option>
+        <option value="letter">Letter</option>
+        <option value="art">Art</option>
+      </select>
+    </div>
+    <div class="form-group" id="modal-text-group">
+      <label>Content</label>
+      <textarea id="modal-content-body" rows="10" placeholder="Paste or type the full text..."></textarea>
+    </div>
+    <div class="form-group" id="modal-art-group" style="display:none">
+      <label>Image</label>
+      <div class="upload-zone" onclick="document.getElementById('art-upload').click()">
+        <div class="upload-icon">🎨</div>
+        <p>Click to upload artwork image</p>
+        <input type="file" id="art-upload" accept="image/*" style="display:none" onchange="handleArtUpload(event)">
+      </div>
+      <div id="art-preview"></div>
+    </div>
+    <div class="form-group">
+      <label>Description / Notes</label>
+      <textarea id="modal-content-desc" rows="3" placeholder="Optional description, dedication, context..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Date Written</label>
+      <input type="text" id="modal-content-date" placeholder="e.g. April 2020">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-small" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-small btn-primary" onclick="addContent()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ PREVIEW MODAL ════════════ -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal" style="max-width:800px;max-height:90vh">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h3 style="margin:0">Page Preview</h3>
+      <button class="btn btn-small" onclick="document.getElementById('preview-modal').classList.remove('active')">Close</button>
+    </div>
+    <iframe id="preview-frame" style="width:100%;height:70vh;border:1px solid var(--border);background:#fff"></iframe>
+  </div>
+</div>
+
+<!-- ════════════ LOADING ════════════ -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <p id="loading-text">Connecting to GitHub...</p>
+</div>
+
+<!-- ════════════ TOAST ════════════ -->
+<div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
-// AUTH — change password in settings, stored in localStorage
-// ============================================================
-const DEFAULT_PASS = 'rwf2024';
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let TOKEN = '';
+let OWNER = '';
+let REPO = '';
+let contributors = [];
+let currentContributor = null;
+let currentContents = [];
+let editingIndex = -1; // -1 = new, >= 0 = existing
+let tempArtData = null;
+let tempProfileData = null;
+let repoFiles = [];
 
-function doLogin() {
-  const user = document.getElementById('loginUser').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  const storedPass = localStorage.getItem('rwf_admin_pass') || DEFAULT_PASS;
+// ══════════════════════════════════════
+//  GITHUB API
+// ══════════════════════════════════════
+async function ghFetch(path, opts = {}) {
+  const url = `https://api.github.com/repos/${OWNER}/${REPO}${path}`;
+  const res = await fetch(url, {
+    ...opts,
+    headers: {
+      'Authorization': `token ${TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+      ...(opts.headers || {}),
+    },
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub API error: ${res.status}`);
+  }
+  return res.json();
+}
 
-  if (user === 'admin' && pass === storedPass) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminApp').style.display = 'flex';
-    initAdmin();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginPass').value = '';
+async function getRepoContents(path = '') {
+  return ghFetch(`/contents/${path}`);
+}
+
+async function getFile(path) {
+  return ghFetch(`/contents/${path}`);
+}
+
+async function putFile(path, content, message, sha = null) {
+  const body = {
+    message,
+    content: btoa(unescape(encodeURIComponent(content))),
+  };
+  if (sha) body.sha = sha;
+  return ghFetch(`/contents/${path}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
+}
+
+async function putBinaryFile(path, base64Content, message, sha = null) {
+  const body = {
+    message,
+    content: base64Content,
+  };
+  if (sha) body.sha = sha;
+  return ghFetch(`/contents/${path}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
+}
+
+async function deleteFile(path, sha, message) {
+  return ghFetch(`/contents/${path}`, {
+    method: 'DELETE',
+    body: JSON.stringify({ message, sha }),
+  });
+}
+
+// ══════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════
+async function doLogin() {
+  TOKEN = document.getElementById('token-input').value.trim();
+  OWNER = document.getElementById('owner-input').value.trim();
+  REPO = document.getElementById('repo-input').value.trim();
+
+  if (!TOKEN || !OWNER || !REPO) {
+    showLoginError('All fields required');
+    return;
+  }
+
+  showLoading('Connecting to GitHub...');
+  try {
+    // Verify token and repo access
+    const repo = await ghFetch('');
+    sessionStorage.setItem('rwf_token', TOKEN);
+    sessionStorage.setItem('rwf_owner', OWNER);
+    sessionStorage.setItem('rwf_repo', REPO);
+
+    document.getElementById('user-info').textContent = `${OWNER}/${REPO}`;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+
+    await loadDashboard();
+  } catch (e) {
+    showLoginError('Connection failed: ' + e.message);
+  }
+  hideLoading();
+}
+
+function logout() {
+  sessionStorage.clear();
+  TOKEN = '';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('token-input').value = '';
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// Check for saved session
+(function autoLogin() {
+  const t = sessionStorage.getItem('rwf_token');
+  const o = sessionStorage.getItem('rwf_owner');
+  const r = sessionStorage.getItem('rwf_repo');
+  if (t && o && r) {
+    document.getElementById('token-input').value = t;
+    document.getElementById('owner-input').value = o;
+    document.getElementById('repo-input').value = r;
+    doLogin();
+  }
+})();
+
+// ══════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════
+async function loadDashboard() {
+  showLoading('Loading repo files...');
+  try {
+    repoFiles = await getRepoContents('');
+    await loadContributorIndex();
+    renderDashboard();
+  } catch (e) {
+    toast('Failed to load repo: ' + e.message, true);
+  }
+  hideLoading();
+}
+
+async function loadContributorIndex() {
+  // Try to load the contributors index JSON
+  try {
+    const file = await getFile('admin-data/contributors.json');
+    const content = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
+    contributors = JSON.parse(content);
+    contributors._sha = file.sha;
+  } catch (e) {
+    // No index yet — start fresh
+    contributors = [];
+    contributors._sha = null;
   }
 }
 
-function doLogout() {
-  document.getElementById('adminApp').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginPass').value = '';
+async function saveContributorIndex() {
+  const sha = contributors._sha || null;
+  const data = contributors.filter(c => c); // remove holes
+  const content = JSON.stringify(data, null, 2);
+  try {
+    const result = await putFile(
+      'admin-data/contributors.json',
+      content,
+      'Update contributor index',
+      sha
+    );
+    contributors._sha = result.content.sha;
+  } catch (e) {
+    toast('Failed to save index: ' + e.message, true);
+    throw e;
+  }
 }
 
-function changePassword() {
-  const p1 = document.getElementById('newPass').value;
-  const p2 = document.getElementById('newPass2').value;
-  if (!p1) return notify('Enter a new password', true);
-  if (p1 !== p2) return notify('Passwords do not match', true);
-  localStorage.setItem('rwf_admin_pass', p1);
-  notify('Password updated');
-  document.getElementById('newPass').value = '';
-  document.getElementById('newPass2').value = '';
+function renderDashboard() {
+  document.getElementById('stat-total').textContent = contributors.length;
+  const totalContent = contributors.reduce((sum, c) => sum + (c.content ? c.content.length : 0), 0);
+  document.getElementById('stat-content').textContent = totalContent;
+  document.getElementById('stat-files').textContent = repoFiles.length;
+
+  renderContributorGrid(contributors);
 }
 
-// ============================================================
-// MOCK INMATE DATABASE
-// ============================================================
-const INMATES = [
-  { id: '1369313', name: 'Nicolas Losito', alias: 'Redbeard the Great', facility: 'Alexander CI', episodes: 52, artwork: 1 },
-  { id: '0847291', name: 'Marcus T. Williams', alias: 'The Quiet Storm', facility: 'Central Prison', episodes: 14, artwork: 0 },
-  { id: '1122034', name: 'DeShawn A. Prichard', alias: 'D-Pritch', facility: 'Lanesboro CI', episodes: 0, artwork: 23 },
-  { id: '0993847', name: 'Raymond L. Okafor', alias: null, facility: 'Nash CI', episodes: 7, artwork: 0 },
-  { id: '0765432', name: 'James E. Holloway', alias: 'Hollow', facility: 'Maury CI', episodes: 31, artwork: 8 },
-  { id: '0871234', name: 'Angela M. Torres', alias: 'Angel T', facility: 'NCCWI', episodes: 19, artwork: 12 },
-];
+function renderContributorGrid(list) {
+  const grid = document.getElementById('contributor-grid');
+  if (list.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--text-muted)">
+        <p style="font-size:2rem;margin-bottom:1rem">📂</p>
+        <p>No contributors yet. Click <strong>+ New Contributor</strong> to get started.</p>
+      </div>`;
+    return;
+  }
 
-const CONTENT_QUEUE = [];
-
-// ============================================================
-// STATE
-// ============================================================
-let currentFile = null;
-let currentFileURL = null;
-let assignedInmate = null;
-let selectedType = 'writing';
-let ocrRunning = false;
-
-// ============================================================
-// INIT
-// ============================================================
-function initAdmin() {
-  updateTopStats();
-  renderInmateTable();
-  renderQueueTable();
+  grid.innerHTML = list.map((c, i) => `
+    <div class="contributor-card" onclick="openEditor(${contributors.indexOf(c)})">
+      <div class="card-badge ${c.status || 'draft'}">${c.status || 'draft'}</div>
+      <div class="card-id">#${c.id || '—'}</div>
+      <div class="card-name">${esc(c.name || 'Unnamed')}</div>
+      <div class="card-facility">${esc(c.facility || 'No facility set')}</div>
+      <div class="card-meta">
+        <span>${(c.content || []).length} items</span>
+        <span>${c.filename || 'no file'}</span>
+      </div>
+    </div>
+  `).join('');
 }
 
-function updateTopStats() {
-  document.getElementById('topTotal').textContent = INMATES.length;
-  document.getElementById('topPublished').textContent =
-    INMATES.reduce((s, i) => s + i.episodes + i.artwork, 0);
-  document.getElementById('topQueue').textContent =
-    CONTENT_QUEUE.filter(c => c.status === 'pending').length;
+function filterContributors() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  if (!q) { renderContributorGrid(contributors); return; }
+  const filtered = contributors.filter(c =>
+    (c.name || '').toLowerCase().includes(q) ||
+    (c.id || '').toLowerCase().includes(q) ||
+    (c.facility || '').toLowerCase().includes(q)
+  );
+  renderContributorGrid(filtered);
 }
 
-// ============================================================
-// SECTION SWITCHING
-// ============================================================
-function switchSection(name, tab) {
-  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  tab.classList.add('active');
-  document.getElementById('section-' + name).classList.add('active');
+// ══════════════════════════════════════
+//  EDITOR
+// ══════════════════════════════════════
+function openNewContributor() {
+  editingIndex = -1;
+  currentContributor = {
+    name: '', id: '', facility: '', status: 'draft',
+    filename: '', bio: '', tagline: '', profileImage: '',
+    content: []
+  };
+  currentContents = [];
+  tempProfileData = null;
+  populateEditor();
+  showEditor();
 }
 
-// ============================================================
-// DRAG & DROP
-// ============================================================
-const uploadZone = document.getElementById('uploadZone');
-uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
-uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-uploadZone.addEventListener('drop', e => {
-  e.preventDefault();
-  uploadZone.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) handleFileUpload(file);
+function openEditor(index) {
+  editingIndex = index;
+  currentContributor = JSON.parse(JSON.stringify(contributors[index]));
+  currentContents = currentContributor.content || [];
+  tempProfileData = null;
+  populateEditor();
+  showEditor();
+}
+
+function populateEditor() {
+  const c = currentContributor;
+  document.getElementById('ed-name').value = c.name || '';
+  document.getElementById('ed-id').value = c.id || '';
+  document.getElementById('ed-facility').value = c.facility || '';
+  document.getElementById('ed-status').value = c.status || 'draft';
+  document.getElementById('ed-filename').value = c.filename || '';
+  document.getElementById('ed-bio').value = c.bio || '';
+  document.getElementById('ed-tagline').value = c.tagline || '';
+  document.getElementById('editor-title').textContent = c.name ? `Edit: ${c.name}` : 'New Contributor';
+  document.getElementById('danger-zone').style.display = editingIndex >= 0 ? 'block' : 'none';
+
+  // Profile image
+  const imgPreview = document.getElementById('profile-img-preview');
+  if (c.profileImage) {
+    imgPreview.innerHTML = `<img src="${c.profileImage}" style="max-width:200px;border:1px solid var(--border)">`;
+  } else {
+    imgPreview.innerHTML = '';
+  }
+
+  renderContentList();
+}
+
+function renderContentList() {
+  const list = document.getElementById('content-list');
+  if (currentContents.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:2rem">No content yet. Add writings, art, poems, or letters above.</p>';
+    return;
+  }
+
+  list.innerHTML = currentContents.map((item, i) => `
+    <div class="content-item">
+      <span class="item-type">${esc(item.type)}</span>
+      <div class="item-body">
+        <div class="item-title">${esc(item.title)}</div>
+        <div class="item-preview">${esc((item.body || item.description || '').substring(0, 120))}</div>
+        ${item.date ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px">${esc(item.date)}</div>` : ''}
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-small btn-ghost" onclick="editContent(${i})">Edit</button>
+        <button class="btn btn-small btn-ghost" style="color:var(--accent)" onclick="removeContent(${i})">×</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showEditor() {
+  document.getElementById('dashboard-view').style.display = 'none';
+  document.getElementById('editor-view').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function backToDashboard() {
+  document.getElementById('editor-view').style.display = 'none';
+  document.getElementById('dashboard-view').style.display = 'block';
+  renderDashboard();
+}
+
+// ══════════════════════════════════════
+//  CONTENT MANAGEMENT
+// ══════════════════════════════════════
+let editingContentIndex = -1;
+
+function openAddContent(type) {
+  editingContentIndex = -1;
+  document.getElementById('modal-content-title').value = '';
+  document.getElementById('modal-content-type').value = type;
+  document.getElementById('modal-content-body').value = '';
+  document.getElementById('modal-content-desc').value = '';
+  document.getElementById('modal-content-date').value = '';
+  document.getElementById('art-preview').innerHTML = '';
+  tempArtData = null;
+  toggleContentTypeFields(type);
+  document.getElementById('modal-title').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+  document.getElementById('content-modal').classList.add('active');
+}
+
+function editContent(index) {
+  editingContentIndex = index;
+  const item = currentContents[index];
+  document.getElementById('modal-content-title').value = item.title || '';
+  document.getElementById('modal-content-type').value = item.type || 'writing';
+  document.getElementById('modal-content-body').value = item.body || '';
+  document.getElementById('modal-content-desc').value = item.description || '';
+  document.getElementById('modal-content-date').value = item.date || '';
+  tempArtData = item.imageData || null;
+  toggleContentTypeFields(item.type);
+  if (item.imageData) {
+    document.getElementById('art-preview').innerHTML = `<img src="${item.imageData}" style="max-width:200px;border:1px solid var(--border)">`;
+  }
+  document.getElementById('modal-title').textContent = `Edit ${item.type}`;
+  document.getElementById('content-modal').classList.add('active');
+}
+
+function toggleContentTypeFields(type) {
+  if (type === 'art') {
+    document.getElementById('modal-text-group').style.display = 'none';
+    document.getElementById('modal-art-group').style.display = 'block';
+  } else {
+    document.getElementById('modal-text-group').style.display = 'block';
+    document.getElementById('modal-art-group').style.display = 'none';
+  }
+}
+
+document.getElementById('modal-content-type').addEventListener('change', function() {
+  toggleContentTypeFields(this.value);
 });
 
-// ============================================================
-// FILE UPLOAD
-// ============================================================
-function handleFileUpload(file) {
-  if (!file) return;
-  currentFile = file;
-  currentFileURL = URL.createObjectURL(file);
-
-  // Advance pipeline
-  setStep(1, 'complete', 'Uploaded: ' + file.name);
-  setStep(2, 'active', 'Assign inmate');
-
-  // Show panels
-  document.getElementById('assignPanel').style.display = 'block';
-  document.getElementById('ocrPanel').style.display = 'block';
-  document.getElementById('publishPanel').style.display = 'block';
-
-  // Show image preview
-  const preview = document.getElementById('ocrPreview');
-  if (file.type.startsWith('image/')) {
-    preview.innerHTML = `<img src="${currentFileURL}" alt="Scan preview">
-      <div class="ocr-progress-bar" id="ocrProgressBar"></div>
-      <div class="ocr-progress-label" id="ocrProgressLabel" style="display:none"></div>`;
-  } else {
-    preview.innerHTML = `<div class="ocr-placeholder">📄 ${file.name}<br><br>PDF preview not available in browser.<br>OCR will still run.</div>
-      <div class="ocr-progress-bar" id="ocrProgressBar"></div>
-      <div class="ocr-progress-label" id="ocrProgressLabel" style="display:none"></div>`;
-  }
-
-  updateChecklist();
-
-  // Auto-run OCR
-  setTimeout(runOCR, 500);
-
-  notify('File uploaded — OCR starting...');
-}
-
-// ============================================================
-// OCR via Tesseract.js
-// ============================================================
-async function runOCR() {
-  if (!currentFile || ocrRunning) return;
-  ocrRunning = true;
-
-  setStep(3, 'active', 'Running OCR...');
-
-  const progressBar = document.getElementById('ocrProgressBar');
-  const progressLabel = document.getElementById('ocrProgressLabel');
-  const output = document.getElementById('ocrOutput');
-
-  progressLabel.style.display = 'block';
-  progressLabel.textContent = 'Initializing OCR engine...';
-  progressBar.style.width = '5%';
-  output.value = '';
-
-  try {
-    const worker = await Tesseract.createWorker('eng', 1, {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          const pct = Math.round(m.progress * 100);
-          progressBar.style.width = pct + '%';
-          progressLabel.textContent = `Scanning... ${pct}%`;
-        } else if (m.status) {
-          progressLabel.textContent = m.status;
-        }
-      }
-    });
-
-    const result = await worker.recognize(currentFileURL);
-    await worker.terminate();
-
-    const text = result.data.text.trim();
-    const confidence = Math.round(result.data.confidence);
-
-    output.value = text;
-    progressBar.style.width = '100%';
-    progressBar.style.background = 'var(--green)';
-    progressLabel.textContent = `Complete`;
-
-    document.getElementById('ocrConfidence').innerHTML =
-      `OCR Confidence: <span>${confidence}%</span>`;
-
-    setStep(3, 'complete', `OCR complete · ${confidence}% confidence`);
-    updateChecklist();
-
-    setTimeout(() => {
-      progressLabel.style.display = 'none';
-      progressBar.style.width = '0';
-      progressBar.style.background = 'var(--red)';
-    }, 2000);
-
-    notify(`OCR complete — ${confidence}% confidence. Review and edit text above.`);
-
-  } catch (err) {
-    console.error(err);
-    progressLabel.textContent = 'OCR failed — enter text manually';
-    progressBar.style.background = 'var(--red)';
-    notify('OCR failed — you can type the text manually', true);
-    setStep(3, 'active', 'Manual entry needed');
-  }
-
-  ocrRunning = false;
-}
-
-function clearOCR() {
-  document.getElementById('ocrOutput').value = '';
-  updateChecklist();
-}
-
-function copyOCR() {
-  const text = document.getElementById('ocrOutput').value;
-  navigator.clipboard.writeText(text).then(() => notify('Text copied to clipboard'));
-}
-
-document.getElementById('ocrOutput').addEventListener('input', updateChecklist);
-document.getElementById('episodeTitle').addEventListener('input', updateChecklist);
-
-// ============================================================
-// INMATE LOOKUP
-// ============================================================
-function lookupInmate(id) {
-  const clean = id.trim().replace(/\D/g, '');
-  if (clean.length < 5) {
-    document.getElementById('lookupResult').classList.remove('visible');
-    assignedInmate = null;
-    updateChecklist();
-    return;
-  }
-
-  const found = INMATES.find(i => i.id === clean.padStart(7, '0') || i.id === clean);
-  if (found) {
-    showLookupResult(found);
-  } else {
-    document.getElementById('lookupResult').classList.remove('visible');
-    assignedInmate = null;
-  }
-  updateChecklist();
-}
-
-function searchInmateName(query) {
-  if (query.length < 2) return;
-  const q = query.toLowerCase();
-  const found = INMATES.find(i => i.name.toLowerCase().includes(q));
-  if (found) {
-    showLookupResult(found);
-    document.getElementById('inmateIdInput').value = found.id;
-  }
-  updateChecklist();
-}
-
-function showLookupResult(inmate) {
-  assignedInmate = inmate;
-  document.getElementById('lrName').textContent = inmate.name;
-  document.getElementById('lrId').textContent = 'NC · ' + inmate.id;
-  document.getElementById('lrFacility').textContent = inmate.facility;
-  document.getElementById('lrEpisodes').textContent =
-    `${inmate.episodes} episodes · ${inmate.artwork} artwork`;
-  document.getElementById('lookupResult').classList.add('visible');
-
-  // Pre-fill alias if available
-  if (inmate.alias && !document.getElementById('episodeAlias').value) {
-    document.getElementById('episodeAlias').value = inmate.alias;
-  }
-
-  setStep(2, 'complete', inmate.name + ' · ' + inmate.id);
-  updateChecklist();
-}
-
-// ============================================================
-// TYPE SELECTION
-// ============================================================
-function selectType(type, el) {
-  document.querySelectorAll('.type-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedType = type;
-}
-
-// ============================================================
-// CHECKLIST + PUBLISH BUTTON
-// ============================================================
-function updateChecklist() {
-  const hasFile = !!currentFile;
-  const hasInmate = !!assignedInmate;
-  const hasText = document.getElementById('ocrOutput').value.trim().length > 20;
-  const hasTitle = document.getElementById('episodeTitle').value.trim().length > 2;
-
-  setCheck('chk-file', hasFile);
-  setCheck('chk-inmate', hasInmate);
-  setCheck('chk-text', hasText);
-  setCheck('chk-title', hasTitle);
-
-  const ready = hasFile && hasInmate && hasText && hasTitle;
-  document.getElementById('publishBtn').disabled = !ready;
-
-  if (ready) setStep(4, 'active', 'Ready to publish');
-}
-
-function setCheck(id, done) {
-  const el = document.getElementById(id);
-  el.className = 'check-item ' + (done ? 'done' : 'pending');
-}
-
-// ============================================================
-// PIPELINE STEP UPDATER
-// ============================================================
-function setStep(num, state, status) {
-  const el = document.getElementById('step' + num);
-  el.className = 'step ' + state;
-  el.querySelector('.step-status').textContent = status;
-}
-
-// ============================================================
-// PUBLISH
-// ============================================================
-function publishEpisode() {
-  if (!assignedInmate) return;
-
-  const episode = {
-    id: Date.now(),
-    inmateId: assignedInmate.id,
-    inmateName: assignedInmate.name,
-    type: selectedType,
-    title: document.getElementById('episodeTitle').value.trim(),
-    text: document.getElementById('ocrOutput').value.trim(),
-    imageURL: currentFileURL,
-    alias: document.getElementById('episodeAlias').value.trim(),
-    date: document.getElementById('episodeDate').value,
-    part: document.getElementById('episodePart').value,
-    addressedTo: document.getElementById('episodeTo').value.trim(),
-    status: 'live',
-    publishedAt: new Date().toISOString()
+function addContent() {
+  const item = {
+    title: document.getElementById('modal-content-title').value.trim(),
+    type: document.getElementById('modal-content-type').value,
+    body: document.getElementById('modal-content-body').value,
+    description: document.getElementById('modal-content-desc').value,
+    date: document.getElementById('modal-content-date').value,
+    imageData: tempArtData || null,
   };
 
-  CONTENT_QUEUE.unshift(episode);
+  if (!item.title) { toast('Title is required', true); return; }
 
-  // Update inmate episode count
-  const inmate = INMATES.find(i => i.id === assignedInmate.id);
-  if (inmate) {
-    if (selectedType === 'art') inmate.artwork++;
-    else inmate.episodes++;
+  if (editingContentIndex >= 0) {
+    currentContents[editingContentIndex] = item;
+  } else {
+    currentContents.push(item);
   }
 
-  setStep(4, 'complete', 'Published!');
-  updateTopStats();
-  renderQueueTable();
-  renderInmateTable();
-
-  notify(`✓ Published "${episode.title}" to ${assignedInmate.name}'s page`);
-
-  // Reset pipeline after 2s
-  setTimeout(resetPipeline, 2000);
+  renderContentList();
+  closeModal();
+  toast('Content added');
 }
 
-function resetPipeline() {
-  currentFile = null;
-  currentFileURL = null;
-  assignedInmate = null;
-
-  document.getElementById('assignPanel').style.display = 'none';
-  document.getElementById('ocrPanel').style.display = 'none';
-  document.getElementById('publishPanel').style.display = 'none';
-
-  document.getElementById('inmateIdInput').value = '';
-  document.getElementById('inmateNameInput').value = '';
-  document.getElementById('ocrOutput').value = '';
-  document.getElementById('episodeTitle').value = '';
-  document.getElementById('episodeAlias').value = '';
-  document.getElementById('episodeDate').value = '';
-  document.getElementById('episodePart').value = '';
-  document.getElementById('episodeTo').value = '';
-  document.getElementById('lookupResult').classList.remove('visible');
-  document.getElementById('ocrPreview').innerHTML = '<div class="ocr-placeholder">No image loaded</div><div class="ocr-progress-bar" id="ocrProgressBar"></div><div class="ocr-progress-label" id="ocrProgressLabel" style="display:none"></div>';
-  document.getElementById('ocrConfidence').innerHTML = '';
-  document.getElementById('fileInput').value = '';
-
-  [1,2,3,4].forEach(n => {
-    if (n === 1) setStep(n, 'active', 'Awaiting file');
-    else setStep(n, '', 'Waiting');
-  });
-
-  updateChecklist();
-}
-
-// ============================================================
-// TABLES
-// ============================================================
-function renderQueueTable() {
-  const tbody = document.getElementById('queueBody');
-  if (CONTENT_QUEUE.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-dim); padding: 3rem;">No content uploaded yet</td></tr>`;
-    return;
+function removeContent(index) {
+  if (confirm('Remove this content item?')) {
+    currentContents.splice(index, 1);
+    renderContentList();
   }
-  tbody.innerHTML = CONTENT_QUEUE.map(c => `
-    <tr>
-      <td>${c.inmateName}</td>
-      <td style="color: var(--text-dim)">NC · ${c.inmateId}</td>
-      <td>${c.title}</td>
-      <td style="text-transform: capitalize">${c.type}</td>
-      <td style="color: var(--text-dim)">${c.date || '—'}</td>
-      <td><span class="status-pill ${c.status}">${c.status}</span></td>
-      <td>
-        <button class="ocr-btn" style="font-size:0.55rem"
-          onclick="viewOnPage('${c.inmateId}')">View Page</button>
-      </td>
-    </tr>
-  `).join('');
 }
 
-function renderInmateTable() {
-  const tbody = document.getElementById('inmateTableBody');
-  tbody.innerHTML = INMATES.map(i => `
-    <tr>
-      <td><strong style="color: var(--text-bright)">${i.name}</strong>
-        ${i.alias ? `<br><span style="color: var(--red); font-size:0.6rem">"${i.alias}"</span>` : ''}
-      </td>
-      <td style="color: var(--text-dim)">NC · ${i.id}</td>
-      <td style="color: var(--text-dim)">${i.facility}</td>
-      <td>${i.episodes}</td>
-      <td>${i.artwork}</td>
-      <td><span class="status-pill live">Live</span></td>
-      <td style="display:flex; gap:0.4rem; flex-wrap: wrap;">
-        <button class="ocr-btn" style="font-size:0.55rem"
-          onclick="viewOnPage('${i.id}')">View Page</button>
-        <button class="ocr-btn" style="font-size:0.55rem; border-color: var(--red); color: var(--red)">Edit</button>
-      </td>
-    </tr>
-  `).join('');
+function closeModal() {
+  document.getElementById('content-modal').classList.remove('active');
 }
 
-function viewOnPage(id) {
-  const url = id === '1369313' ? 'NC-1369313.html' : `NC-${id}.html`;
-  window.open(url, '_blank');
+// ══════════════════════════════════════
+//  IMAGE HANDLING
+// ══════════════════════════════════════
+function handleProfileImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    tempProfileData = e.target.result;
+    document.getElementById('profile-img-preview').innerHTML =
+      `<img src="${tempProfileData}" style="max-width:200px;border:1px solid var(--border)">`;
+  };
+  reader.readAsDataURL(file);
 }
 
-// ============================================================
-// NOTIFICATION
-// ============================================================
-function notify(msg, isError = false) {
-  const el = document.getElementById('notification');
+function handleArtUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    tempArtData = e.target.result;
+    document.getElementById('art-preview').innerHTML =
+      `<img src="${tempArtData}" style="max-width:200px;border:1px solid var(--border)">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══════════════════════════════════════
+//  SAVE / PUSH TO GITHUB
+// ══════════════════════════════════════
+async function savePage() {
+  const name = document.getElementById('ed-name').value.trim();
+  const id = document.getElementById('ed-id').value.trim();
+  let filename = document.getElementById('ed-filename').value.trim();
+
+  if (!name) { toast('Name is required', true); return; }
+  if (!filename) {
+    filename = 'contributor-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '') + '.html';
+    document.getElementById('ed-filename').value = filename;
+  }
+  if (!filename.endsWith('.html')) filename += '.html';
+
+  // Build contributor data
+  currentContributor = {
+    name,
+    id,
+    facility: document.getElementById('ed-facility').value.trim(),
+    status: document.getElementById('ed-status').value,
+    filename,
+    bio: document.getElementById('ed-bio').value,
+    tagline: document.getElementById('ed-tagline').value,
+    profileImage: tempProfileData || currentContributor.profileImage || '',
+    content: currentContents,
+  };
+
+  showLoading('Generating page & pushing to GitHub...');
+
+  try {
+    // 1. Generate the HTML page
+    const html = generateContributorPage(currentContributor);
+
+    // 2. Check if file exists (to get SHA for update)
+    let sha = null;
+    try {
+      const existing = await getFile(filename);
+      sha = existing.sha;
+    } catch (e) { /* new file */ }
+
+    // 3. Push the HTML file
+    await putFile(filename, html, `${editingIndex >= 0 ? 'Update' : 'Add'} contributor: ${name}`, sha);
+
+    // 4. Upload profile image if new
+    if (tempProfileData && tempProfileData.startsWith('data:')) {
+      const ext = tempProfileData.split(';')[0].split('/')[1] || 'jpg';
+      const imgPath = `images/profiles/${filename.replace('.html', '')}.${ext}`;
+      const base64 = tempProfileData.split(',')[1];
+      let imgSha = null;
+      try { const f = await getFile(imgPath); imgSha = f.sha; } catch(e) {}
+      await putBinaryFile(imgPath, base64, `Profile image: ${name}`, imgSha);
+      currentContributor.profileImage = imgPath;
+      tempProfileData = null;
+    }
+
+    // 5. Upload art images
+    for (let i = 0; i < currentContents.length; i++) {
+      const item = currentContents[i];
+      if (item.imageData && item.imageData.startsWith('data:')) {
+        const ext = item.imageData.split(';')[0].split('/')[1] || 'jpg';
+        const artPath = `images/art/${filename.replace('.html', '')}-${i}.${ext}`;
+        const base64 = item.imageData.split(',')[1];
+        let artSha = null;
+        try { const f = await getFile(artPath); artSha = f.sha; } catch(e) {}
+        await putBinaryFile(artPath, base64, `Art upload: ${item.title}`, artSha);
+        currentContents[i].imageData = artPath;
+      }
+    }
+
+    // 6. Update the contributor index
+    if (editingIndex >= 0) {
+      contributors[editingIndex] = currentContributor;
+    } else {
+      contributors.push(currentContributor);
+      editingIndex = contributors.length - 1;
+    }
+    await saveContributorIndex();
+
+    toast('Saved & pushed to GitHub!');
+    document.getElementById('editor-title').textContent = `Edit: ${name}`;
+    document.getElementById('danger-zone').style.display = 'block';
+  } catch (e) {
+    toast('Save failed: ' + e.message, true);
+  }
+  hideLoading();
+}
+
+// ══════════════════════════════════════
+//  DELETE
+// ══════════════════════════════════════
+async function deletePage() {
+  if (!confirm(`Delete ${currentContributor.name}? This removes the file from GitHub.`)) return;
+  if (!confirm('Are you absolutely sure? This cannot be undone.')) return;
+
+  showLoading('Deleting...');
+  try {
+    const filename = currentContributor.filename;
+    if (filename) {
+      try {
+        const file = await getFile(filename);
+        await deleteFile(filename, file.sha, `Delete contributor: ${currentContributor.name}`);
+      } catch(e) { /* file may not exist */ }
+    }
+
+    contributors.splice(editingIndex, 1);
+    await saveContributorIndex();
+    toast('Deleted');
+    backToDashboard();
+  } catch (e) {
+    toast('Delete failed: ' + e.message, true);
+  }
+  hideLoading();
+}
+
+// ══════════════════════════════════════
+//  PAGE GENERATOR
+// ══════════════════════════════════════
+function generateContributorPage(c) {
+  const contentHTML = (c.content || []).map(item => {
+    if (item.type === 'art') {
+      const src = item.imageData || '';
+      return `
+      <div class="content-piece art-piece">
+        <h3>${esc(item.title)}</h3>
+        ${src ? `<img src="${src}" alt="${esc(item.title)}" class="art-image">` : ''}
+        ${item.description ? `<p class="piece-desc">${esc(item.description)}</p>` : ''}
+        ${item.date ? `<span class="piece-date">${esc(item.date)}</span>` : ''}
+      </div>`;
+    }
+    return `
+    <div class="content-piece">
+      <span class="piece-type">${esc(item.type)}</span>
+      <h3>${esc(item.title)}</h3>
+      <div class="piece-body">${escMultiline(item.body || '')}</div>
+      ${item.description ? `<p class="piece-desc">${esc(item.description)}</p>` : ''}
+      ${item.date ? `<span class="piece-date">${esc(item.date)}</span>` : ''}
+    </div>`;
+  }).join('\n');
+
+  const profileImgSrc = c.profileImage || '';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(c.name)} | Razor Wire Feels</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --border: #2a2a2a;
+    --text: #d4d4d4;
+    --text-dim: #777;
+    --accent: #ff3333;
+    --accent-glow: rgba(255,51,51,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Courier Prime', monospace;
+    line-height: 1.7;
+  }
+  .noise {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .container { max-width: 800px; margin: 0 auto; padding: 2rem; position: relative; z-index: 1; }
+  .back-link {
+    display: inline-block; margin-bottom: 2rem; color: var(--text-dim);
+    text-decoration: none; font-size: 13px;
+  }
+  .back-link:hover { color: var(--accent); }
+  .profile-header {
+    text-align: center; padding: 3rem 0; margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .profile-img {
+    width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
+    border: 3px solid var(--accent); margin-bottom: 1.5rem;
+  }
+  .profile-name {
+    font-family: 'Permanent Marker', cursive; font-size: 2.2rem;
+    color: var(--accent); margin-bottom: 0.25rem;
+  }
+  .profile-id { color: var(--text-dim); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; }
+  .profile-facility { color: var(--text-dim); font-size: 14px; margin-top: 0.5rem; }
+  .profile-tagline {
+    font-style: italic; color: var(--text); margin-top: 1.5rem;
+    font-size: 15px; max-width: 500px; margin-left: auto; margin-right: auto;
+  }
+  .bio-section {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 2rem; margin-bottom: 2rem;
+  }
+  .bio-section h2 {
+    font-family: 'Permanent Marker', cursive; color: var(--accent);
+    font-size: 1.2rem; margin-bottom: 1rem;
+  }
+  .content-piece {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 2rem; margin-bottom: 1.5rem;
+  }
+  .content-piece h3 {
+    font-family: 'Permanent Marker', cursive; font-size: 1.3rem;
+    color: var(--text); margin-bottom: 1rem;
+  }
+  .piece-type {
+    display: inline-block; padding: 2px 10px; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--accent);
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  .piece-body { white-space: pre-wrap; line-height: 1.8; }
+  .piece-desc { color: var(--text-dim); font-size: 13px; margin-top: 1rem; font-style: italic; }
+  .piece-date { display: block; color: var(--text-dim); font-size: 12px; margin-top: 0.75rem; letter-spacing: 1px; }
+  .art-image { width: 100%; max-width: 600px; margin: 1rem auto; display: block; border: 1px solid var(--border); }
+  .chain-divider {
+    text-align: center; padding: 1rem 0; color: var(--text-dim);
+    font-size: 12px; letter-spacing: 4px;
+  }
+  .site-footer {
+    text-align: center; padding: 3rem 0; color: var(--text-dim);
+    font-size: 12px; border-top: 1px solid var(--border); margin-top: 3rem;
+  }
+  .site-footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="container">
+  <a href="index.html" class="back-link">← Back to Directory</a>
+  <div class="profile-header">
+    ${profileImgSrc ? `<img src="${profileImgSrc}" alt="${esc(c.name)}" class="profile-img">` : ''}
+    <div class="profile-name">${esc(c.name)}</div>
+    ${c.id ? `<div class="profile-id">#${esc(c.id)}</div>` : ''}
+    ${c.facility ? `<div class="profile-facility">${esc(c.facility)}</div>` : ''}
+    ${c.tagline ? `<div class="profile-tagline">"${esc(c.tagline)}"</div>` : ''}
+  </div>
+
+  ${c.bio ? `
+  <div class="bio-section">
+    <h2>About</h2>
+    <p>${escMultiline(c.bio)}</p>
+  </div>` : ''}
+
+  <div class="chain-divider">⛓ ⛓ ⛓ ⛓ ⛓</div>
+
+  ${contentHTML}
+
+  <div class="site-footer">
+    <p><a href="index.html">Razor Wire Feels</a></p>
+    <p style="margin-top:0.5rem">We were exiled from society. This is what we made while we were gone.</p>
+  </div>
+</div>
+</body>
+</html>`;
+}
+
+// ══════════════════════════════════════
+//  PREVIEW
+// ══════════════════════════════════════
+function previewPage() {
+  const c = {
+    name: document.getElementById('ed-name').value.trim() || 'Preview',
+    id: document.getElementById('ed-id').value.trim(),
+    facility: document.getElementById('ed-facility').value.trim(),
+    status: document.getElementById('ed-status').value,
+    bio: document.getElementById('ed-bio').value,
+    tagline: document.getElementById('ed-tagline').value,
+    profileImage: tempProfileData || currentContributor.profileImage || '',
+    content: currentContents,
+  };
+
+  const html = generateContributorPage(c);
+  const frame = document.getElementById('preview-frame');
+  frame.srcdoc = html;
+  document.getElementById('preview-modal').classList.add('active');
+}
+
+// ══════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════
+function esc(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function escMultiline(str) {
+  return esc(str).replace(/\n/g, '<br>');
+}
+
+function toast(msg, isError = false) {
+  const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = 'notification' + (isError ? ' error' : '');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3500);
+  el.className = 'toast active' + (isError ? ' error' : '');
+  setTimeout(() => el.classList.remove('active'), 3000);
 }
+
+function showLoading(msg) {
+  document.getElementById('loading-text').textContent = msg || 'Loading...';
+  document.getElementById('loading').classList.add('active');
+}
+
+function hideLoading() {
+  document.getElementById('loading').classList.remove('active');
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('active');
+  });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+  }
+});
 </script>
 </body>
 </html>
