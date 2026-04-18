@@ -9,6 +9,11 @@
 <title>Razor Wire Feels</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<!-- Firebase SDK (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <style>
 
 /* ══════════════════════════════════════════
@@ -1260,6 +1265,222 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.12em;
   color: var(--dim2);
   text-transform: uppercase;
+}
+
+/* ── AUTH ERROR / SUCCESS STATES ─────── */
+.form-error {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--red2);
+  background: rgba(192,22,15,0.1);
+  border: 1px solid rgba(192,22,15,0.2);
+  padding: 0.65rem 0.85rem;
+  display: none;
+}
+.form-error.show { display: block; }
+.form-success {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: #4caf50;
+  background: rgba(76,175,80,0.08);
+  border: 1px solid rgba(76,175,80,0.2);
+  padding: 0.65rem 0.85rem;
+  display: none;
+}
+.form-success.show { display: block; }
+.modal-submit.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ── REP DASHBOARD ───────────────────── */
+.dash-welcome {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.dash-rep-name {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: var(--bright);
+  line-height: 1;
+}
+.dash-inmate-tag {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 0.4rem;
+}
+.dash-inmate-tag span { color: var(--red); }
+.dash-tier-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  margin-top: 0.5rem;
+}
+.dash-section-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+.dash-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.dash-action-btn {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.85rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s;
+}
+.dash-action-btn:hover { border-color: var(--red); color: var(--bright); }
+.dash-action-btn svg { width: 18px; height: 18px; }
+.dash-action-btn.full-width { grid-column: 1 / -1; }
+.dash-content-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.dash-content-type {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: var(--panel);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.dash-content-title {
+  font-family: var(--body);
+  font-size: 0.8rem;
+  color: var(--text);
+  flex: 1;
+  line-height: 1.3;
+}
+.dash-content-status {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.dash-content-status.pending   { color: var(--gold); }
+.dash-content-status.approved  { color: #4caf50; }
+.dash-content-status.published { color: var(--red); }
+.dash-empty {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--dim2);
+  text-align: center;
+  padding: 1.5rem 0;
+}
+.dash-signout {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+}
+.dash-signout:hover { border-color: var(--red); color: var(--red); }
+
+/* ── UPLOAD FORM ─────────────────────── */
+.upload-back {
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  margin-bottom: 0.75rem;
+}
+.upload-back:hover { color: var(--text); }
+.upload-type-label {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: var(--bright);
+  margin-bottom: 0.75rem;
+}
+.file-drop {
+  border: 1px dashed var(--border2);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+}
+.file-drop:hover { border-color: var(--dim); }
+.file-drop input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.file-drop-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.file-drop-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  line-height: 1.9;
+}
+.file-selected {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--gold);
+  margin-top: 0.4rem;
+  letter-spacing: 0.06em;
+}
+.upload-progress {
+  height: 2px;
+  background: var(--border);
+  margin-top: 0.5rem;
+  display: none;
+}
+.upload-progress-fill {
+  height: 100%;
+  background: var(--red);
+  width: 0%;
+  transition: width 0.3s;
 }
 
 /* ── LOGIN MODAL ─────────────────────── */
@@ -3280,56 +3501,165 @@ img { max-width: 100%; display: block; }
 ══════════════════════════════════════ -->
 <div class="modal-overlay" id="login-modal" onclick="closeLoginModal()">
   <div class="modal-sheet" onclick="event.stopPropagation()">
+
+    <!-- HEAD — changes based on state -->
     <div class="modal-head">
-      <div class="modal-title">REP <span>LOGIN</span></div>
+      <div class="modal-title" id="modal-title">REP <span>LOGIN</span></div>
       <button class="modal-close-btn" onclick="closeLoginModal()">×</button>
     </div>
-    <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchModalTab('login',this)">Sign In</button>
-      <button class="modal-tab" onclick="switchModalTab('signup',this)">Create Account</button>
+
+    <!-- TABS — hidden on dashboard -->
+    <div class="modal-tabs" id="modal-tabs">
+      <button class="modal-tab active" id="tab-signin" onclick="switchModalTab('login',this)">Sign In</button>
+      <button class="modal-tab" id="tab-create" onclick="switchModalTab('signup',this)">Create Account</button>
     </div>
-    <!-- LOGIN PANEL -->
+
+    <!-- ── SIGN IN PANEL ── -->
     <div id="modal-login" class="modal-body">
-      <p class="form-hint">Outside representatives — family, advocates, friends — sign in here to upload content for your incarcerated person.</p>
+      <p class="form-hint">Outside representatives — family, advocates, friends — sign in to manage your person's page.</p>
+      <div id="login-error" class="form-error"></div>
+      <div id="login-success" class="form-success"></div>
       <div class="form-group">
         <label class="form-label">Email Address</label>
-        <input class="form-input" type="email" placeholder="your@email.com">
+        <input class="form-input" id="login-email" type="email" placeholder="your@email.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label class="form-label">Password</label>
-        <input class="form-input" type="password" placeholder="••••••••">
+        <input class="form-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
       </div>
-      <button class="modal-submit" onclick="alert('Login coming soon!')">SIGN IN →</button>
+      <button class="modal-submit" id="login-submit" onclick="handleSignIn()">SIGN IN →</button>
       <div class="modal-sep">or</div>
-      <p class="form-hint" style="text-align:center;">Don't have an account? <a href="#" onclick="switchModalTab('signup',document.querySelectorAll('.modal-tab')[1])">Create one →</a></p>
-      <p class="form-hint" style="text-align:center;margin-top:-0.5rem;"><a href="#" onclick="alert('Password reset coming soon')">Forgot password?</a></p>
+      <p class="form-hint" style="text-align:center;">No account? <a href="#" onclick="switchModalTab('signup',document.getElementById('tab-create'))">Create one →</a></p>
+      <p class="form-hint" style="text-align:center;margin-top:-0.5rem;"><a href="#" onclick="handleForgotPassword()">Forgot password?</a></p>
     </div>
-    <!-- SIGNUP PANEL -->
+
+    <!-- ── SIGN UP PANEL ── -->
     <div id="modal-signup" class="modal-body" style="display:none;">
-      <p class="form-hint">Create an account as an <strong style="color:var(--bright)">outside representative</strong>. You'll be linked to the inmate(s) you manage submissions for.</p>
+      <p class="form-hint">Create an account as an <strong style="color:var(--bright)">outside representative</strong>. You'll be linked to the inmate you manage.</p>
+      <div id="signup-error" class="form-error"></div>
       <div class="form-group">
         <label class="form-label">Your Full Name</label>
-        <input class="form-input" type="text" placeholder="Jane Smith">
+        <input class="form-input" id="signup-name" type="text" placeholder="Jane Smith" autocomplete="name">
       </div>
       <div class="form-group">
         <label class="form-label">Email Address</label>
-        <input class="form-input" type="email" placeholder="your@email.com">
+        <input class="form-input" id="signup-email" type="email" placeholder="your@email.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label class="form-label">Password</label>
-        <input class="form-input" type="password" placeholder="At least 8 characters">
+        <input class="form-input" id="signup-password" type="password" placeholder="At least 8 characters" autocomplete="new-password">
       </div>
       <div class="form-group">
         <label class="form-label">Inmate ID Number (NCDAC)</label>
-        <input class="form-input" type="text" placeholder="e.g. 1369313" style="letter-spacing:0.1em;">
+        <input class="form-input" id="signup-inmate-id" type="text" placeholder="e.g. 1369313" style="letter-spacing:0.1em;">
       </div>
       <div class="form-group">
-        <label class="form-label">Your Relationship to This Person</label>
-        <input class="form-input" type="text" placeholder="e.g. Sister, Friend, Advocate">
+        <label class="form-label">Inmate's Full Name</label>
+        <input class="form-input" id="signup-inmate-name" type="text" placeholder="e.g. Marcus T. Williams">
       </div>
-      <div class="form-hint">By creating an account you confirm you have the inmate's consent to manage their page and submit content on their behalf. <a href="#">Read our rep policy →</a></div>
-      <button class="modal-submit" onclick="alert('Account creation coming soon!')">CREATE ACCOUNT →</button>
+      <div class="form-group">
+        <label class="form-label">Your Relationship</label>
+        <input class="form-input" id="signup-relationship" type="text" placeholder="e.g. Sister, Friend, Advocate">
+      </div>
+      <div class="form-hint">By creating an account you confirm you have the inmate's consent to manage their page and submit content on their behalf.</div>
+      <button class="modal-submit" id="signup-submit" onclick="handleSignUp()">CREATE ACCOUNT →</button>
     </div>
+
+    <!-- ── DASHBOARD PANEL (shown when logged in) ── -->
+    <div id="modal-dashboard" class="modal-body" style="display:none;">
+      <div class="dash-welcome">
+        <div class="dash-rep-name" id="dash-rep-name">—</div>
+        <div class="dash-inmate-tag">Managing: <span id="dash-inmate-display">—</span></div>
+        <div class="dash-tier-badge" id="dash-tier-badge">Free Tier</div>
+      </div>
+
+      <div class="dash-section-label">Upload Content</div>
+      <div class="dash-actions">
+        <button class="dash-action-btn" onclick="showUploadPanel('writing')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Writing
+        </button>
+        <button class="dash-action-btn" onclick="showUploadPanel('artwork')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Artwork
+        </button>
+        <button class="dash-action-btn" onclick="showUploadPanel('audio')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Audio
+        </button>
+        <button class="dash-action-btn" onclick="showUploadPanel('video')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Video Link
+        </button>
+      </div>
+
+      <div class="dash-section-label" style="margin-top:0.25rem;">Your Submissions</div>
+      <div id="dash-content-list"><div class="dash-empty">No submissions yet.</div></div>
+
+      <div class="dash-section-label" style="margin-top:0.25rem;">Subscription</div>
+      <button class="dash-action-btn full-width" onclick="closeLoginModal(); switchTab('services')" style="display:flex;flex-direction:row;justify-content:space-between;padding:0.85rem 1rem;">
+        <span>Upgrade tier</span>
+        <span style="color:var(--red)">View plans →</span>
+      </button>
+
+      <button class="dash-signout" onclick="handleSignOut()">Sign Out</button>
+    </div>
+
+    <!-- ── UPLOAD PANEL (shown when uploading) ── -->
+    <div id="modal-upload" class="modal-body" style="display:none;">
+      <button class="upload-back" onclick="showDashboard()">← Back</button>
+      <div class="upload-type-label" id="upload-type-label">Upload Writing</div>
+      <div id="upload-error" class="form-error"></div>
+      <div id="upload-success" class="form-success"></div>
+
+      <!-- Writing fields -->
+      <div id="upload-writing-fields">
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="upload-title" type="text" placeholder="Title of the piece">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Content</label>
+          <textarea class="form-input" id="upload-body" rows="6" placeholder="Paste or type the writing here..." style="resize:vertical;line-height:1.7;"></textarea>
+        </div>
+      </div>
+
+      <!-- File upload fields (artwork / audio) -->
+      <div id="upload-file-fields" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="upload-file-title" type="text" placeholder="Title of the piece">
+        </div>
+        <div class="file-drop" id="file-drop-zone">
+          <input type="file" id="upload-file-input" onchange="fileSelected(this)">
+          <div class="file-drop-icon">📎</div>
+          <div class="file-drop-label">Tap to choose a file<br><span style="color:var(--dim);font-size:0.48rem;">JPG, PNG, PDF, MP3, WAV, M4A</span></div>
+        </div>
+        <div class="file-selected" id="file-selected-name" style="display:none;"></div>
+        <div class="upload-progress" id="upload-progress">
+          <div class="upload-progress-fill" id="upload-progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Video link fields -->
+      <div id="upload-video-fields" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="upload-video-title" type="text" placeholder="Title of the video">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Video URL</label>
+          <input class="form-input" id="upload-video-url" type="url" placeholder="YouTube, Vimeo, or direct link">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description (optional)</label>
+          <textarea class="form-input" id="upload-video-desc" rows="3" placeholder="Brief description..." style="resize:vertical;line-height:1.7;"></textarea>
+        </div>
+      </div>
+
+      <button class="modal-submit" id="upload-submit" onclick="handleUpload()">SUBMIT FOR REVIEW →</button>
+    </div>
+
   </div>
 </div>
 
@@ -4840,347 +5170,180 @@ function denyEntry() {
   document.getElementById('age-denied').classList.add('show');
 }
 
-/* ── LOGIN MODAL ─────────────────────── */
+/* ════════════════════════════════════════
+   FIREBASE INIT
+════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCcoVQ6exb5Lx2dMs2EjkeRIsarcTUPrzI",
+  authDomain: "rwf-publishing.firebaseapp.com",
+  projectId: "rwf-publishing",
+  storageBucket: "rwf-publishing.firebasestorage.app",
+  messagingSenderId: "912960041283",
+  appId: "1:912960041283:web:1d75a602f6759589a4bff6"
+};
+firebase.initializeApp(firebaseConfig);
+const auth     = firebase.auth();
+const db       = firebase.firestore();
+const storage  = firebase.storage();
+
+// Persist session across page reloads
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+// Current rep profile (populated after login)
+var currentRep = null;
+// Current upload type
+var currentUploadType = null;
+
+/* ── AUTH STATE LISTENER ─────────────── */
+auth.onAuthStateChanged(async function(user) {
+  var btn = document.getElementById('login-btn');
+  if (user) {
+    // Logged in — load rep profile
+    try {
+      var doc = await db.collection('reps').doc(user.uid).get();
+      if (doc.exists) {
+        currentRep = doc.data();
+        currentRep.uid = user.uid;
+      } else {
+        currentRep = { uid: user.uid, email: user.email, name: user.email };
+      }
+    } catch(e) {
+      currentRep = { uid: user.uid, email: user.email, name: user.email };
+    }
+    if (btn) {
+      btn.textContent = 'My Account';
+      btn.style.color = 'var(--gold)';
+    }
+  } else {
+    currentRep = null;
+    if (btn) {
+      btn.textContent = 'Rep Login';
+      btn.style.color = '';
+    }
+  }
+});
+
+/* ── HELPERS ─────────────────────────── */
+function showError(id, msg) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function clearMessages() {
+  ['login-error','login-success','signup-error','upload-error','upload-success'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.classList.remove('show'); el.textContent = ''; }
+  });
+}
+function setLoading(btnId, loading) {
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.classList.toggle('loading', loading);
+  btn.disabled = loading;
+}
+function firebaseErrorMsg(code) {
+  var msgs = {
+    'auth/user-not-found':       'No account found with that email.',
+    'auth/wrong-password':       'Incorrect password.',
+    'auth/invalid-credential':   'Incorrect email or password.',
+    'auth/email-already-in-use': 'An account with that email already exists.',
+    'auth/weak-password':        'Password must be at least 6 characters.',
+    'auth/invalid-email':        'Please enter a valid email address.',
+    'auth/too-many-requests':    'Too many attempts. Try again later.',
+    'auth/network-request-failed': 'Network error. Check your connection.'
+  };
+  return msgs[code] || 'Something went wrong. Please try again.';
+}
+
+/* ── MODAL OPEN / CLOSE ──────────────── */
 function openLoginModal() {
+  clearMessages();
   document.getElementById('login-modal').classList.add('open');
+  if (auth.currentUser && currentRep) {
+    showDashboard();
+  } else {
+    showSignInPanel();
+  }
 }
 function closeLoginModal() {
   document.getElementById('login-modal').classList.remove('open');
 }
+
+/* ── PANEL SWITCHERS ─────────────────── */
+function showSignInPanel() {
+  document.getElementById('modal-tabs').style.display = '';
+  document.getElementById('modal-title').innerHTML = 'REP <span>LOGIN</span>';
+  ['modal-login','modal-signup','modal-dashboard','modal-upload'].forEach(function(id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('modal-login').style.display = 'flex';
+  document.getElementById('tab-signin').classList.add('active');
+  document.getElementById('tab-create').classList.remove('active');
+}
+function showDashboard() {
+  if (!currentRep) { showSignInPanel(); return; }
+  clearMessages();
+  document.getElementById('modal-tabs').style.display = 'none';
+  document.getElementById('modal-title').innerHTML = 'MY <span>ACCOUNT</span>';
+  ['modal-login','modal-signup','modal-upload'].forEach(function(id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('modal-dashboard').style.display = 'flex';
+  // Populate dashboard
+  document.getElementById('dash-rep-name').textContent = currentRep.name || currentRep.email;
+  document.getElementById('dash-inmate-display').textContent =
+    (currentRep.inmateName || '—') + ' #' + (currentRep.inmateId || '—');
+  var tierLabels = { free: 'Free Tier', unlimited: 'Unlimited — $10/mo', publishing: 'Publishing Package' };
+  document.getElementById('dash-tier-badge').textContent = tierLabels[currentRep.tier] || 'Free Tier';
+  loadSubmissions();
+}
+function showUploadPanel(type) {
+  currentUploadType = type;
+  clearMessages();
+  document.getElementById('modal-tabs').style.display = 'none';
+  document.getElementById('modal-title').innerHTML = 'SUBMIT <span>WORK</span>';
+  ['modal-login','modal-signup','modal-dashboard'].forEach(function(id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('modal-upload').style.display = 'flex';
+  var labels = { writing: 'Upload Writing', artwork: 'Upload Artwork', audio: 'Upload Audio', video: 'Add Video Link' };
+  document.getElementById('upload-type-label').textContent = labels[type] || 'Upload';
+  document.getElementById('upload-writing-fields').style.display = type === 'writing' ? '' : 'none';
+  document.getElementById('upload-file-fields').style.display  = (type === 'artwork' || type === 'audio') ? '' : 'none';
+  document.getElementById('upload-video-fields').style.display  = type === 'video' ? '' : 'none';
+  // Set accepted file types
+  var fileInput = document.getElementById('upload-file-input');
+  if (type === 'artwork') fileInput.accept = 'image/jpeg,image/png,image/gif,image/webp,application/pdf';
+  if (type === 'audio')   fileInput.accept = 'audio/mpeg,audio/mp4,audio/wav,audio/m4a,audio/ogg';
+}
 function switchModalTab(tab, btn) {
-  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  clearMessages();
+  document.querySelectorAll('.modal-tab').forEach(function(t) { t.classList.remove('active'); });
   btn.classList.add('active');
-  document.getElementById('modal-login').style.display = tab === 'login' ? 'flex' : 'none';
+  document.getElementById('modal-login').style.display  = tab === 'login'  ? 'flex' : 'none';
   document.getElementById('modal-signup').style.display = tab === 'signup' ? 'flex' : 'none';
 }
 
-/* ── MORE SHEET ──────────────────────── */
-function openMoreSheet() {
-  document.getElementById('more-sheet-overlay').classList.add('open');
-}
-function closeMoreSheet() {
-  document.getElementById('more-sheet-overlay').classList.remove('open');
-}
-
-/* ── NAVIGATION ─────────────────────── */
-var navTabs = ['home','directory','store','profile','submit','services','about'];
-function switchTab(tab) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  var view = document.getElementById('view-' + tab);
-  if (view) view.classList.add('active');
-  var navBtn = document.getElementById('tab-' + tab);
-  if (navBtn) navBtn.classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-/* ── DRAWER ─────────────────────────── */
-function openDrawer() {
-  document.getElementById('drawer-overlay').classList.add('open');
-}
-function closeDrawer() {
-  document.getElementById('drawer-overlay').classList.remove('open');
-}
-
-/* ── SEARCH OVERLAY ─────────────────── */
-function openSearch() {
-  document.getElementById('search-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('search-field').focus(), 100);
-}
-function closeSearch() {
-  document.getElementById('search-overlay').classList.remove('open');
-  document.getElementById('search-field').value = '';
-  document.getElementById('search-results').innerHTML = '<div class="search-hint">Type to search contributors by name or ID number</div>';
-}
-
-document.getElementById('search-field').addEventListener('input', function() {
-  var q = this.value.trim().toLowerCase();
-  var results = document.getElementById('search-results');
-  if (!q) {
-    results.innerHTML = '<div class="search-hint">Type to search contributors by name or ID number</div>';
-    return;
-  }
-  var contributors = [
-    { name: 'Nicolas Losito', alias: '"Redbeard the Great"', id: '1369313', facility: 'Central Prison · Raleigh, NC', tab: 'profile' }
-  ];
-  var matches = contributors.filter(c =>
-    c.name.toLowerCase().includes(q) ||
-    c.id.includes(q) ||
-    c.alias.toLowerCase().includes(q)
-  );
-  if (!matches.length) {
-    results.innerHTML = '<div class="search-hint" style="color:var(--dim)">No results for "' + q + '"</div>';
-    return;
-  }
-  results.innerHTML = matches.map(c => `
-    <div class="inmate-card has-page featured" style="border:1px solid var(--border); margin-bottom:1px; cursor:pointer;"
-      onclick="closeSearch(); switchTab('${c.tab}')">
-      <div class="ic-avatar">RL</div>
-      <div class="ic-body">
-        <div class="ic-name">${c.name}</div>
-        <div class="ic-alias">${c.alias}</div>
-        <div class="ic-id">ID: ${c.id} · NCDAC</div>
-        <div class="ic-bottom" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border);">
-          <span class="ic-facility">${c.facility}</span>
-          <span class="ic-cta">View →</span>
-        </div>
-      </div>
-    </div>
-  `).join('');
-});
-
-/* ── DIRECTORY FILTER ───────────────── */
-function setFilter(btn, type) {
-  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  var cards = document.querySelectorAll('#inmate-list .inmate-card');
-  cards.forEach(function(card) {
-    if (type === 'all') { card.style.display = ''; return; }
-    if (type === 'page' && card.classList.contains('has-page')) { card.style.display = ''; return; }
-    if (type === 'new' && card.dataset.new === 'true') { card.style.display = ''; return; }
-    if (type === 'writing' && card.dataset.type && card.dataset.type.includes('writing')) { card.style.display = ''; return; }
-    if (type === 'art' && card.dataset.type && card.dataset.type.includes('art')) { card.style.display = ''; return; }
-    card.style.display = 'none';
-  });
-}
-
-function doSearch() {
-  var q = document.getElementById('dir-search-input').value.toLowerCase().trim();
-  var cards = document.querySelectorAll('#inmate-list .inmate-card');
-  cards.forEach(function(card) {
-    var name = (card.dataset.name || '').toLowerCase();
-    var id = (card.dataset.id || '').toLowerCase();
-    if (!q || name.includes(q) || id.includes(q)) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
-  });
-}
-document.getElementById('dir-search-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doSearch();
-});
-
-/* ── EPISODE TABS ───────────────────── */
-document.querySelectorAll('.ep-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.ep-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    // show/hide media vs writing panel
-    var isMedia = tab.dataset.epTab === 'media';
-    document.getElementById('media-tab-panel').style.display = isMedia ? 'block' : 'none';
-    document.getElementById('writing-tab-panel').style.display = isMedia ? 'none' : 'block';
-  });
-});
-
-function showMediaTab() {
-  document.querySelectorAll('.ep-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('[data-ep-tab="media"]').classList.add('active');
-  document.getElementById('media-tab-panel').style.display = 'block';
-  document.getElementById('writing-tab-panel').style.display = 'none';
-}
-
-/* ── AUDIO PLAYER (demo) ─────────────── */
-var playing = null;
-function togglePlay(btn) {
-  var icon = btn.querySelector('svg');
-  var progressFill = btn.closest('.audio-bar').querySelector('.audio-progress-fill');
-  if (playing && playing !== btn) {
-    // stop previous
-    playing.querySelector('svg').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-    clearInterval(playing._timer);
-    playing = null;
-  }
-  if (btn._playing) {
-    btn._playing = false;
-    clearInterval(btn._timer);
-    playing = null;
-    icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-  } else {
-    btn._playing = true;
-    playing = btn;
-    icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-    var pct = parseFloat(progressFill.style.width) || 0;
-    btn._timer = setInterval(function() {
-      pct += 0.3;
-      if (pct >= 100) { pct = 0; clearInterval(btn._timer); btn._playing = false; playing = null; icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>'; }
-      progressFill.style.width = pct + '%';
-    }, 80);
+/* ── SIGN IN ─────────────────────────── */
+async function handleSignIn() {
+  clearMessages();
+  var email    = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+  if (!email || !password) { showError('login-error', 'Please enter your email and password.'); return; }
+  setLoading('login-submit', true);
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    var doc = await db.collection('reps').doc(auth.currentUser.uid).get();
+    currentRep = doc.exists ? { ...doc.data(), uid: auth.currentUser.uid } : { uid: auth.currentUser.uid, email };
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+    showDashboard();
+  } catch(e) {
+    showError('login-error', firebaseErrorMsg(e.code));
+  } finally {
+    setLoading('login-submit', false);
   }
 }
-function seekAudio(bar) {
-  var fill = bar.querySelector('.audio-progress-fill');
-  fill.style.width = '25%';
-}
 
-/* ── EPISODE DATA ───────────────────── */
-var episodes = {
-  'final': {
-    part: 'Part V · Final Episode · a.o.T.D',
-    alias: 'Redbeard the Astronomer',
-    title: 'C-Lizzle Mainizzle — Greetings from the Dungeon',
-    date: 'October 26, 2023',
-    text: `<p>The hole again. Final weeks. No phone, no coffee, no sunlight.</p>
-    <p>A CO came by and asked him what he was writing. He said: "A letter." The CO asked who to. He said: "Whoever reads it."</p>
-    <p>The CO walked away and didn't come back for four hours. When he did, he slid a cup of coffee under the door without a word.</p>
-    <p>That's the last thing Redbeard the Astronomer wrote about from inside. The mathematical inquiry into the size of a dick required to choke the sun was conducted in collaboration with that same CO, who Googled it and came back an hour later with an answer. The answer was not printable.</p>
-    <div class="redbeard-sign">This has been the final incarcerated episode of Razor Wire Feels.<br>I'm your host, Redbeard the Astronomer.<br>See you soon Cuz.</div>
-    <div class="aotd">(a.o.T.D over)</div>`
-  },
-  'origin': {
-    part: 'Part IV · 12/12/20 · Origin Episode',
-    alias: 'Redbeard the Regressor',
-    title: 'The Birth of Redbeard the Great',
-    date: 'December 12, 2020',
-    text: `<p>Guards shook down the block today and took everything. Forty pairs of socks. Ten pants. Fourteen boxers. The block grieved collectively.</p>
-    <p>He went on a three-page tangent about language regressing to cave paintings, the origin of milk ("someone had to decide to try that"), cannibalism as the first science. Then:</p>
-    <p>He's been teaching himself card tricks. One to two hours a day. Found a book on the block — "Card Tricks Anyone Can Do" — and has been working through it methodically. He can already do four. He has names for each of them.</p>
-    <div class="redbeard-sign">Already have my Magician name picked out — Redbeard the Great. Coincidence? I think not.</div>
-    <p>This has been another episode of Razor Wire Feels. I'm your host, Redbeard the Regressor.</p>`
-  },
-  'astronomer': {
-    part: 'Part V · Final Episodes',
-    alias: 'Redbeard the Astronomer',
-    title: 'The Allan Sandage Letter',
-    date: 'October 2023',
-    text: `<p>"Astronomy is an impossible science. It's a wonder we know anything at all." — Allan Sandage.</p>
-    <p>He'd been reading about Sandage for two weeks. No specific reason. The name came up in something else and he followed it. In a cell. In the dark.</p>
-    <p>The biggest question, Sandage said, is whether the universe is finite or infinite. Lying in the hole he wondered the same about time. Whether there's an edge to it. Whether being in one place long enough means you start to understand the shape of the whole thing from the inside.</p>
-    <p>He decided the answer is yes. And that you have to go all the way to the edge to know that.</p>
-    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Astronomer.</div>
-    <div class="aotd">"The biggest question is: did it happen once, or does it happen over and over?" — A. Sandage</div>`
-  },
-  'regressor': {
-    part: 'Part IV · December 2020',
-    alias: 'Redbeard the Regressor',
-    title: 'Going Backwards to Move Forward',
-    date: 'December 2020',
-    text: `<p>He'd been at it for two weeks. Card tricks. The same four moves, over and over, until his hands stopped thinking about them and just did them.</p>
-    <p>Someone on the block watched him practice and said: "Why you learning magic in prison?"</p>
-    <p>He said: "Because a magician makes things disappear, and I've been trying to figure out how they do it in here."</p>
-    <p>The guy didn't say anything after that.</p>
-    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Regressor.</div>`
-  },
-  'cold-open': {
-    part: 'Part III · Solitary',
-    alias: 'Redbeard the Great',
-    title: 'The Cold Open',
-    date: '2019–2020',
-    text: `<p>Six miles from where I grew up. That's where they put me. I could see a window from my cell — sandblasted so you couldn't see through it. There were grates on it anyway. I stared at it for a year.</p>
-    <p>Sometimes when the light hit it right, in the afternoon, it looked almost blue. Not quite blue. Some other color that doesn't have a name because nobody's needed to name it before.</p>
-    <p>I named it. I'm not going to say what. Some things you keep.</p>
-    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
-  },
-  'covid-radio': {
-    part: 'Part IV · 2020',
-    alias: 'Redbeard the Great',
-    title: 'COVID Through a Radio',
-    date: 'March–December 2020',
-    text: `<p>The world went into lockdown March 2020. I'd been locked down since May 2019. I heard the whole pandemic through a transistor radio.</p>
-    <p>Glenn Beck. Rush Limbaugh. NPR. I listened to all of them, every day, for hours. The news coming from the outside sounded exactly like the inside: fear, bad information, people losing their minds in enclosed spaces.</p>
-    <p>I didn't tell anyone I felt that way. I wrote it instead.</p>
-    <p>We came out more in the hole during COVID than before it. Nobody explained why. The logic of incarceration doesn't require explanation.</p>
-    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
-  },
-  'mason': {
-    part: 'Part V · November 2022',
-    alias: 'Redbeard the Great',
-    title: 'Mason',
-    date: 'November 14, 2022',
-    text: `<p>His son, Mason, is six years old. He has never seen a picture of him. His mom was showing him photos on her phone. He pointed at one and asked who that was.</p>
-    <p>She said: that's your dad, he comes home from prison next year.</p>
-    <p>Mason looked at her and said — proudly, by all accounts — "My Dad comes home from prison next year."</p>
-    <p>His baby mama was furious that he apparently said it to like four other kids at school that week. She called to tell him about it. He could barely hear her over the sound of being the proudest man alive.</p>
-    <div class="redbeard-sign">I'm proud of the kid for being proud of me coming home from prison.<br>This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
-  },
-  'paranoid': {
-    part: 'Part V · March 2023',
-    alias: 'Redbeard the Paranoid',
-    title: 'Squeaky Pip — Solitary Confinement is the Catalyst',
-    date: 'March 30, 2023',
-    text: `<p>Back in the hole. Protective custody this time. Different feeling from solitary — more chaotic, less controlled. People in PC are there because someone outside is trying to hurt them.</p>
-    <p>A stranger he'd never met walked up to him one morning and handed him a freshly sharpened pencil. Said he seemed like a good dude. Said nothing else and walked away.</p>
-    <p>He knew immediately what it meant. He understood the geometry of the gesture.</p>
-    <p>That afternoon he could hear, through two walls, someone coaching someone else on where to aim. Specifically: under the ear. The carotid artery. He wrote it down. He wrote it all down.</p>
-    <p>Then he wrote the letter anyway. He always writes the letter.</p>
-    <div class="redbeard-sign">Respect from a bunch of criminals isn't gonna pay my bills or raise my son. I'm coming home.<br>This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Paranoid.</div>`
-  },
-  'breaking-bad': {
-    part: 'Part IV–V · March 2022',
-    alias: 'Redbeard the Great',
-    title: 'The Breaking Bad Letter — Mary Beth & Nate',
-    date: 'March 27, 2022',
-    text: `<p>He tried to watch the Breaking Bad episode where Jesse's girlfriend chokes on her vomit. Season two. He'd seen it before, years ago, before everything.</p>
-    <p>He couldn't get through it. His body went into a full panic attack. Hyperventilation. Shaking. He had to lie on the floor of his cell and breathe until it stopped.</p>
-    <p>That's how Mary Beth went out. Alone in her apartment.</p>
-    <p>That's how Nate went out. Alone in his room.</p>
-    <p>Both of them are people he introduced to this seductively numbing personal form of hell. He carries that. He wrote about carrying it — not for absolution, not for pity. Just because it's true and it needed to be somewhere outside his head.</p>
-    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
-  },
-  'thanksgiving': {
-    part: 'Part IV · November 2020',
-    alias: 'Redbeard the Wise',
-    title: 'Gobble Gobble Motherfuckers',
-    date: 'November 26, 2020',
-    text: `<p>Thanksgiving on lockdown. 166.75 hours a week in the cell. One hour out, three days a week — maybe. Depends on staffing.</p>
-    <p>The prison radio played Alice's Restaurant at the exact moment they slid his tray under the door. He took this as a sign. A sign of what, exactly, he wasn't sure. A sign that the universe has a sense of irony and a mean streak.</p>
-    <p>The turkey was one slice. That thick — he drew a line in the margin, maybe a centimeter wide. He ate it in one bite and then spent the rest of the meal writing about it.</p>
-    <p>We came out more in the hole during COVID than before it. He got used to the math of it — the conversion rate between time spent and time remaining, the exchange rate between outside hours and inside hours.</p>
-    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Wise.</div>`
-  }
-};
-
-function openEpisode(id) {
-  var ep = episodes[id];
-  if (!ep) return;
-  document.getElementById('ep-modal-title').textContent = ep.part;
-  document.getElementById('ep-modal-body').innerHTML = `
-    <div class="ep-modal-kicker">${ep.part}</div>
-    <h1 class="ep-modal-headline">${ep.title}</h1>
-    <div class="ep-modal-byline">${ep.alias} · ${ep.date}</div>
-    <div class="ep-modal-text">${ep.text}</div>
-    <div class="ep-nav">
-      <button class="ep-nav-btn" onclick="closeEpisode()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Back
-      </button>
-      <button class="ep-nav-btn" onclick="switchTab('profile'); closeEpisode()">
-        All Episodes
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-      </button>
-    </div>
-  `;
-  document.getElementById('ep-modal').classList.add('open');
-  document.getElementById('ep-modal').scrollTop = 0;
-}
-
-function closeEpisode() {
-  document.getElementById('ep-modal').classList.remove('open');
-}
-
-/* ── KEYBOARD SHORTCUTS ─────────────── */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeSearch();
-    closeDrawer();
-    closeEpisode();
-  }
-});
-
-/* ── STAT COUNTER ANIMATION ─────────── */
-function animateCount(el, target, duration) {
-  var start = 0;
-  var step = target / (duration / 16);
-  var timer = setInterval(function() {
-    start += step;
-    if (start >= target) { start = target; clearInterval(timer); }
-    el.textContent = Math.floor(start).toLocaleString();
-  }, 16);
-}
-setTimeout(function() {
-  animateCount(document.getElementById('stat-count'), 32000, 1800);
-}, 400);
-
-</script>
-</body>
-</html>
+/* ── SIGN UP ─────────────�
