@@ -1,0 +1,5186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Razor Wire Feels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════ */
+:root {
+  --black:   #080808;
+  --deep:    #0f0f0f;
+  --panel:   #141414;
+  --panel2:  #1a1a1a;
+  --border:  #242424;
+  --border2: #2e2e2e;
+  --red:     #c0160f;
+  --red2:    #e01a12;
+  --red-dim: rgba(192,22,15,0.12);
+  --gold:    #b8960c;
+  --gold-dim: rgba(184,150,12,0.15);
+  --text:    #ccc4b4;
+  --dim:     #665e50;
+  --dim2:    #4a4440;
+  --bright:  #eee8dc;
+  --mono:    'IBM Plex Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body:    'Libre Baskerville', serif;
+  --type:    'Special Elite', cursive;
+
+  /* safe area */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* nav heights */
+  --topbar-h: 52px;
+  --bottomnav-h: 60px;
+}
+
+/* ══════════════════════════════════════════
+   RESET + BASE
+══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 15px; }
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: calc(var(--bottomnav-h) + var(--safe-bottom));
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9000;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ══════════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════════ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: calc(var(--topbar-h) + var(--safe-top));
+  padding-top: var(--safe-top);
+  background: rgba(8,8,8,0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  z-index: 500;
+}
+.topbar-logo {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: var(--bright);
+  flex: 1;
+}
+.topbar-logo span { color: var(--red); }
+.topbar-actions { display: flex; align-items: center; gap: 0.25rem; }
+.topbar-btn {
+  width: 40px; height: 40px;
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.topbar-btn:hover { color: var(--bright); background: var(--panel); }
+.topbar-btn svg { width: 20px; height: 20px; }
+
+/* ══════════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════════ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: calc(var(--bottomnav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: rgba(8,8,8,0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 500;
+}
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  color: var(--dim);
+  transition: color 0.15s;
+  padding: 0;
+}
+.nav-tab svg { width: 22px; height: 22px; }
+.nav-tab-label {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.nav-tab.active { color: var(--red); }
+.nav-tab:hover:not(.active) { color: var(--text); }
+
+/* ══════════════════════════════════════════
+   PAGE WRAPPER + VIEWS
+══════════════════════════════════════════ */
+.view-container {
+  padding-top: calc(var(--topbar-h) + var(--safe-top));
+  min-height: 100vh;
+}
+.view {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+.view.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════
+   SEARCH OVERLAY
+══════════════════════════════════════════ */
+.search-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 800;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+}
+.search-overlay.open { display: flex; }
+.search-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.search-field {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  color: var(--bright);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.65rem 1rem;
+  outline: none;
+  letter-spacing: 0.04em;
+}
+.search-field::placeholder { color: var(--dim); }
+.search-cancel {
+  border: none;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  padding: 0.5rem;
+}
+.search-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+.search-hint {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  padding: 0.5rem 0;
+}
+
+/* ══════════════════════════════════════════
+   DRAWER (side menu)
+══════════════════════════════════════════ */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 700;
+}
+.drawer-overlay.open { display: block; }
+.drawer {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(280px, 80vw);
+  background: var(--deep);
+  border-left: 1px solid var(--border);
+  z-index: 750;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+.drawer-overlay.open .drawer { transform: translateX(0); }
+.drawer-head {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.drawer-brand {
+  font-family: var(--display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--bright);
+}
+.drawer-brand span { color: var(--red); }
+.drawer-close {
+  border: none; background: transparent;
+  color: var(--dim); width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+}
+.drawer-nav { flex: 1; overflow-y: auto; padding: 0.75rem 0; }
+.drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+}
+.drawer-link:hover, .drawer-link:active { color: var(--bright); background: var(--panel); }
+.drawer-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+.drawer-sep { height: 1px; background: var(--border); margin: 0.5rem 0; }
+.drawer-link.cta { color: var(--red); }
+.drawer-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  color: var(--dim2);
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════════════════
+   COMMON COMPONENTS
+══════════════════════════════════════════ */
+
+/* Section header */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 0 0.85rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.25rem;
+}
+.sec-title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--bright);
+  letter-spacing: 0.08em;
+}
+.sec-title span { color: var(--red); }
+.sec-link {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* Kicker label */
+.kicker {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.kicker::after { content: ''; width: 30px; height: 1px; background: var(--red); }
+
+/* Tag / badge */
+.badge {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.45rem;
+  border: 1px solid;
+}
+.badge-red { border-color: var(--red); color: var(--red); }
+.badge-gold { border-color: var(--gold); color: var(--gold); }
+.badge-blue { border-color: #3a7bd5; color: #3a7bd5; }
+.badge-filled { background: var(--red); border-color: var(--red); color: white; }
+.badge-dim { border-color: var(--border2); color: var(--dim); }
+
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
+
+/* Red btn */
+.btn-red {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--red);
+  color: white;
+  border: none;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.5rem;
+  transition: background 0.15s;
+  width: 100%;
+}
+.btn-red:hover, .btn-red:active { background: var(--red2); }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border2);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.5rem;
+  transition: all 0.15s;
+  width: 100%;
+}
+.btn-outline:hover { border-color: var(--red); color: var(--red); }
+
+/* ══════════════════════════════════════════
+   VIEW: HOME
+══════════════════════════════════════════ */
+
+/* Hero */
+.hero {
+  padding: 2rem 1rem 0;
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+}
+.hero-headline {
+  font-family: var(--display);
+  font-size: clamp(3.2rem, 15vw, 5rem);
+  line-height: 0.88;
+  color: var(--bright);
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+.hero-headline .r { color: var(--red); }
+.hero-body {
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+/* Stat strip */
+.stat-strip {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  margin: 0 -1rem;
+}
+.stat-strip::-webkit-scrollbar { display: none; }
+.stat-cell {
+  background: var(--panel);
+  padding: 1rem 1.25rem;
+  flex-shrink: 0;
+  min-width: 100px;
+}
+.stat-num {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.stat-num.red { color: var(--red); }
+.stat-lbl {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  line-height: 1.5;
+  margin-top: 0.2rem;
+}
+
+/* Featured scroll sections */
+.feat-section { padding: 1.75rem 0; border-bottom: 1px solid var(--border); }
+.feat-inner { padding: 0 1rem; }
+.cards-scroll {
+  display: flex;
+  gap: 1px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 0 -1rem;
+  margin-top: 1rem;
+}
+.cards-scroll::-webkit-scrollbar { display: none; }
+
+.feat-card {
+  background: var(--panel);
+  min-width: 220px;
+  max-width: 220px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  text-align: left;
+  color: inherit;
+}
+.feat-card:active { background: var(--panel2); }
+.fc-tag {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.fc-tag::before { content: ''; width: 14px; height: 1px; background: var(--red); }
+.fc-name {
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+.fc-excerpt {
+  font-style: italic;
+  font-size: 0.73rem;
+  color: var(--dim);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fc-meta {
+  margin-top: auto;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+.feat-card.placeholder { opacity: 0.35; cursor: default; }
+
+/* ── WHAT'S HOT (curated pick) ───────── */
+.hots-section {
+  border-bottom: 1px solid var(--border);
+  background: var(--deep);
+}
+.hots-inner { padding: 1.75rem 1rem; }
+.hots-pick {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+.hots-pick::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
+}
+.hots-badge-row {
+  padding: 1rem 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.hots-badge {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--black);
+  padding: 0.2rem 0.55rem;
+  font-weight: 700;
+}
+.hots-month {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.hots-body { padding: 0.85rem 1rem 1.1rem; }
+.hots-title {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 7vw, 2.2rem);
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+.hots-author {
+  font-family: var(--type);
+  font-size: 0.78rem;
+  color: var(--red);
+  margin-bottom: 0.65rem;
+}
+.hots-excerpt {
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--text);
+  border-left: 3px solid var(--gold);
+  padding-left: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+.hots-why {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  line-height: 1.7;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.hots-why strong { color: var(--gold); font-weight: 600; }
+.hots-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--black);
+}
+.hots-facility {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.hots-read {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ── SHOUT OUTS TICKER ───────────────── */
+.shoutouts-section {
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  background: var(--deep);
+}
+.shoutouts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem 0;
+}
+.shoutouts-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.shoutouts-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.shoutouts-title {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.shoutouts-cta {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid var(--red);
+  background: transparent;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.shoutouts-cta:hover, .shoutouts-cta:active {
+  background: var(--red);
+  color: white;
+}
+
+.ticker-wrap {
+  padding: 0.75rem 0 0.85rem;
+  overflow: hidden;
+  position: relative;
+  /* fades at edges */
+  mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+.ticker-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: ticker-scroll 40s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 1.1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+}
+.ticker-heart {
+  color: var(--red);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.ticker-msg {
+  font-family: var(--type);
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.ticker-from {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  flex-shrink: 0;
+}
+
+/* ── PHONE-IN LINE ───────────────────── */
+.phonein-section {
+  border-bottom: 1px solid var(--border);
+  background: var(--black);
+}
+.phonein-inner { padding: 1.75rem 1rem; }
+.phonein-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.phonein-top {
+  background: repeating-linear-gradient(
+    135deg,
+    #0a0a0a 0px, #0a0a0a 8px,
+    #111 8px, #111 20px
+  );
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+.phonein-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 10px rgba(192,22,15,0.5));
+}
+.phonein-number {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 10vw, 2.8rem);
+  color: var(--bright);
+  letter-spacing: 0.12em;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.phonein-number span { color: var(--red); }
+.phonein-coming {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: 1px solid var(--border2);
+  padding: 0.2rem 0.65rem;
+  margin-top: 0.35rem;
+}
+.phonein-tagline {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  margin-top: 0.65rem;
+}
+.phonein-body { padding: 1rem; }
+.phonein-how {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.phonein-step {
+  background: var(--deep);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem;
+}
+.phonein-step-num {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  color: var(--red);
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 24px;
+}
+.phonein-step-text {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+.phonein-step-text strong {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bright);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+.phonein-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem;
+  background: var(--deep);
+  border: 1px solid var(--border);
+}
+.phonein-topic {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+}
+.phonein-topic.hot { border-color: var(--red); color: var(--red); }
+
+/* ── PODCAST STRIP ───────────────────── */
+.podcast-section {
+  border-bottom: 1px solid var(--border);
+  background: var(--deep);
+}
+.podcast-inner { padding: 1.5rem 1rem; }
+.podcast-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  gap: 0;
+}
+.podcast-thumb {
+  width: 90px;
+  flex-shrink: 0;
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem 0.5rem;
+  border-right: 1px solid var(--border);
+}
+.podcast-yt-icon {
+  width: 32px; height: 32px;
+  background: #ff0000;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.podcast-yt-icon svg { width: 18px; height: 18px; fill: white; }
+.podcast-thumb-label {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: center;
+}
+.podcast-info {
+  flex: 1;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.podcast-show-title {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+.podcast-handle {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: #ff0000;
+}
+.podcast-desc {
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--dim);
+  line-height: 1.6;
+  flex: 1;
+}
+.podcast-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+.podcast-new-badge {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--red);
+  color: white;
+  padding: 0.15rem 0.45rem;
+}
+.podcast-sub-btn {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: 1px solid var(--border2);
+  background: transparent;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.podcast-sub-btn:hover, .podcast-sub-btn:active {
+  border-color: #ff0000;
+  color: #ff0000;
+}
+
+/* latest episodes mini list */
+.podcast-episodes {
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+.podcast-ep-head {
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.podcast-ep-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.podcast-ep-item:last-child { border-bottom: none; }
+.podcast-ep-item:active { background: var(--panel2); }
+.podcast-ep-num {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--dim2);
+  letter-spacing: 0.04em;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+.podcast-ep-info { flex: 1; }
+.podcast-ep-title {
+  font-family: var(--display);
+  font-size: 0.9rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.podcast-ep-meta {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  margin-top: 0.15rem;
+}
+.podcast-ep-play {
+  width: 30px; height: 30px;
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--dim);
+  background: var(--deep);
+}
+.podcast-ep-play svg { width: 12px; height: 12px; }
+.podcast-ep-item.coming .podcast-ep-play { border-color: var(--border); }
+.podcast-ep-item.coming .podcast-ep-title { color: var(--dim); }
+
+/* ── SUPPORT / DONATE ────────────────── */
+.support-section {
+  border-bottom: 1px solid var(--border);
+}
+.support-inner { padding: 1.75rem 1rem; }
+.support-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.support-top {
+  padding: 1.25rem 1rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.support-headline {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 9vw, 2.8rem);
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 0.95;
+  margin-bottom: 0.5rem;
+}
+.support-headline span { color: var(--red); }
+.support-sub {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.7;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.support-tiers {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.support-tier {
+  flex: 1;
+  background: var(--deep);
+  padding: 0.85rem 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.support-tier:active { background: var(--panel2); }
+.support-tier.featured { background: var(--red-dim); }
+.support-tier-amt {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+.support-tier.featured .support-tier-amt { color: var(--red); }
+.support-tier-label {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.support-tier.featured .support-tier-label { color: var(--text); }
+.support-donate-btn {
+  display: block;
+  width: 100%;
+  background: var(--red);
+  color: white;
+  border: none;
+  font-family: var(--display);
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: center;
+}
+.support-donate-btn:active { background: var(--red2); }
+.support-donate-note {
+  padding: 0.65rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  color: var(--dim2);
+  text-align: center;
+  line-height: 1.7;
+}
+
+/* ── AGE GATE ────────────────────────── */
+.age-gate {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem 2rem;
+  text-align: center;
+  overflow-y: auto;
+}
+
+/* Ghost "18+" watermark fills background */
+.age-gate::before {
+  content: '18+';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--display);
+  font-size: clamp(140px, 50vw, 320px);
+  color: rgba(192,22,15,0.055);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+/* Everything else sits above the watermark */
+.age-gate > * { position: relative; z-index: 1; }
+
+.age-gate-logo {
+  font-family: var(--display);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--dim);
+  margin-bottom: 2rem;
+}
+.age-gate-logo span { color: var(--red); }
+
+/* Hide emoji — let the watermark do the work */
+.age-gate-lock { display: none; }
+
+.age-gate-headline {
+  font-family: var(--display);
+  font-size: clamp(3.5rem, 16vw, 5.5rem);
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 0.85;
+  margin-bottom: 0;
+}
+
+/* Red rule under headline */
+.age-gate-rule {
+  width: 36px;
+  height: 3px;
+  background: var(--red);
+  margin: 1.25rem auto 1.25rem;
+}
+
+.age-gate-sub {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  line-height: 1.9;
+  max-width: 260px;
+  margin: 0 auto 2rem;
+}
+.age-gate-btn-yes {
+  width: 100%;
+  max-width: 320px;
+  background: var(--red);
+  border: none;
+  color: #fff;
+  font-family: var(--display);
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  padding: 1.1rem 1rem;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  transition: background 0.15s;
+  display: block;
+}
+.age-gate-btn-yes:hover  { background: var(--red2); }
+.age-gate-btn-yes:active { background: var(--red2); }
+.age-gate-btn-no {
+  width: 100%;
+  max-width: 320px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: block;
+}
+.age-gate-btn-no:hover  { border-color: var(--dim); color: var(--text); }
+.age-gate-btn-no:active { border-color: var(--text); color: var(--text); }
+.age-gate-warn {
+  margin-top: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.07em;
+  color: var(--dim2);
+  line-height: 1.8;
+  max-width: 280px;
+}
+
+/* ── AGE DENIED ──────────────────────── */
+.age-denied {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+.age-denied.show { display: flex; }
+.age-denied::before {
+  content: 'NO';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--display);
+  font-size: clamp(160px, 55vw, 360px);
+  color: rgba(192,22,15,0.04);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.age-denied > * { position: relative; z-index: 1; }
+.age-denied-text {
+  font-family: var(--display);
+  font-size: clamp(2rem, 10vw, 3.5rem);
+  color: var(--dim);
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  margin-bottom: 1rem;
+}
+.age-denied-sub {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--dim2);
+  text-transform: uppercase;
+}
+
+/* ── LOGIN MODAL ─────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 800;
+  align-items: flex-end;
+}
+.modal-overlay.open { display: flex; }
+.modal-sheet {
+  width: 100%;
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--bright);
+  letter-spacing: 0.07em;
+}
+.modal-title span { color: var(--red); }
+.modal-close-btn {
+  border: none; background: transparent;
+  color: var(--dim); font-size: 1.4rem; line-height: 1;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.modal-tab {
+  flex: 1;
+  padding: 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+.modal-tab.active { color: var(--red); border-bottom-color: var(--red); }
+.modal-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.form-input {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  color: var(--bright);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.form-input:focus { border-color: var(--red); }
+.form-input::placeholder { color: var(--dim); }
+.form-hint {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  color: var(--dim2);
+  line-height: 1.6;
+}
+.form-hint a { color: var(--red); }
+.modal-submit {
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  padding: 0.9rem;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.modal-submit:active { background: var(--red2); }
+.modal-sep {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--dim2);
+}
+.modal-sep::before, .modal-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── TOPBAR LOGIN BTN ─────────────────── */
+.topbar-login {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: 1px solid var(--border2);
+  background: transparent;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.topbar-login:hover { border-color: var(--red); color: var(--red); }
+.topbar-login.logged-in { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
+/* ── AD BANNERS ──────────────────────── */
+.ad-banner {
+  background: var(--panel);
+  border: 1px dashed var(--border2);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+}
+.ad-banner-label {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim2);
+}
+.ad-banner-slot {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: var(--dim2);
+  text-align: center;
+  font-style: italic;
+}
+.ad-banner-cta {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── STORE PAGE ──────────────────────── */
+.store-view { padding: 0 0 2rem; }
+.store-hero {
+  padding: 2rem 1rem 1.5rem;
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+}
+.store-hero-headline {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 12vw, 4rem);
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+}
+.store-hero-headline span { color: var(--red); }
+.store-hero-sub {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  margin-top: 0.6rem;
+  text-transform: uppercase;
+}
+.store-section { padding: 1.5rem 1rem; border-bottom: 1px solid var(--border); }
+.store-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.store-item {
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.store-item:active { background: var(--panel2); }
+.store-item-img {
+  aspect-ratio: 1;
+  background: var(--panel2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.store-item-img.book {
+  background: linear-gradient(135deg, #1a1210, #2a1a15);
+}
+.store-item-img.merch {
+  background: linear-gradient(135deg, #101820, #1a1a2e);
+}
+.store-item-img.digital {
+  background: linear-gradient(135deg, #0a1a0a, #101a10);
+}
+.store-item-emoji { font-size: 2rem; }
+.store-item-img-label {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim2);
+}
+.store-item-new {
+  position: absolute;
+  top: 0.5rem; right: 0.5rem;
+  background: var(--red);
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.4rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.4rem;
+}
+.store-item-body { padding: 0.75rem 0.85rem 0.85rem; flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+.store-item-name {
+  font-family: var(--display);
+  font-size: 0.9rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.store-item-sub {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.07em;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.store-item-price {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+.store-item-btn {
+  margin: 0 0.85rem 0.85rem;
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.55rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  width: calc(100% - 1.7rem);
+}
+.store-item-btn:active { background: var(--red2); }
+.store-item-btn.outline {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+}
+/* featured book (full width) */
+.store-item-featured {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.store-item-featured:active { background: var(--panel2); }
+.store-item-featured-cover {
+  width: 100px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1a1210, #2a1a15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-right: 1px solid var(--border);
+  padding: 1rem 0.5rem;
+}
+.store-book-spine {
+  font-family: var(--display);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--red);
+  text-align: center;
+  line-height: 1.3;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+.store-item-featured-info { flex: 1; padding: 1rem; display: flex; flex-direction: column; }
+.featured-badge {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--black);
+  padding: 0.15rem 0.45rem;
+  font-weight: 700;
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+}
+.featured-title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+.featured-author {
+  font-family: var(--type);
+  font-size: 0.72rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+.featured-desc {
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--dim);
+  line-height: 1.6;
+  flex: 1;
+}
+.featured-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+.featured-price {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  color: var(--red);
+  letter-spacing: 0.06em;
+}
+.featured-buy {
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+/* ── SERVICES / SUBSCRIPTIONS ────────── */
+.services-view { padding: 0 0 2rem; }
+.services-hero {
+  padding: 2rem 1rem 1.5rem;
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+}
+.services-hero-hl {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 11vw, 3.5rem);
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+  margin-bottom: 0.5rem;
+}
+.services-hero-hl span { color: var(--red); }
+.services-hero-sub {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.7;
+}
+.tier-cards { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.tier-card {
+  background: var(--panel);
+  padding: 1.25rem 1rem;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tier-card:active { background: var(--panel2); }
+.tier-card.featured-tier {
+  background: var(--red-dim);
+  border-left: 3px solid var(--red);
+}
+.tier-popular {
+  position: absolute;
+  top: 0.85rem; right: 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--red);
+  color: white;
+  padding: 0.15rem 0.45rem;
+}
+.tier-price-row { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.4rem; }
+.tier-price {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.tier-card.featured-tier .tier-price { color: var(--red); }
+.tier-per {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.tier-name {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--bright);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+.tier-features { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.85rem; }
+.tier-feature {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
+  color: var(--dim);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+.tier-feature::before { content: '→'; color: var(--red); flex-shrink: 0; }
+.tier-feature.dim::before { color: var(--dim2); }
+.tier-btn {
+  width: 100%;
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tier-btn:active { background: var(--red2); }
+.tier-btn.outline {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+}
+.service-contact-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1px;
+}
+.scc-icon { font-size: 1.4rem; }
+.scc-title {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+}
+.scc-desc {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  line-height: 1.65;
+}
+.scc-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  align-self: flex-start;
+}
+.scc-btn:active { border-color: var(--red); color: var(--red); }
+
+/* ── ABOUT / CONTACT ─────────────────── */
+.about-view { padding: 0 0 2rem; }
+.about-hero {
+  background: var(--deep);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 1rem 1.5rem;
+}
+.about-headline {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 11vw, 3.8rem);
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+  margin-bottom: 0.6rem;
+}
+.about-headline span { color: var(--red); }
+.about-section { padding: 1.5rem 1rem; border-bottom: 1px solid var(--border); }
+.about-body {
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.about-body p + p { margin-top: 0.9rem; }
+.about-body strong { font-style: normal; color: var(--bright); }
+.contact-form { display: flex; flex-direction: column; gap: 0.85rem; }
+.contact-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.contact-opt {
+  background: var(--panel);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  text-align: left;
+}
+.contact-opt:active { background: var(--panel2); }
+.contact-opt-icon { font-size: 1.1rem; }
+.contact-opt-title {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bright);
+}
+.contact-opt-sub {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  line-height: 1.4;
+}
+
+/* advertise block */
+.advertise-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.adv-head {
+  background: var(--gold-dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.adv-head-title {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--gold);
+  letter-spacing: 0.07em;
+}
+.adv-body { padding: 1rem; }
+.adv-desc {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+.adv-spots {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.adv-spot {
+  background: var(--deep);
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.adv-spot-name {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.adv-spot-price {
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.adv-spot-avail {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ── MORE BOTTOM SHEET ───────────────── */
+.more-sheet-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 600;
+  align-items: flex-end;
+}
+.more-sheet-overlay.open { display: flex; }
+.more-sheet {
+  width: 100%;
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  padding-bottom: calc(var(--bottomnav-h) + var(--safe-bottom) + 0.5rem);
+  animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.more-sheet-grip {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem;
+}
+.more-sheet-grip::after {
+  content: '';
+  width: 36px; height: 3px;
+  background: var(--border2);
+  border-radius: 2px;
+}
+.more-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.more-sheet-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1rem 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.more-sheet-item:nth-child(4n) { border-right: none; }
+.more-sheet-item:nth-last-child(-n+4) { border-bottom: none; }
+.more-sheet-item:active { background: var(--panel); }
+.msi-icon { font-size: 1.3rem; }
+.msi-label {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── MEDIA PLAYER (profile) ──────────── */
+.media-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.media-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+.media-type-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.media-type-icon.audio { background: var(--red-dim); color: var(--red); }
+.media-type-icon.video { background: var(--gold-dim); color: var(--gold); }
+.media-type-icon svg { width: 14px; height: 14px; }
+.media-meta { flex: 1; }
+.media-title {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.media-date {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  margin-top: 0.1rem;
+}
+.media-badge { flex-shrink: 0; }
+.media-player {
+  padding: 0.85rem;
+}
+.audio-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.play-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--red);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: white;
+  transition: background 0.15s;
+}
+.play-btn:active { background: var(--red2); }
+.play-btn svg { width: 16px; height: 16px; }
+.audio-track {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.audio-progress {
+  height: 3px;
+  background: var(--border2);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+.audio-progress-fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 2px;
+  width: 35%;
+}
+.audio-times {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.media-desc {
+  padding: 0 0.85rem 0.85rem;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--dim);
+  line-height: 1.65;
+}
+.video-placeholder {
+  background: #000;
+  aspect-ratio: 16/9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.video-play-icon {
+  width: 52px; height: 52px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-play-icon svg { width: 22px; height: 22px; fill: white; margin-left: 3px; }
+.video-label {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+/* submit media CTA */
+.media-submit-cta {
+  background: var(--deep);
+  border: 1px dashed var(--border2);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+.msc-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.msc-title {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--bright);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+}
+.msc-text {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.07em;
+  color: var(--dim);
+  line-height: 1.7;
+  margin-bottom: 0.85rem;
+}
+.msc-number {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+}
+
+/* CTA Banner */
+.cta-banner {
+  background: var(--red);
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+.cta-headline {
+  font-family: var(--display);
+  font-size: clamp(1.9rem, 9vw, 3rem);
+  color: white;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.cta-sub {
+  font-style: italic;
+  color: rgba(255,255,255,0.78);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+.btn-white {
+  display: inline-block;
+  background: white;
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.85rem 2rem;
+  font-weight: 700;
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+/* Footer */
+.page-footer {
+  padding: 1.75rem 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.footer-brand {
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--bright);
+  letter-spacing: 0.08em;
+}
+.footer-brand span { color: var(--red); }
+.footer-meta {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  line-height: 1.8;
+}
+
+/* ══════════════════════════════════════════
+   VIEW: DIRECTORY
+══════════════════════════════════════════ */
+.dir-view { padding: 1.25rem 1rem; }
+
+/* Search bar */
+.dir-search {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.dir-search-input {
+  flex: 1;
+  background: var(--panel);
+  border: none;
+  outline: none;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--bright);
+  padding: 0.85rem 1rem;
+  letter-spacing: 0.04em;
+}
+.dir-search-input::placeholder { color: var(--dim); }
+.dir-search-btn {
+  background: var(--red);
+  border: none;
+  color: white;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0 1.1rem;
+  white-space: nowrap;
+}
+
+/* Filter chips */
+.filter-strip {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.1rem;
+}
+.filter-strip::-webkit-scrollbar { display: none; }
+.filter-chip {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.filter-chip.on { background: var(--red); border-color: var(--red); color: white; }
+.filter-chip:hover:not(.on) { border-color: var(--text); color: var(--text); }
+
+/* Sort row */
+.sort-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+.sort-count {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  flex: 1;
+}
+.sort-count span { color: var(--red); }
+.sort-select {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0.65rem;
+  outline: none;
+}
+
+/* Inmate cards — mobile-first stacked */
+.inmate-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
+.inmate-card {
+  background: var(--panel);
+  padding: 1.1rem;
+  display: flex;
+  gap: 0.85rem;
+  position: relative;
+  transition: background 0.15s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.inmate-card:active { background: var(--panel2); }
+.inmate-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--border);
+}
+.inmate-card.has-page::before { background: var(--red); }
+.inmate-card.featured::before { background: var(--gold); }
+.inmate-card.no-page { opacity: 0.45; }
+
+.ic-avatar {
+  width: 48px; height: 48px;
+  flex-shrink: 0;
+  background: var(--panel2);
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 1.2rem;
+  color: var(--dim);
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  position: relative;
+}
+.ic-avatar img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+
+.ic-body { flex: 1; min-width: 0; }
+.ic-name {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ic-alias {
+  font-family: var(--type);
+  font-size: 0.7rem;
+  color: var(--red);
+  margin-top: 0.1rem;
+}
+.ic-id {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  margin-top: 0.2rem;
+}
+.ic-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+.ic-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.65rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+.ic-facility {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.ic-cta {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.ic-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  background: var(--black);
+  margin-top: 0.6rem;
+}
+.ic-stat {
+  flex: 1;
+  padding: 0.35rem 0.4rem;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.ic-stat:last-child { border-right: none; }
+.ic-stat-num {
+  font-family: var(--display);
+  font-size: 0.9rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  display: block;
+}
+.ic-stat-lbl {
+  font-family: var(--mono);
+  font-size: 0.42rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  display: block;
+}
+
+/* empty state */
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+}
+
+/* ══════════════════════════════════════════
+   VIEW: PROFILE
+══════════════════════════════════════════ */
+/* Profile hero */
+.profile-hero {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.profile-banner-strip {
+  height: 80px;
+  background: repeating-linear-gradient(135deg, #111 0px, #111 6px, #1a1210 6px, #1a1210 16px);
+  position: relative;
+}
+.profile-banner-strip::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(192,22,15,0.4), transparent 70%);
+}
+.profile-hero-inner { padding: 0 1rem 1.25rem; }
+.profile-avatar-wrap { margin-top: -30px; margin-bottom: 0.75rem; }
+.profile-avatar-lg {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 3px solid var(--panel);
+  background: #1a1210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  color: var(--text);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.profile-name {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+.profile-realname {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  margin-top: 0.15rem;
+}
+.profile-id-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--panel2);
+  border: 1px solid var(--border2);
+  padding: 0.25rem 0.65rem;
+  margin-top: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.profile-id-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+}
+.profile-tagline {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-top: 0.8rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Profile stats strip */
+.profile-stats-strip {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.p-stat {
+  flex: 1;
+  background: var(--deep);
+  padding: 0.85rem 0.5rem;
+  text-align: center;
+}
+.p-stat-num {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  display: block;
+}
+.p-stat-lbl {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Profile sections */
+.profile-section {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.psec-title {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.psec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Info rows */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+  gap: 0.5rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { color: var(--dim); font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; flex-shrink: 0; }
+.info-value { color: var(--text); text-align: right; font-size: 0.8rem; }
+
+/* Tags cloud */
+.tags-cloud { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+/* Bio text */
+.bio-text {
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.bio-text p + p { margin-top: 0.85rem; }
+.bio-text strong { color: var(--bright); font-style: normal; }
+.bio-quote {
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--red);
+  background: var(--red-dim);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--bright);
+  line-height: 1.7;
+}
+
+/* Aliases */
+.alias-strip { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.85rem; }
+.alias-chip {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  padding: 0.2rem 0.5rem;
+}
+.alias-chip.current {
+  background: var(--red-dim);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Projects */
+.project-item {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.project-item:last-child { border-bottom: none; }
+.project-thumb {
+  width: 40px; height: 52px;
+  background: var(--panel2);
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+.project-thumb.red { background: var(--red); border-color: var(--red); color: white; }
+.project-info {}
+.project-name {
+  font-family: var(--display);
+  font-size: 0.95rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+}
+.project-sub {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.07em;
+  color: var(--dim);
+  margin-top: 0.2rem;
+}
+.project-link {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  text-transform: uppercase;
+  display: inline-block;
+  margin-top: 0.35rem;
+}
+
+/* Episode feed */
+.episode-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.episode-tabs::-webkit-scrollbar { display: none; }
+.ep-tab {
+  padding: 0.85rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.ep-tab.active { color: var(--red); border-bottom-color: var(--red); }
+.ep-tab:hover:not(.active) { color: var(--text); }
+
+.episode-list { padding: 0 1rem; }
+.part-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.1rem 0 0.75rem;
+}
+.part-divider-line { flex: 1; height: 1px; background: var(--border); }
+.part-divider-label {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.episode-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.episode-card:active { background: var(--panel2); }
+.ep-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+.ep-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #1a1210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 0.75rem;
+  color: var(--text);
+  flex-shrink: 0;
+}
+.ep-meta { flex: 1; }
+.ep-author {
+  font-family: var(--display);
+  font-size: 0.85rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.ep-date {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  margin-top: 0.05rem;
+}
+.ep-badge { flex-shrink: 0; }
+.ep-body { padding: 0.85rem; }
+.ep-title {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+.ep-excerpt {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--dim);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ep-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem;
+  border-top: 1px solid var(--border);
+}
+.ep-ep-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--dim2);
+  text-transform: uppercase;
+}
+.ep-read {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  text-transform: uppercase;
+  border: none;
+  background: transparent;
+}
+
+/* ══════════════════════════════════════════
+   VIEW: SUBMIT
+══════════════════════════════════════════ */
+.submit-view { padding: 1.25rem 1rem 2rem; }
+.submit-hero {
+  background: var(--red);
+  margin: 0 -1rem 1.5rem;
+  padding: 2.5rem 1rem;
+}
+.submit-hero-headline {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 11vw, 3.5rem);
+  line-height: 0.9;
+  color: white;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.submit-hero-sub {
+  font-style: italic;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.how-it-works { margin-bottom: 1.5rem; }
+.step-item {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 0.85rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  margin-bottom: 1px;
+}
+.step-num {
+  width: 32px; height: 32px;
+  border: 1px solid var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--red);
+  flex-shrink: 0;
+}
+.step-content {}
+.step-title {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bright);
+  margin-bottom: 0.2rem;
+}
+.step-text {
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+.step-text em { color: var(--dim); }
+
+.info-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 1.1rem;
+  margin-bottom: 1rem;
+}
+.ib-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ib-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.ib-text {
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+.ib-large {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.split-earn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.earn-cell {
+  background: var(--panel);
+  padding: 1rem;
+  text-align: center;
+}
+.earn-pct {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.earn-pct.creator { color: var(--red); }
+.earn-pct.platform { color: var(--dim); }
+.earn-label {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 0.25rem;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 0;
+}
+.faq-q {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--bright);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+.faq-a {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════════
+   EPISODE MODAL
+══════════════════════════════════════════ */
+.ep-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 900;
+  overflow-y: auto;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+}
+.ep-modal.open { display: flex; }
+.ep-modal-head {
+  position: sticky;
+  top: 0;
+  background: rgba(8,8,8,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 10;
+}
+.ep-modal-back {
+  border: none;
+  background: transparent;
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.ep-modal-back svg { width: 14px; height: 14px; }
+.ep-modal-title {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-left: auto;
+  text-align: right;
+}
+.ep-modal-body { padding: 2rem 1rem 4rem; }
+.ep-modal-kicker {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.ep-modal-headline {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 9vw, 3rem);
+  line-height: 0.95;
+  color: var(--bright);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.ep-modal-byline {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.ep-modal-text {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 2;
+  color: var(--text);
+}
+.ep-modal-text p + p { margin-top: 1.25rem; }
+.ep-modal-text .redbeard-sign {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  margin-top: 2rem;
+  line-height: 1.2;
+}
+.ep-modal-text .aotd {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  margin-top: 0.35rem;
+}
+.ep-nav {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 2.5rem;
+}
+.ep-nav-btn {
+  flex: 1;
+  background: var(--panel);
+  border: none;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 0.85rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.15s;
+}
+.ep-nav-btn:hover, .ep-nav-btn:active { color: var(--bright); background: var(--panel2); }
+.ep-nav-btn svg { width: 14px; height: 14px; }
+
+/* ════════════════════════════════════════════════
+   DESKTOP GUTTER FRAME  (hidden on mobile)
+════════════════════════════════════════════════ */
+.desktop-frame {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.desktop-gutter {
+  position: absolute;
+  top: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 2rem;
+}
+.left-gutter  { left: 0; right: calc(50% + 240px); }
+.right-gutter { left: calc(50% + 240px); right: 0; }
+.gutter-wordmark {
+  font-family: var(--display);
+  font-size: 3.5rem;
+  letter-spacing: 0.12em;
+  color: rgba(192,22,15,0.12);
+  line-height: 1;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  user-select: none;
+}
+.gutter-tagline {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(102,94,80,0.3);
+  text-align: center;
+  line-height: 2.2;
+  user-select: none;
+}
+.gutter-stat {
+  text-align: center;
+  user-select: none;
+}
+.gutter-stat-num {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  letter-spacing: 0.05em;
+  color: rgba(192,22,15,0.13);
+  line-height: 1;
+}
+.gutter-stat-label {
+  font-family: var(--mono);
+  font-size: 0.4rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(102,94,80,0.25);
+  margin-top: 0.3rem;
+}
+.gutter-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(192,22,15,0.08);
+}
+.gutter-url {
+  font-family: var(--mono);
+  font-size: 0.42rem;
+  letter-spacing: 0.15em;
+  color: rgba(102,94,80,0.22);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — TABLET  (600px – 899px)
+════════════════════════════════════════════════ */
+@media (min-width: 600px) and (max-width: 899px) {
+  html { font-size: 15.5px; }
+  .age-gate,
+  .age-denied {
+    left: calc(50% - 280px);
+    right: calc(50% - 280px);
+  }
+  .topbar {
+    left: calc(50% - 280px);
+    right: calc(50% - 280px);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  .bottom-nav {
+    left: calc(50% - 280px);
+    right: calc(50% - 280px);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  .view-container {
+    max-width: 560px;
+    margin: 0 auto;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    min-height: 100vh;
+  }
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE — DESKTOP  (900px+)
+════════════════════════════════════════════════ */
+@media (min-width: 900px) {
+  html { font-size: 16px; }
+
+  body {
+    background: #040404;
+    background-image:
+      repeating-linear-gradient(
+        135deg,
+        rgba(192,22,15,0.018) 0px,
+        rgba(192,22,15,0.018) 1px,
+        transparent 1px,
+        transparent 32px
+      );
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 620px;
+    height: 100vh;
+    background: radial-gradient(ellipse 50% 70% at 50% 50%, rgba(192,22,15,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .desktop-frame { display: block; }
+
+  /* Age gate + denied screen snap to the phone column */
+  .age-gate,
+  .age-denied {
+    left: calc(50% - 240px);
+    right: calc(50% - 240px);
+  }
+  .age-gate::before,
+  .age-denied::before {
+    font-size: 220px;
+  }
+
+  .topbar {
+    left: calc(50% - 240px);
+    right: calc(50% - 240px);
+    border-left: 1px solid var(--border2);
+    border-right: 1px solid var(--border2);
+  }
+
+  .bottom-nav {
+    left: calc(50% - 240px);
+    right: calc(50% - 240px);
+    border-left: 1px solid var(--border2);
+    border-right: 1px solid var(--border2);
+  }
+
+  .view-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--black);
+    position: relative;
+    z-index: 1;
+    border-left: 1px solid var(--border2);
+    border-right: 1px solid var(--border2);
+    min-height: 100vh;
+    box-shadow:
+      -24px 0 80px rgba(0,0,0,0.7),
+       24px 0 80px rgba(0,0,0,0.7),
+       0 0 140px rgba(192,22,15,0.06);
+  }
+
+  body::after { z-index: 9999; }
+}
+
+@media (min-width: 1280px) {
+  .gutter-wordmark  { font-size: 4.5rem; }
+  .gutter-stat-num  { font-size: 2.8rem; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     DESKTOP GUTTER FRAME (visible 900px+)
+══════════════════════════════════════ -->
+<div class="desktop-frame" aria-hidden="true">
+  <div class="desktop-gutter left-gutter">
+    <div class="gutter-wordmark">RAZOR WIRE FEELS</div>
+    <div class="gutter-divider"></div>
+    <div class="gutter-tagline">Giving the<br>incarcerated<br>a public voice</div>
+    <div class="gutter-divider"></div>
+    <div class="gutter-url">razorwirefeels.org</div>
+  </div>
+  <div class="desktop-gutter right-gutter">
+    <div class="gutter-stat">
+      <div class="gutter-stat-num">32K</div>
+      <div class="gutter-stat-label">NC Inmates</div>
+    </div>
+    <div class="gutter-divider"></div>
+    <div class="gutter-stat">
+      <div class="gutter-stat-num">80%</div>
+      <div class="gutter-stat-label">To Creators</div>
+    </div>
+    <div class="gutter-divider"></div>
+    <div class="gutter-stat">
+      <div class="gutter-stat-num">100%</div>
+      <div class="gutter-stat-label">Authentic</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     AGE GATE
+══════════════════════════════════════ -->
+<div class="age-gate" id="age-gate">
+  <div class="age-gate-logo">RAZOR WIRE <span>FEELS</span></div>
+  <div class="age-gate-headline">ADULTS<br>ONLY</div>
+  <div class="age-gate-rule"></div>
+  <p class="age-gate-sub">This site contains mature content including strong language, descriptions of violence, addiction, and incarceration. You must be 18 or older to enter.</p>
+  <button class="age-gate-btn-yes" onclick="enterSite()">I AM 18 OR OLDER — ENTER</button>
+  <button class="age-gate-btn-no" onclick="denyEntry()">I am under 18 — Leave</button>
+  <p class="age-gate-warn">By entering you confirm you are at least 18 years of age and consent to viewing adult content. This site is not affiliated with NCDAC or any government body.</p>
+</div>
+<div class="age-denied" id="age-denied">
+  <div class="age-denied-text">COME BACK<br>WHEN YOU'RE<br>OLDER.</div>
+  <div class="age-denied-sub">This site is for adults only.</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LOGIN / SIGNUP MODAL
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="login-modal" onclick="closeLoginModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">REP <span>LOGIN</span></div>
+      <button class="modal-close-btn" onclick="closeLoginModal()">×</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchModalTab('login',this)">Sign In</button>
+      <button class="modal-tab" onclick="switchModalTab('signup',this)">Create Account</button>
+    </div>
+    <!-- LOGIN PANEL -->
+    <div id="modal-login" class="modal-body">
+      <p class="form-hint">Outside representatives — family, advocates, friends — sign in here to upload content for your incarcerated person.</p>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <button class="modal-submit" onclick="alert('Login coming soon!')">SIGN IN →</button>
+      <div class="modal-sep">or</div>
+      <p class="form-hint" style="text-align:center;">Don't have an account? <a href="#" onclick="switchModalTab('signup',document.querySelectorAll('.modal-tab')[1])">Create one →</a></p>
+      <p class="form-hint" style="text-align:center;margin-top:-0.5rem;"><a href="#" onclick="alert('Password reset coming soon')">Forgot password?</a></p>
+    </div>
+    <!-- SIGNUP PANEL -->
+    <div id="modal-signup" class="modal-body" style="display:none;">
+      <p class="form-hint">Create an account as an <strong style="color:var(--bright)">outside representative</strong>. You'll be linked to the inmate(s) you manage submissions for.</p>
+      <div class="form-group">
+        <label class="form-label">Your Full Name</label>
+        <input class="form-input" type="text" placeholder="Jane Smith">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="At least 8 characters">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Inmate ID Number (NCDAC)</label>
+        <input class="form-input" type="text" placeholder="e.g. 1369313" style="letter-spacing:0.1em;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Relationship to This Person</label>
+        <input class="form-input" type="text" placeholder="e.g. Sister, Friend, Advocate">
+      </div>
+      <div class="form-hint">By creating an account you confirm you have the inmate's consent to manage their page and submit content on their behalf. <a href="#">Read our rep policy →</a></div>
+      <button class="modal-submit" onclick="alert('Account creation coming soon!')">CREATE ACCOUNT →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MORE BOTTOM SHEET
+══════════════════════════════════════ -->
+<div class="more-sheet-overlay" id="more-sheet-overlay" onclick="closeMoreSheet()">
+  <div class="more-sheet" onclick="event.stopPropagation()">
+    <div class="more-sheet-grip"></div>
+    <div class="more-sheet-grid">
+      <button class="more-sheet-item" onclick="closeMoreSheet(); switchTab('submit')">
+        <div class="msi-icon">✉️</div>
+        <div class="msi-label">Submit Work</div>
+      </button>
+      <button class="more-sheet-item" onclick="closeMoreSheet(); switchTab('services')">
+        <div class="msi-icon">⭐</div>
+        <div class="msi-label">Services</div>
+      </button>
+      <button class="more-sheet-item" onclick="closeMoreSheet(); switchTab('about')">
+        <div class="msi-icon">📋</div>
+        <div class="msi-label">About</div>
+      </button>
+      <button class="more-sheet-item" onclick="closeMoreSheet(); openLoginModal()">
+        <div class="msi-icon">🔑</div>
+        <div class="msi-label">Rep Login</div>
+      </button>
+      <button class="more-sheet-item" onclick="closeMoreSheet(); switchTab('home'); setTimeout(()=>document.querySelector('.phonein-section').scrollIntoView({behavior:'smooth'}),200)">
+        <div class="msi-icon">📞</div>
+        <div class="msi-label">Call In Line</div>
+      </button>
+      <button class="more-sheet-item" onclick="closeMoreSheet(); switchTab('about'); setTimeout(()=>document.getElementById('advertise-section').scrollIntoView({behavior:'smooth'}),200)">
+        <div class="msi-icon">📣</div>
+        <div class="msi-label">Advertise</div>
+      </button>
+      <button class="more-sheet-item" onclick="closeMoreSheet(); switchTab('home'); setTimeout(()=>document.querySelector('.support-section').scrollIntoView({behavior:'smooth'}),200)">
+        <div class="msi-icon">❤️</div>
+        <div class="msi-label">Donate</div>
+      </button>
+      <a class="more-sheet-item" href="https://youtube.com/@razorwirefeels" target="_blank" style="text-decoration:none;">
+        <div class="msi-icon">🎙️</div>
+        <div class="msi-label">Podcast</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TOP BAR
+══════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-logo">RAZOR WIRE <span>FEELS</span></div>
+  <div class="topbar-actions">
+    <button class="topbar-login" id="login-btn" onclick="openLoginModal()">Rep Login</button>
+    <button class="topbar-btn" onclick="openSearch()" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </button>
+    <button class="topbar-btn" onclick="openDrawer()" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════
+     VIEWS
+══════════════════════════════════════ -->
+<div class="view-container">
+
+  <!-- ── HOME / FEED ─────────────────────── -->
+  <div id="view-home" class="view active">
+
+    <div class="hero">
+      <div class="kicker">North Carolina · NCDAC · Est. 2026</div>
+      <h1 class="hero-headline">32,000<br>PEOPLE.<br>ONE <span class="r">VOICE</span><br>EACH.</h1>
+      <p class="hero-body">There are approximately 32,000 people incarcerated in North Carolina state prisons right now. Most of them will never be heard. Razor Wire Feels is that place — a permanent public page for every incarcerated person who wants one.</p>
+      <div class="stat-strip">
+        <div class="stat-cell">
+          <div class="stat-num red" id="stat-count">32,000</div>
+          <div class="stat-lbl">people in<br>NC prisons</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">1</div>
+          <div class="stat-lbl">active pages<br>live now</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">8</div>
+          <div class="stat-lbl">pieces<br>published</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">55+</div>
+          <div class="stat-lbl">NCDAC<br>facilities</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHOUT OUTS TICKER -->
+    <div class="shoutouts-section">
+      <div class="shoutouts-header">
+        <div class="shoutouts-label">
+          <div class="shoutouts-dot"></div>
+          <span class="shoutouts-title">Shout Outs — Live</span>
+        </div>
+        <button class="shoutouts-cta" onclick="alert('Send a shout out — $2 per message. Coming soon!')">Send One →</button>
+      </div>
+      <div class="ticker-wrap">
+        <div class="ticker-track" id="ticker-track">
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">DC at Craven — we love you bro. Stay strong. The whole family's waiting.</span><span class="ticker-from">— The Williams Fam</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Tommy B at Harnett — your daughter drew you a picture, it's in the mail.</span><span class="ticker-from">— Keisha</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Redbeard — the letters changed my perspective. Thank you for writing.</span><span class="ticker-from">— A reader in Raleigh</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Marcus J at Piedmont — we got the house bro. You're coming home to a real home.</span><span class="ticker-from">— Trey & Mom</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Anthony W at Central — happy birthday baby. 34 and counting. See you soon.</span><span class="ticker-from">— Nikki</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Pops at Bertie — the grandkids ask about you every day. You're not forgotten.</span><span class="ticker-from">— Janelle</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Rico at Maury — keep your head up cuzzo. 11 months left.</span><span class="ticker-from">— Dex</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">To anyone reading this from inside — somebody out here is thinking about you right now.</span><span class="ticker-from">— Anonymous</span></div>
+          <!-- duplicate set for seamless loop -->
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">DC at Craven — we love you bro. Stay strong. The whole family's waiting.</span><span class="ticker-from">— The Williams Fam</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Tommy B at Harnett — your daughter drew you a picture, it's in the mail.</span><span class="ticker-from">— Keisha</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Redbeard — the letters changed my perspective. Thank you for writing.</span><span class="ticker-from">— A reader in Raleigh</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Marcus J at Piedmont — we got the house bro. You're coming home to a real home.</span><span class="ticker-from">— Trey & Mom</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Anthony W at Central — happy birthday baby. 34 and counting. See you soon.</span><span class="ticker-from">— Nikki</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Pops at Bertie — the grandkids ask about you every day. You're not forgotten.</span><span class="ticker-from">— Janelle</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">Rico at Maury — keep your head up cuzzo. 11 months left.</span><span class="ticker-from">— Dex</span></div>
+          <div class="ticker-item"><span class="ticker-heart">&#10084;</span><span class="ticker-msg">To anyone reading this from inside — somebody out here is thinking about you right now.</span><span class="ticker-from">— Anonymous</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHAT'S HOT THIS MONTH -->
+    <div class="hots-section">
+      <div class="hots-inner">
+        <div class="sec-head">
+          <div class="sec-title"><span>WHAT'S HOT</span> THIS MONTH</div>
+          <span class="sec-link">April 2026</span>
+        </div>
+        <div class="hots-pick" onclick="openEpisode('origin')">
+          <div class="hots-badge-row">
+            <span class="hots-badge">&#9733; Staff Pick</span>
+            <span class="hots-month">Selected by Redbeard</span>
+          </div>
+          <div class="hots-body">
+            <div class="hots-title">The Birth of Redbeard the Great</div>
+            <div class="hots-author">Redbeard the Regressor · Nicolas Losito</div>
+            <div class="hots-excerpt">"Already have my Magician name picked out — Redbeard the Great. Coincidence? I think not." Guards shook down the block and took everything. So he started teaching himself card tricks instead.</div>
+            <div class="hots-why"><strong>Why this one:</strong> This is where it all started. A guard raid, a card trick book, and the name that stuck. If you're going to read one episode, start here.</div>
+          </div>
+          <div class="hots-foot">
+            <span class="hots-facility">Central Prison · Raleigh, NC · 12/12/20</span>
+            <button class="hots-read">Read It →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEST OF THIS WEEK -->
+    <div class="feat-section">
+      <div class="feat-inner">
+        <div class="sec-head">
+          <div class="sec-title">BEST OF <span>THIS WEEK</span></div>
+          <span class="sec-link" onclick="switchTab('directory')">All →</span>
+        </div>
+      </div>
+      <div class="cards-scroll">
+        <button class="feat-card has-page" onclick="openEpisode('astronomer')">
+          <div class="fc-tag">Writing · Part V</div>
+          <div class="fc-name">Redbeard the Astronomer</div>
+          <div class="fc-excerpt">"The Final Letter. Allan Sandage once said the biggest question is whether the universe is finite or infinite. Lying here I wonder the same about time..."</div>
+          <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison</span></div>
+        </button>
+        <button class="feat-card has-page" onclick="openEpisode('regressor')">
+          <div class="fc-tag">Writing · Part IV</div>
+          <div class="fc-name">Redbeard the Regressor</div>
+          <div class="fc-excerpt">"I learned a card trick today from a book I found on the block. Called it Redbeard the Regressor. Going backwards feels like going somewhere..."</div>
+          <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison</span></div>
+        </button>
+        <button class="feat-card placeholder">
+          <div class="fc-tag">Your work here</div>
+          <div class="fc-name">Get Your Page</div>
+          <div class="fc-excerpt">Write to us at our PO Box and your work could be featured here. Free pages for every incarcerated person in NC.</div>
+          <div class="fc-meta"><span>razorwirefeels.org</span><span>NC</span></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- BEST OF THIS MONTH -->
+    <div class="feat-section">
+      <div class="feat-inner">
+        <div class="sec-head">
+          <div class="sec-title">BEST OF <span>THIS MONTH</span></div>
+          <span class="sec-link" onclick="switchTab('directory')">All →</span>
+        </div>
+      </div>
+      <div class="cards-scroll">
+        <button class="feat-card has-page" onclick="openEpisode('cold-open')">
+          <div class="fc-tag">Writing · Part III</div>
+          <div class="fc-name">The Cold Open</div>
+          <div class="fc-excerpt">"Six miles from where I grew up. I could see a window — sandblasted so you couldn't see through it. There were grates on it. I stared at it for a year."</div>
+          <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison · Solitary</span></div>
+        </button>
+        <button class="feat-card has-page" onclick="openEpisode('covid-radio')">
+          <div class="fc-tag">Writing · Part IV</div>
+          <div class="fc-name">COVID Through a Radio</div>
+          <div class="fc-excerpt">"The world went into lockdown March 2020. I'd been locked down since May 2019. I heard the whole pandemic through a transistor radio. Glenn Beck. Rush. NPR."</div>
+          <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>Central Prison · Solitary</span></div>
+        </button>
+        <button class="feat-card placeholder">
+          <div class="fc-tag">Your work here</div>
+          <div class="fc-name">Get Your Page</div>
+          <div class="fc-excerpt">Mail us your writing or artwork. We scan it, publish it, and your readers get notified the moment it goes live.</div>
+          <div class="fc-meta"><span>razorwirefeels.org</span><span>NC</span></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- MOST VIEWED -->
+    <div class="feat-section">
+      <div class="feat-inner">
+        <div class="sec-head">
+          <div class="sec-title"><span>MOST</span> VIEWED</div>
+          <span class="sec-link" onclick="switchTab('directory')">All →</span>
+        </div>
+      </div>
+      <div class="cards-scroll">
+        <button class="feat-card has-page" onclick="openEpisode('origin')">
+          <div class="fc-tag">Writing · Origin Episode</div>
+          <div class="fc-name">Redbeard the Great</div>
+          <div class="fc-excerpt">"I am officially Redbeard the Regressor. Teaching myself card tricks in a cell six miles from where I was born. This is how you go backwards to move forward."</div>
+          <div class="fc-meta"><span>Nicolas Losito · 1369313</span><span>834 views</span></div>
+        </button>
+        <button class="feat-card placeholder">
+          <div class="fc-tag">Coming soon</div>
+          <div class="fc-name">More pages loading</div>
+          <div class="fc-excerpt">As more writers and artists get their pages, the most viewed section will fill up. Every voice deserves to be read.</div>
+          <div class="fc-meta"><span>razorwirefeels.org</span><span>NC</span></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- PHONE-IN LINE -->
+    <div class="phonein-section">
+      <div class="phonein-inner">
+        <div class="sec-head">
+          <div class="sec-title">CALL <span>IN</span></div>
+          <span class="sec-link">Your story. Your voice.</span>
+        </div>
+        <div class="phonein-card">
+          <div class="phonein-top">
+            <div class="phonein-icon">📞</div>
+            <div class="phonein-number"><span>1-</span>XXX<span>-</span>RWF<span>-</span>CALL</div>
+            <div class="phonein-coming">Number dropping soon</div>
+            <div class="phonein-tagline">15 Minutes. No Script. Just Talk.</div>
+          </div>
+          <div class="phonein-body">
+            <div class="phonein-how">
+              <div class="phonein-step">
+                <div class="phonein-step-num">1</div>
+                <div class="phonein-step-text"><strong>Dial the number</strong>Works from the prison phone. No app. No account. Just call.</div>
+              </div>
+              <div class="phonein-step">
+                <div class="phonein-step-num">2</div>
+                <div class="phonein-step-text"><strong>Leave your message</strong>Up to 15 minutes. Say your name, your facility, whatever you want to say. Funny. Real. Serious. All of it.</div>
+              </div>
+              <div class="phonein-step">
+                <div class="phonein-step-num">3</div>
+                <div class="phonein-step-text"><strong>It goes on your page</strong>Best submissions go live on your contributor page as audio. Top picks get featured on the Razor Wire Feels podcast.</div>
+              </div>
+            </div>
+            <div class="phonein-topics">
+              <span class="phonein-topic hot">Funny stories &#128293;</span>
+              <span class="phonein-topic hot">What's going on at your spot</span>
+              <span class="phonein-topic">Spoken word</span>
+              <span class="phonein-topic">Rap</span>
+              <span class="phonein-topic">Behind the wall news</span>
+              <span class="phonein-topic">Shout outs</span>
+              <span class="phonein-topic">Life advice</span>
+              <span class="phonein-topic">Anything, really</span>
+            </div>
+            <button class="btn-outline" style="margin-top:0;" onclick="alert('Phone line coming soon — number will be posted here.')">Get Notified When Line Goes Live →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PODCAST -->
+    <div class="podcast-section">
+      <div class="podcast-inner">
+        <div class="sec-head">
+          <div class="sec-title">THE <span>PODCAST</span></div>
+          <a href="https://youtube.com/@razorwirefeels" target="_blank" class="sec-link">YouTube →</a>
+        </div>
+        <div class="podcast-card">
+          <div class="podcast-thumb">
+            <div class="podcast-yt-icon">
+              <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#ff0000" style="fill:#1a1a1a"/></svg>
+            </div>
+            <div class="podcast-thumb-label">YouTube</div>
+          </div>
+          <div class="podcast-info">
+            <div class="podcast-show-title">Razor Wire Feels</div>
+            <div class="podcast-handle">@razorwirefeels</div>
+            <div class="podcast-desc">Nik reads the best writing and artwork submitted by people inside. Guest interviews. Eventually — live call-ins from different prisons.</div>
+            <div class="podcast-foot">
+              <span class="podcast-new-badge">New episodes coming</span>
+              <a href="https://youtube.com/@razorwirefeels" target="_blank">
+                <button class="podcast-sub-btn">Subscribe →</button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="podcast-episodes">
+          <div class="podcast-ep-head">Episodes</div>
+          <div class="podcast-ep-item coming">
+            <div class="podcast-ep-num">01</div>
+            <div class="podcast-ep-info">
+              <div class="podcast-ep-title">Pilot — The Letters That Started Everything</div>
+              <div class="podcast-ep-meta">Dropping soon · Razor Wire Feels</div>
+            </div>
+            <div class="podcast-ep-play" style="opacity:0.35;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+          <div class="podcast-ep-item coming">
+            <div class="podcast-ep-num">02</div>
+            <div class="podcast-ep-info">
+              <div class="podcast-ep-title">Reading Submissions — Best Writing This Month</div>
+              <div class="podcast-ep-meta">Dropping soon · Razor Wire Feels</div>
+            </div>
+            <div class="podcast-ep-play" style="opacity:0.35;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+          <div class="podcast-ep-item coming">
+            <div class="podcast-ep-num">03</div>
+            <div class="podcast-ep-info">
+              <div class="podcast-ep-title">Calling In — Stories from Behind the Wall</div>
+              <div class="podcast-ep-meta">Dropping soon · Razor Wire Feels</div>
+            </div>
+            <div class="podcast-ep-play" style="opacity:0.35;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPORT / DONATE -->
+    <div class="support-section">
+      <div class="support-inner">
+        <div class="support-card">
+          <div class="support-top">
+            <div class="support-headline">SUPPORT<br>THE <span>CAUSE</span></div>
+            <p class="support-sub">Every dollar helps us build pages, process submissions, and keep this platform free for every person inside.</p>
+          </div>
+          <div class="support-tiers">
+            <button class="support-tier" onclick="alert('Donate $5 — coming soon!')">
+              <span class="support-tier-amt">$5</span>
+              <span class="support-tier-label">One-time</span>
+            </button>
+            <button class="support-tier featured" onclick="alert('Donate $10 — coming soon!')">
+              <span class="support-tier-amt">$10</span>
+              <span class="support-tier-label">Most common</span>
+            </button>
+            <button class="support-tier" onclick="alert('Donate $25 — coming soon!')">
+              <span class="support-tier-amt">$25</span>
+              <span class="support-tier-label">Builder</span>
+            </button>
+            <button class="support-tier" onclick="alert('Monthly sub — coming soon!')">
+              <span class="support-tier-amt">$9.99</span>
+              <span class="support-tier-label">/ month</span>
+            </button>
+          </div>
+          <button class="support-donate-btn" onclick="alert('Donate link coming soon!')">DONATE NOW →</button>
+          <div class="support-donate-note">
+            Secured via Stripe · RWF Publishing LLC · No account required<br>
+            Or send a shout out for $2 — your name goes on the ticker above
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA BANNER -->
+    <div class="cta-banner">
+      <div class="cta-headline">ARE YOU<br>INSIDE?<br>THIS IS<br>YOUR PAGE.</div>
+      <p class="cta-sub">Free for every incarcerated person in North Carolina. Write to us. We build your page. Your words reach the world.</p>
+      <button class="btn-white" onclick="switchTab('submit')">Get Your Free Page →</button>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-brand">RAZOR WIRE <span>FEELS</span></div>
+      <div class="footer-meta">
+        razorwirefeels.org · North Carolina<br>
+        Not affiliated with NCDAC or any correctional institution.<br>
+        Founded by Nicolas Losito "Redbeard the Great" · ID 1369313<br>
+        © 2026 RWF Publishing LLC
+      </div>
+    </footer>
+
+  </div><!-- /view-home -->
+
+  <!-- ── DIRECTORY ───────────────────────── -->
+  <div id="view-directory" class="view">
+    <div class="dir-view">
+
+      <div class="sec-head" style="margin-bottom:1rem;">
+        <div class="sec-title">THE <span>DIRECTORY</span></div>
+      </div>
+
+      <div class="dir-search">
+        <input class="dir-search-input" id="dir-search-input" type="text"
+          placeholder="Name or inmate ID..." autocomplete="off">
+        <button class="dir-search-btn" onclick="doSearch()">Search →</button>
+      </div>
+
+      <div class="filter-strip">
+        <button class="filter-chip on" onclick="setFilter(this,'all')">All</button>
+        <button class="filter-chip" onclick="setFilter(this,'page')">Has a Page</button>
+        <button class="filter-chip" onclick="setFilter(this,'writing')">Writing</button>
+        <button class="filter-chip" onclick="setFilter(this,'art')">Artwork</button>
+        <button class="filter-chip" onclick="setFilter(this,'new')">New This Month</button>
+      </div>
+
+      <div class="sort-row">
+        <div class="sort-count">Showing <span id="show-count">1</span> active · <span style="color:var(--dim2)">32,000 seats</span></div>
+        <select class="sort-select">
+          <option>Most Recent</option>
+          <option>Most Viewed</option>
+          <option>A – Z</option>
+        </select>
+      </div>
+
+      <div class="inmate-list" id="inmate-list">
+
+        <!-- NICOLAS — REAL PAGE -->
+        <a class="inmate-card has-page featured"
+          data-name="nicolas losito" data-id="1369313" data-type="writing" data-new="true"
+          href="#" onclick="event.preventDefault(); switchTab('profile')">
+          <div class="ic-avatar">RL</div>
+          <div class="ic-body">
+            <div class="ic-name">Nicolas Losito</div>
+            <div class="ic-alias">"Redbeard the Great"</div>
+            <div class="ic-id">ID: 1369313 · NCDAC</div>
+            <div class="ic-stats">
+              <div class="ic-stat"><span class="ic-stat-num">52</span><span class="ic-stat-lbl">Episodes</span></div>
+              <div class="ic-stat"><span class="ic-stat-num">1</span><span class="ic-stat-lbl">Comic</span></div>
+              <div class="ic-stat"><span class="ic-stat-num">7</span><span class="ic-stat-lbl">Aliases</span></div>
+            </div>
+            <div class="ic-tags">
+              <span class="badge badge-red">Writing</span>
+              <span class="badge badge-blue">Comic</span>
+              <span class="badge badge-filled">Featured</span>
+            </div>
+            <div class="ic-bottom">
+              <span class="ic-facility">Central Prison · Raleigh, NC</span>
+              <span class="ic-cta">View Page →</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- PLACEHOLDER CARDS -->
+        <div class="inmate-card no-page"
+          data-name="" data-id="" data-type="" data-new="false">
+          <div class="ic-avatar" style="font-size:1.5rem; color:var(--border2);">+</div>
+          <div class="ic-body">
+            <div class="ic-name" style="color:var(--border2);">Your Name Here</div>
+            <div class="ic-id" style="color:var(--border2); margin-top:0.25rem;">This page is unclaimed</div>
+            <div class="ic-bottom">
+              <span class="ic-facility" style="color:var(--border2);">NCDAC · North Carolina</span>
+              <a href="#" onclick="event.preventDefault(); switchTab('submit')" style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.1em; color:var(--red); text-transform:uppercase;">Claim it →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="inmate-card no-page"
+          data-name="" data-id="" data-type="" data-new="false">
+          <div class="ic-avatar" style="font-size:1.5rem; color:var(--border2);">+</div>
+          <div class="ic-body">
+            <div class="ic-name" style="color:var(--border2);">Your Name Here</div>
+            <div class="ic-id" style="color:var(--border2); margin-top:0.25rem;">This page is unclaimed</div>
+            <div class="ic-bottom">
+              <span class="ic-facility" style="color:var(--border2);">NCDAC · North Carolina</span>
+              <a href="#" onclick="event.preventDefault(); switchTab('submit')" style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.1em; color:var(--red); text-transform:uppercase;">Claim it →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="inmate-card no-page"
+          data-name="" data-id="" data-type="" data-new="false">
+          <div class="ic-avatar" style="font-size:1.5rem; color:var(--border2);">+</div>
+          <div class="ic-body">
+            <div class="ic-name" style="color:var(--border2);">Your Name Here</div>
+            <div class="ic-id" style="color:var(--border2); margin-top:0.25rem;">This page is unclaimed</div>
+            <div class="ic-bottom">
+              <span class="ic-facility" style="color:var(--border2);">NCDAC · North Carolina</span>
+              <a href="#" onclick="event.preventDefault(); switchTab('submit')" style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.1em; color:var(--red); text-transform:uppercase;">Claim it →</a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /inmate-list -->
+
+      <!-- Directory ad banner -->
+      <div class="ad-banner" style="margin: 1rem 0;">
+        <span class="ad-banner-label">Ad</span>
+        <span class="ad-banner-slot">Advertise to families and advocates across NC</span>
+        <button class="ad-banner-cta" onclick="switchTab('about'); setTimeout(()=>document.getElementById('advertise-section').scrollIntoView({behavior:'smooth'}),200)">Get a Spot →</button>
+      </div>
+
+      <div style="margin-top:0.5rem; text-align:center;">
+        <p style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.1em; color:var(--dim); line-height:1.8;">
+          31,999 pages still unclaimed —
+          <button onclick="switchTab('submit')" style="border:none; background:transparent; color:var(--red); font-family:var(--mono); font-size:0.55rem; letter-spacing:0.1em; cursor:pointer;">help us fill them</button>
+        </p>
+      </div>
+
+    </div>
+  </div><!-- /view-directory -->
+
+  <!-- ── PROFILE: REDBEARD ───────────────── -->
+  <div id="view-profile" class="view">
+
+    <div class="profile-hero">
+      <div class="profile-banner-strip"></div>
+      <div class="profile-hero-inner">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar-lg">R</div>
+        </div>
+        <div class="profile-name">Redbeard the Great</div>
+        <div class="profile-realname">Nicolas Losito</div>
+        <div class="profile-id-pill">
+          <span class="dot"></span>NC · 1369313 · NCDAC
+        </div>
+        <div class="profile-tagline">"Written one letter — and one text — at a time from inside a box."</div>
+      </div>
+      <div class="profile-stats-strip">
+        <div class="p-stat"><span class="p-stat-num">52</span><span class="p-stat-lbl">Episodes</span></div>
+        <div class="p-stat"><span class="p-stat-num">5</span><span class="p-stat-lbl">Parts</span></div>
+        <div class="p-stat"><span class="p-stat-num">2017</span><span class="p-stat-lbl">First Letter</span></div>
+        <div class="p-stat"><span class="p-stat-num">#0</span><span class="p-stat-lbl">Comic</span></div>
+      </div>
+    </div>
+
+    <!-- BIO -->
+    <div class="profile-section">
+      <div class="psec-title">Story</div>
+      <div class="bio-text">
+        <p>My name is <strong>Nicolas Losito</strong>. Inside, they call me <strong>Redbeard the Great</strong> — though the alias has had other forms. It started as a joke. I was teaching myself card tricks in my cell in late 2020, and I thought: every good magician needs a name.</p>
+        <div class="bio-quote">
+          "Out in the real world, I'm a junkie fuckup. In here, apparently I'm one of the smart ones. People come to me for wisdom and insight and fun facts."<br>
+          <small style="opacity:0.65; font-style:normal; font-size:0.75rem;">— 11/23/20</small>
+        </div>
+        <p>Starting in <strong>2017</strong>, I wrote letters home from inside NCDAC. Those letters became a memoir — <em>Razor Wire Feels</em> — 52 episodes across 5 parts. When they gave us tablets in 2021, the letters became texts. The format changed; the voice didn't.</p>
+        <p>During the pandemic I used my COVID stimulus check to draw <em>K-Master K & The Hammer: Issue #0</em>, 26 pages. In 2022 I founded <strong>Bich Fist Comics</strong> as the publishing arm. I also have a son, Mason, who told his mom proudly — <em>"My Dad comes home from prison next year."</em></p>
+      </div>
+      <div class="psec-title" style="margin-top:1rem;">Known Aliases</div>
+      <div class="alias-strip">
+        <span class="alias-chip">the Wise</span>
+        <span class="alias-chip">the Regressor</span>
+        <span class="alias-chip">the Capitalist</span>
+        <span class="alias-chip">the Poet</span>
+        <span class="alias-chip">the Intolerant</span>
+        <span class="alias-chip">the Paranoid</span>
+        <span class="alias-chip current">the Astronomer ✦ final</span>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="profile-section">
+      <div class="psec-title">About</div>
+      <div class="info-row"><span class="info-label">Location</span><span class="info-value">North Carolina</span></div>
+      <div class="info-row"><span class="info-label">Active</span><span class="info-value">2017 – 2023</span></div>
+      <div class="info-row"><span class="info-label">Founder</span><span class="info-value">Razor Wire Feels</span></div>
+      <div class="info-row"><span class="info-label">Publisher</span><span class="info-value">Bich Fist Comics</span></div>
+      <div class="info-row"><span class="info-label">Released</span><span class="info-value">2023</span></div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="profile-section">
+      <div class="psec-title">Tags</div>
+      <div class="tags-cloud">
+        <span class="badge badge-red">Memoir</span>
+        <span class="badge badge-red">Founder</span>
+        <span class="badge badge-dim">Incarceration</span>
+        <span class="badge badge-dim">Gonzo</span>
+        <span class="badge badge-dim">Comic Book</span>
+        <span class="badge badge-dim">NCDAC</span>
+        <span class="badge badge-dim">Dark Comedy</span>
+        <span class="badge badge-dim">Poems</span>
+        <span class="badge badge-dim">Prison Politics</span>
+        <span class="badge badge-dim">Grief</span>
+        <span class="badge badge-gold">Music</span>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="profile-section">
+      <div class="psec-title">Projects</div>
+      <div class="project-item">
+        <div class="project-thumb">RAZOR<br>WIRE<br>FEELS</div>
+        <div class="project-info">
+          <div class="project-name">Razor Wire Feels</div>
+          <div class="project-sub">Memoir · 52 Episodes · 5 Parts</div>
+          <a href="#" class="project-link" onclick="event.preventDefault(); document.querySelector('#view-profile .episode-tabs').scrollIntoView({behavior:'smooth'})">Read episodes →</a>
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-thumb red">K-<br>MASTER<br>K #0</div>
+        <div class="project-info">
+          <div class="project-name">K-Master K & The Hammer</div>
+          <div class="project-sub">Comic · Issue #0 · 26 Pages · Bich Fist Comics</div>
+          <a href="#" class="project-link">Get Issue #0 →</a>
+        </div>
+      </div>
+      <div class="project-item">
+        <div class="project-thumb">THE<br>RAVAGED</div>
+        <div class="project-info">
+          <div class="project-name">The Ravaged</div>
+          <div class="project-sub">Short Story · 17 pages · Handwritten</div>
+          <a href="#" class="project-link">Read →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- EPISODE FEED -->
+    <div>
+      <div class="episode-tabs">
+        <button class="ep-tab active" data-ep-tab="writing">Writing</button>
+        <button class="ep-tab" data-ep-tab="media" onclick="showMediaTab()">Audio &amp; Video</button>
+        <button class="ep-tab" data-ep-tab="artwork">Artwork</button>
+        <button class="ep-tab" data-ep-tab="all">All Posts</button>
+      </div>
+      <!-- MEDIA TAB PANEL -->
+      <div id="media-tab-panel" style="display:none; padding:1rem;">
+
+        <div class="media-submit-cta">
+          <div class="msc-icon">📞</div>
+          <div class="msc-title">Submit Audio or Video</div>
+          <p class="msc-text">Call in from the prison phone. Rap. Spoken word. Stories. It goes right on your page.<br>Some of you got phones too — video welcome.</p>
+          <div class="msc-number">1-XXX-RWF-CALL</div>
+          <div style="font-family:var(--mono); font-size:0.48rem; letter-spacing:0.08em; color:var(--dim2); margin-top:0.35rem;">Number dropping soon</div>
+        </div>
+
+        <!-- AUDIO CARD 1 -->
+        <div class="media-card">
+          <div class="media-head">
+            <div class="media-type-icon audio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div class="media-meta">
+              <div class="media-title">Card Tricks in Solitary</div>
+              <div class="media-date">Phone call · December 2020 · 6:42</div>
+            </div>
+            <span class="badge badge-red media-badge">Audio</span>
+          </div>
+          <div class="media-player">
+            <div class="audio-bar">
+              <button class="play-btn" onclick="togglePlay(this)">
+                <svg id="play-icon-1" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </button>
+              <div class="audio-track">
+                <div class="audio-progress" onclick="seekAudio(this)">
+                  <div class="audio-progress-fill" style="width:0%"></div>
+                </div>
+                <div class="audio-times"><span>0:00</span><span>6:42</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="media-desc">"I learned the double-lift first. Kept dropping it. Did it for three hours straight until my hands stopped thinking about it..."</div>
+        </div>
+
+        <!-- AUDIO CARD 2 -->
+        <div class="media-card">
+          <div class="media-head">
+            <div class="media-type-icon audio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div class="media-meta">
+              <div class="media-title">Gobble Gobble — Thanksgiving '20</div>
+              <div class="media-date">Phone call · November 2020 · 9:18</div>
+            </div>
+            <span class="badge badge-red media-badge">Audio</span>
+          </div>
+          <div class="media-player">
+            <div class="audio-bar">
+              <button class="play-btn" onclick="togglePlay(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </button>
+              <div class="audio-track">
+                <div class="audio-progress" onclick="seekAudio(this)">
+                  <div class="audio-progress-fill" style="width:0%"></div>
+                </div>
+                <div class="audio-times"><span>0:00</span><span>9:18</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="media-desc">"They slid the tray. Alice's Restaurant was playing. One slice of turkey. I ate it in one bite. Then I wrote for two hours."</div>
+        </div>
+
+        <!-- VIDEO CARD -->
+        <div class="media-card">
+          <div class="media-head">
+            <div class="media-type-icon video">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            </div>
+            <div class="media-meta">
+              <div class="media-title">K-Master K: Issue #0 Walkthrough</div>
+              <div class="media-date">Video · 2022 · 4:30</div>
+            </div>
+            <span class="badge badge-gold media-badge">Video</span>
+          </div>
+          <div class="video-placeholder" onclick="alert('Video coming soon')">
+            <div class="video-play-icon">
+              <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="video-label">Tap to play</div>
+          </div>
+          <div class="media-desc" style="padding:0.65rem 0.85rem 0.85rem;">Walking through the hand-drawn pages of K-Master K & The Hammer: Issue #0. 26 pages drawn with a COVID stimulus check.</div>
+        </div>
+
+      </div><!-- /media-tab-panel -->
+
+      <div class="episode-list" id="writing-tab-panel">
+
+        <!-- PART V -->
+        <div class="part-divider">
+          <div class="part-divider-line"></div>
+          <span class="part-divider-label">Part V — Getting Out · 2022–2023</span>
+          <div class="part-divider-line"></div>
+        </div>
+
+        <div class="episode-card" onclick="openEpisode('final')">
+          <div class="ep-head">
+            <div class="ep-avatar">R</div>
+            <div class="ep-meta">
+              <div class="ep-author">Redbeard the Astronomer</div>
+              <div class="ep-date">October 26, 2023</div>
+            </div>
+            <span class="badge badge-dim ep-badge">Final</span>
+          </div>
+          <div class="ep-body">
+            <div class="ep-title">C-Lizzle Mainizzle — Greetings from the Dungeon</div>
+            <div class="ep-excerpt">The last letter. The hole again. In his final weeks. No phone, no coffee, no sunlight. This has been the final incarcerated episode of Razor Wire Feels. See you soon Cuz.</div>
+          </div>
+          <div class="ep-foot">
+            <span class="ep-ep-label">PART V · FINAL · a.o.T.D</span>
+            <button class="ep-read">Read →</button>
+          </div>
+        </div>
+
+        <div class="episode-card" onclick="openEpisode('paranoid')">
+          <div class="ep-head">
+            <div class="ep-avatar">R</div>
+            <div class="ep-meta">
+              <div class="ep-author">Redbeard the Paranoid</div>
+              <div class="ep-date">March 30, 2023</div>
+            </div>
+            <span class="badge badge-red ep-badge">Writing</span>
+          </div>
+          <div class="ep-body">
+            <div class="ep-title">Squeaky Pip — Solitary Confinement is the Catalyst</div>
+            <div class="ep-excerpt">Back in the hole on protective custody. A stranger handed him a freshly sharpened pencil, said he seemed like a good dude. He could hear someone coaching someone else to aim for his carotid artery.</div>
+          </div>
+          <div class="ep-foot">
+            <span class="ep-ep-label">PART V · 3/30/23</span>
+            <button class="ep-read">Read →</button>
+          </div>
+        </div>
+
+        <div class="episode-card" onclick="openEpisode('mason')">
+          <div class="ep-head">
+            <div class="ep-avatar">R</div>
+            <div class="ep-meta">
+              <div class="ep-author">Redbeard the Great</div>
+              <div class="ep-date">November 14, 2022</div>
+            </div>
+            <span class="badge badge-blue ep-badge">Digital</span>
+          </div>
+          <div class="ep-body">
+            <div class="ep-title">Mason</div>
+            <div class="ep-excerpt">His son, age 6, had never seen a picture of him. His mom showed Mason a photo. He said: that's your dad, he comes home from prison next year. Mason said proudly: "My Dad comes home from prison next year."</div>
+          </div>
+          <div class="ep-foot">
+            <span class="ep-ep-label">PART V · 11/14/22</span>
+            <button class="ep-read">Read →</button>
+          </div>
+        </div>
+
+        <!-- PART IV -->
+        <div class="part-divider">
+          <div class="part-divider-line"></div>
+          <span class="part-divider-label">Part IV — Pandemic Inside · 2020–2021</span>
+          <div class="part-divider-line"></div>
+        </div>
+
+        <div class="episode-card" onclick="openEpisode('breaking-bad')">
+          <div class="ep-head">
+            <div class="ep-avatar">R</div>
+            <div class="ep-meta">
+              <div class="ep-author">Redbeard the Great</div>
+              <div class="ep-date">March 27, 2022</div>
+            </div>
+            <span class="badge badge-dim ep-badge" style="border-color:#555;color:#aaa;">Grief</span>
+          </div>
+          <div class="ep-body">
+            <div class="ep-title">The Breaking Bad Letter — Mary Beth & Nate</div>
+            <div class="ep-excerpt">He tried to watch the Breaking Bad episode where Jesse's girlfriend chokes on her vomit. He couldn't get through it. That's how Mary Beth went out. Alone in her apartment. That's how Nate went out.</div>
+          </div>
+          <div class="ep-foot">
+            <span class="ep-ep-label">PART IV–V · 3/27/22</span>
+            <button class="ep-read">Read →</button>
+          </div>
+        </div>
+
+        <div class="episode-card" onclick="openEpisode('origin')">
+          <div class="ep-head">
+            <div class="ep-avatar">R</div>
+            <div class="ep-meta">
+              <div class="ep-author">Redbeard the Regressor</div>
+              <div class="ep-date">December 12, 2020</div>
+            </div>
+            <span class="badge badge-red ep-badge">Writing</span>
+          </div>
+          <div class="ep-body">
+            <div class="ep-title">The Birth of Redbeard the Great</div>
+            <div class="ep-excerpt">Guards shook down the block and took everything. Teaching himself card tricks, 1–2 hours a day. "Already have my Magician name picked out — Redbeard the Great. Coincidence? I think not."</div>
+          </div>
+          <div class="ep-foot">
+            <span class="ep-ep-label">PART IV · 12/12/20 · Origin</span>
+            <button class="ep-read">Read →</button>
+          </div>
+        </div>
+
+        <div class="episode-card" onclick="openEpisode('thanksgiving')">
+          <div class="ep-head">
+            <div class="ep-avatar">R</div>
+            <div class="ep-meta">
+              <div class="ep-author">Redbeard the Wise</div>
+              <div class="ep-date">November 26, 2020 — Thanksgiving</div>
+            </div>
+            <span class="badge badge-red ep-badge">Writing</span>
+          </div>
+          <div class="ep-body">
+            <div class="ep-title">Gobble Gobble Motherfuckers</div>
+            <div class="ep-excerpt">Thanksgiving on lockdown. The prison radio played Alice's Restaurant at the exact moment they slid his tray under the door. COVID outbreak — 166.75 hours a week in the cell.</div>
+          </div>
+          <div class="ep-foot">
+            <span class="ep-ep-label">PART IV · 11/26/20</span>
+            <button class="ep-read">Read →</button>
+          </div>
+        </div>
+
+      </div><!-- /writing-tab-panel -->
+    </div>
+
+  </div><!-- /view-profile -->
+
+  <!-- ── SUBMIT ───────────────────────────── -->
+  <div id="view-submit" class="view">
+    <div class="submit-view">
+
+      <div class="submit-hero">
+        <div class="submit-hero-headline">YOUR<br>PAGE.<br>YOUR<br>VOICE.</div>
+        <p class="submit-hero-sub">Free for every incarcerated person in North Carolina. Your writing, your art, your story — published and preserved on the open web.</p>
+      </div>
+
+      <div class="sec-head" style="margin-bottom:1.25rem;">
+        <div class="sec-title">HOW IT <span>WORKS</span></div>
+      </div>
+
+      <div class="how-it-works">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Write It Down</div>
+            <p class="step-text">Write a letter, a poem, a story — anything. Handwritten is fine. <em>That's the whole point.</em></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Mail It to Us</div>
+            <p class="step-text">Send it to our PO Box (address below). Include your name, ID number, and facility. Your family or advocate can also submit on your behalf.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">We Build Your Page</div>
+            <p class="step-text">Within 2 weeks of receiving your submission, we'll have a page live at <em>razorwirefeels.org/NC/[your ID]</em>.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Your Readers Find You</div>
+            <p class="step-text">Your page is public, searchable, and permanent. People outside can read your work, follow your story, and support you directly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="ib-label">PO Box</div>
+        <div class="ib-large">Coming Soon</div>
+        <p class="ib-text" style="margin-top:0.5rem;">We're setting up our PO Box now. Check back soon or have your outside contact submit digitally in the meantime.</p>
+      </div>
+
+      <div class="sec-head" style="margin-bottom:1.1rem;">
+        <div class="sec-title">CREATOR <span>SPLIT</span></div>
+      </div>
+      <div class="split-earn">
+        <div class="earn-cell">
+          <div class="earn-pct creator">80%</div>
+          <div class="earn-label">You Keep</div>
+        </div>
+        <div class="earn-cell">
+          <div class="earn-pct platform">20%</div>
+          <div class="earn-label">Platform</div>
+        </div>
+      </div>
+      <p style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.07em; color:var(--dim); line-height:1.7; margin-bottom:1.5rem;">Every dollar earned from your page, your work, your merch — 80 cents goes to you (or your designated outside contact). No exceptions.</p>
+
+      <div class="sec-head" style="margin-bottom:1.1rem;">
+        <div class="sec-title">FAQ</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is this really free?</div>
+        <div class="faq-a">Yes. Building your page costs you nothing. There's never a fee to get published here.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can my family submit for me?</div>
+        <div class="faq-a">Absolutely. Anyone on the outside can submit on your behalf — just include your name and ID number with the submission.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What types of work can I submit?</div>
+        <div class="faq-a">Writing (letters, essays, poetry, fiction), artwork, comics — anything you've created. Handwritten or drawn is fine, we'll scan and publish it.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I sign over my rights?</div>
+        <div class="faq-a">No. You keep full ownership. We use an 80/20 publishing agreement — you own the work, we take 20% of any revenue it generates on this platform. Full release form available on request.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does this platform support people in federal prisons?</div>
+        <div class="faq-a">Right now we're focused on North Carolina state facilities (NCDAC). We're building toward national coverage — but we have to walk before we run.</div>
+      </div>
+
+      <div style="margin-top:2rem; display:flex; flex-direction:column; gap:0.75rem;">
+        <button class="btn-red" onclick="alert('Submit form coming soon!')">Submit Your Work →</button>
+        <button class="btn-outline" onclick="alert('Release form coming soon!')">Download Release Form</button>
+      </div>
+
+    </div>
+  </div><!-- /view-submit -->
+
+  <!-- ── STORE ─────────────────────────── -->
+  <div id="view-store" class="view">
+    <div class="store-view">
+      <div class="store-hero">
+        <div class="kicker">RWF Publishing LLC</div>
+        <div class="store-hero-headline">THE<br><span>STORE</span></div>
+        <div class="store-hero-sub">Books · Merch · Digital · Print-on-Demand</div>
+      </div>
+
+      <!-- Ad banner top of store -->
+      <div class="ad-banner">
+        <span class="ad-banner-label">Ad</span>
+        <span class="ad-banner-slot">Your ad here — reach families and advocates across NC</span>
+        <button class="ad-banner-cta" onclick="switchTab('about'); setTimeout(()=>document.getElementById('advertise-section').scrollIntoView({behavior:'smooth'}),200)">Advertise →</button>
+      </div>
+
+      <!-- FEATURED BOOK -->
+      <div class="store-section">
+        <div class="sec-head"><div class="sec-title">FLAGSHIP <span>BOOK</span></div></div>
+        <div class="store-item-featured" onclick="alert('Buy Razor Wire Feels — $24. Coming soon!')">
+          <div class="store-item-featured-cover">
+            <div class="store-book-spine">RAZOR WIRE FEELS</div>
+            <div style="font-size:1.5rem; margin-top:0.5rem;">📖</div>
+          </div>
+          <div class="store-item-featured-info">
+            <span class="featured-badge">★ Flagship</span>
+            <div class="featured-title">Razor Wire Feels</div>
+            <div class="featured-author">Nicolas "Redbeard" Losito</div>
+            <div class="featured-desc">52 episodes. 5 parts. Six years of incarceration in North Carolina — written one letter at a time from inside a box. The memoir that started the platform.</div>
+            <div class="featured-price-row">
+              <span class="featured-price">$24</span>
+              <button class="featured-buy" onclick="event.stopPropagation(); alert('Add to cart — coming soon!')">Add to Cart →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MERCH -->
+      <div class="store-section">
+        <div class="sec-head"><div class="sec-title">MERCH</div><span class="sec-link">Print-on-demand</span></div>
+        <div class="store-grid">
+          <div class="store-item">
+            <div class="store-item-img merch">
+              <span class="store-item-emoji">👕</span>
+              <span class="store-item-img-label">Shirt</span>
+              <span class="store-item-new">New</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">RWF Logo Tee</div>
+              <div class="store-item-sub">Dark industrial print · Unisex · S–3XL</div>
+              <div class="store-item-price">$25</div>
+            </div>
+            <button class="store-item-btn" onclick="alert('Coming soon!')">Add to Cart</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img merch">
+              <span class="store-item-emoji">🧢</span>
+              <span class="store-item-img-label">Hat</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">Redbeard Cap</div>
+              <div class="store-item-sub">Structured · Adjustable · One size</div>
+              <div class="store-item-price">$20</div>
+            </div>
+            <button class="store-item-btn" onclick="alert('Coming soon!')">Add to Cart</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img merch">
+              <span class="store-item-emoji">🧥</span>
+              <span class="store-item-img-label">Hoodie</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">RWF Hoodie</div>
+              <div class="store-item-sub">Heavy fleece · Back graphic · S–3XL</div>
+              <div class="store-item-price">$45</div>
+            </div>
+            <button class="store-item-btn" onclick="alert('Coming soon!')">Add to Cart</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img merch">
+              <span class="store-item-emoji">🏷️</span>
+              <span class="store-item-img-label">Sticker Pack</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">Sticker Pack</div>
+              <div class="store-item-sub">5 die-cut stickers · RWF + Redbeard art</div>
+              <div class="store-item-price">$5</div>
+            </div>
+            <button class="store-item-btn" onclick="alert('Coming soon!')">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOKS / PUBLICATIONS -->
+      <div class="store-section">
+        <div class="sec-head"><div class="sec-title">BOOKS &amp; <span>PUBLICATIONS</span></div></div>
+        <div class="store-grid">
+          <div class="store-item">
+            <div class="store-item-img book">
+              <span class="store-item-emoji">📕</span>
+              <span class="store-item-img-label">Book</span>
+              <span class="store-item-new">Flagship</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">Razor Wire Feels</div>
+              <div class="store-item-sub">Memoir · Losito · 52 episodes</div>
+              <div class="store-item-price">$24</div>
+            </div>
+            <button class="store-item-btn" onclick="alert('Coming soon!')">Buy Now</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img book" style="background:linear-gradient(135deg,#0d1a0d,#1a2a1a);">
+              <span class="store-item-emoji">📗</span>
+              <span class="store-item-img-label">Coming Soon</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">Your Book Here</div>
+              <div class="store-item-sub">We publish for contributors · 80/20 split</div>
+              <div class="store-item-price" style="color:var(--dim);">TBD</div>
+            </div>
+            <button class="store-item-btn outline" onclick="switchTab('services')">Publish With Us</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img book" style="background:linear-gradient(135deg,#1a150a,#2a200a);">
+              <span class="store-item-emoji">📔</span>
+              <span class="store-item-img-label">Zine</span>
+              <span class="store-item-new">Vol 1</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">RWF Quarterly</div>
+              <div class="store-item-sub">Magazine · Vol. 1 · Written inside</div>
+              <div class="store-item-price" style="color:var(--dim);">Coming</div>
+            </div>
+            <button class="store-item-btn outline" onclick="alert('Coming soon!')">Notify Me</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img book" style="background:linear-gradient(135deg,#1a0a0a,#2a1010);">
+              <span class="store-item-emoji">📙</span>
+              <span class="store-item-img-label">Comic</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">K-Master K #0</div>
+              <div class="store-item-sub">Comic · Bich Fist Comics · 26 pages</div>
+              <div class="store-item-price" style="color:var(--dim);">Coming</div>
+            </div>
+            <button class="store-item-btn outline" onclick="alert('Coming soon!')">Notify Me</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIGITAL -->
+      <div class="store-section">
+        <div class="sec-head"><div class="sec-title">DIGITAL <span>DOWNLOADS</span></div></div>
+        <div class="store-grid">
+          <div class="store-item">
+            <div class="store-item-img digital">
+              <span class="store-item-emoji">📄</span>
+              <span class="store-item-img-label">PDF</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">Episode Collection</div>
+              <div class="store-item-sub">All 52 episodes · PDF · Parts I–V</div>
+              <div class="store-item-price">$8</div>
+            </div>
+            <button class="store-item-btn" onclick="alert('Coming soon!')">Download</button>
+          </div>
+          <div class="store-item">
+            <div class="store-item-img digital">
+              <span class="store-item-emoji">🎵</span>
+              <span class="store-item-img-label">Audio</span>
+            </div>
+            <div class="store-item-body">
+              <div class="store-item-name">Audio Episodes</div>
+              <div class="store-item-sub">MP3 collection · Read by Redbeard</div>
+              <div class="store-item-price" style="color:var(--dim);">Coming</div>
+            </div>
+            <button class="store-item-btn outline" onclick="alert('Coming soon!')">Notify Me</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ad banner mid-store -->
+      <div class="ad-banner">
+        <span class="ad-banner-label">Ad</span>
+        <span class="ad-banner-slot">Your message to 32,000 families across NC</span>
+        <button class="ad-banner-cta" onclick="switchTab('about'); setTimeout(()=>document.getElementById('advertise-section').scrollIntoView({behavior:'smooth'}),200)">Get a Spot →</button>
+      </div>
+
+    </div>
+  </div><!-- /view-store -->
+
+  <!-- ── SERVICES / SUBSCRIPTIONS ────────── -->
+  <div id="view-services" class="view">
+    <div class="services-view">
+      <div class="services-hero">
+        <div class="kicker">RWF Publishing LLC</div>
+        <div class="services-hero-hl">SERVICES &amp;<br><span>PLANS</span></div>
+        <p class="services-hero-sub">Whether you want unlimited uploads, a published book, or a produced track — we've got a tier for that. All managed by your outside rep.</p>
+      </div>
+
+      <!-- SUBSCRIPTION TIERS -->
+      <div style="padding:1.5rem 1rem; border-bottom:1px solid var(--border);">
+        <div class="sec-head"><div class="sec-title">PAGE <span>PLANS</span></div></div>
+        <div class="tier-cards">
+
+          <div class="tier-card">
+            <div class="tier-price-row">
+              <span class="tier-price">Free</span>
+            </div>
+            <div class="tier-name">Basic Page</div>
+            <div class="tier-features">
+              <div class="tier-feature">Public page on razorwirefeels.org</div>
+              <div class="tier-feature">Up to 5 writing/artwork uploads</div>
+              <div class="tier-feature">Listed in the directory</div>
+              <div class="tier-feature dim">No audio or video uploads</div>
+              <div class="tier-feature dim">No store listing</div>
+            </div>
+            <button class="tier-btn outline" onclick="switchTab('submit')">Get Your Free Page →</button>
+          </div>
+
+          <div class="tier-card featured-tier">
+            <span class="tier-popular">Most Popular</span>
+            <div class="tier-price-row">
+              <span class="tier-price">$10</span>
+              <span class="tier-per">/ month</span>
+            </div>
+            <div class="tier-name">Unlimited Creator</div>
+            <div class="tier-features">
+              <div class="tier-feature">Everything in Free</div>
+              <div class="tier-feature">Unlimited writing, artwork, audio &amp; video uploads</div>
+              <div class="tier-feature">Priority processing (live in 3 days)</div>
+              <div class="tier-feature">Featured in the directory</div>
+              <div class="tier-feature">Your work considered for podcast reads</div>
+              <div class="tier-feature">Store listing for your work</div>
+            </div>
+            <button class="tier-btn" onclick="alert('Subscribe — $10/month. Coming soon!')">Subscribe — $10/mo →</button>
+          </div>
+
+        </div>
+        <p style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.07em; color:var(--dim2); line-height:1.7; margin-top:0.85rem; padding:0.75rem; border:1px solid var(--border); background:var(--panel);">Subscriptions are billed to the outside representative or family member. The inmate's page stays active as long as the plan is active. Cancel any time.</p>
+      </div>
+
+      <!-- PUBLISHING / PRODUCTION SERVICES -->
+      <div style="padding:1.5rem 1rem; border-bottom:1px solid var(--border);">
+        <div class="sec-head"><div class="sec-title">PUBLISHING &amp; <span>PRODUCTION</span></div></div>
+        <div style="display:flex; flex-direction:column; gap:1px; background:var(--border); border:1px solid var(--border);">
+
+          <div class="service-contact-card">
+            <div class="scc-icon">📚</div>
+            <div class="scc-title">Book Publishing</div>
+            <div class="scc-desc">We take your manuscript from raw pages to a published, print-on-demand book. Cover design, formatting, ISBN, listing in our store, and your page on the platform. 80/20 split on all sales — you keep 80%.</div>
+            <div style="font-family:var(--display); font-size:1.5rem; color:var(--red); letter-spacing:0.06em; margin:0.25rem 0;">$500 flat</div>
+            <div style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.07em; color:var(--dim); line-height:1.6; margin-bottom:0.5rem;">One-time fee. Includes everything. No royalty cuts beyond the 20% platform share.</div>
+            <button class="scc-btn" onclick="switchTab('about')">Contact Us About Publishing →</button>
+          </div>
+
+          <div class="service-contact-card">
+            <div class="scc-icon">🎵</div>
+            <div class="scc-title">Music Production</div>
+            <div class="scc-desc">Submit raw vocals — phone recording, acapella, anything — and we'll produce a full track. Mixing, beats, mastering, and DistroKid distribution. Your music on Spotify, Apple Music, everywhere.</div>
+            <div style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.08em; color:var(--dim); margin:0.35rem 0;">Pricing varies by project scope.</div>
+            <button class="scc-btn" onclick="switchTab('about')">Contact Us for a Quote →</button>
+          </div>
+
+          <div class="service-contact-card">
+            <div class="scc-icon">🎬</div>
+            <div class="scc-title">Video / Recording</div>
+            <div class="scc-desc">Spoken word, interviews, spoken memoir excerpts — if you want something professionally recorded and produced, we can make it happen. Video for the platform, YouTube, or wherever it needs to go.</div>
+            <div style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.08em; color:var(--dim); margin:0.35rem 0;">Contact us to discuss your project.</div>
+            <button class="scc-btn" onclick="switchTab('about')">Contact Us →</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 80/20 REMINDER -->
+      <div style="padding:1.5rem 1rem;">
+        <div style="background:var(--red-dim); border:1px solid var(--red); padding:1.1rem;">
+          <div style="font-family:var(--display); font-size:1.2rem; color:var(--red); letter-spacing:0.06em; margin-bottom:0.4rem;">THE 80/20 RULE</div>
+          <p style="font-style:italic; font-size:0.82rem; color:var(--text); line-height:1.75;">Every dollar your page, your book, your music, or your merch earns — 80 cents goes to you (or your designated outside contact). 20 cents keeps the platform running. No exceptions. It's in the release form.</p>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /view-services -->
+
+  <!-- ── ABOUT / CONTACT / ADVERTISE ──── -->
+  <div id="view-about" class="view">
+    <div class="about-view">
+      <div class="about-hero">
+        <div class="kicker">North Carolina · Est. 2026</div>
+        <div class="about-headline">THE<br><span>MISSION</span></div>
+      </div>
+
+      <!-- MISSION -->
+      <div class="about-section">
+        <div class="psec-title" style="margin-bottom:0.85rem;">About Razor Wire Feels</div>
+        <div class="about-body">
+          <p>There are approximately <strong>32,000 people</strong> incarcerated in North Carolina state prisons right now. Most of them will never be heard. Not because they have nothing to say — but because no one built them a place to say it.</p>
+          <p><strong>Razor Wire Feels is that place.</strong> A permanent public page for every incarcerated person in NC who wants one. Their writing. Their art. Their music. Their story. Published, preserved, and open to the world.</p>
+          <p>The platform was founded by <strong>Nicolas "Redbeard the Great" Losito</strong>, who wrote the original <em>Razor Wire Feels</em> letters from inside NCDAC facilities between 2017 and 2023 — including significant time in solitary confinement. Those letters became the memoir that became the platform.</p>
+          <p>We are <strong>not affiliated with NCDAC</strong> or any correctional institution. We are a private publishing platform operated by RWF Publishing LLC.</p>
+        </div>
+      </div>
+
+      <!-- CONTACT OPTIONS -->
+      <div class="about-section">
+        <div class="psec-title" style="margin-bottom:0.85rem;">Contact Us</div>
+        <div class="contact-options">
+          <button class="contact-opt" onclick="alert('Email: contact@razorwirefeels.org — coming soon')">
+            <div class="contact-opt-icon">✉️</div>
+            <div class="contact-opt-title">Email</div>
+            <div class="contact-opt-sub">General inquiries, press, partnerships</div>
+          </button>
+          <button class="contact-opt" onclick="alert('Submission inquiries — coming soon')">
+            <div class="contact-opt-icon">📬</div>
+            <div class="contact-opt-title">Submit Work</div>
+            <div class="contact-opt-sub">Mail submissions, rep uploads, new pages</div>
+          </button>
+          <button class="contact-opt" onclick="alert('Publishing inquiries — coming soon')">
+            <div class="contact-opt-icon">📚</div>
+            <div class="contact-opt-title">Publishing</div>
+            <div class="contact-opt-sub">Book publishing, production quotes</div>
+          </button>
+          <button class="contact-opt" onclick="switchTab('about'); setTimeout(()=>document.getElementById('advertise-section').scrollIntoView({behavior:'smooth'}),100)">
+            <div class="contact-opt-icon">📣</div>
+            <div class="contact-opt-title">Advertise</div>
+            <div class="contact-opt-sub">Ad spots, sponsorships, partnerships</div>
+          </button>
+        </div>
+        <div class="contact-form">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input class="form-input" type="text" placeholder="Name or organization">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-input" rows="4" placeholder="What's on your mind..." style="resize:vertical; font-style:italic; line-height:1.6;"></textarea>
+          </div>
+          <button class="btn-red" onclick="alert('Contact form coming soon!')">Send Message →</button>
+        </div>
+      </div>
+
+      <!-- ADVERTISE -->
+      <div class="about-section" id="advertise-section">
+        <div class="psec-title" style="margin-bottom:0.85rem;">Advertise With Us</div>
+        <div class="advertise-card">
+          <div class="adv-head">
+            <div class="adv-head-title">📣 AD SPOTS</div>
+          </div>
+          <div class="adv-body">
+            <p class="adv-desc">Razor Wire Feels reaches a uniquely loyal audience: <strong style="color:var(--bright)">families of incarcerated people, criminal justice advocates, social workers, journalists, and readers</strong> who care deeply about the people on this platform. Not a lot of ads — we're keeping it clean. But a few targeted spots for the right partners.</p>
+            <div class="adv-spots">
+              <div class="adv-spot">
+                <span class="adv-spot-name">Home Page Banner</span>
+                <span class="adv-spot-price">$50<span style="font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.06em;">/mo</span></span>
+                <span class="adv-spot-avail">Available</span>
+              </div>
+              <div class="adv-spot">
+                <span class="adv-spot-name">Shout Outs Ticker Sponsor</span>
+                <span class="adv-spot-price">$75<span style="font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.06em;">/mo</span></span>
+                <span class="adv-spot-avail">Available</span>
+              </div>
+              <div class="adv-spot">
+                <span class="adv-spot-name">Directory Page Banner</span>
+                <span class="adv-spot-price">$40<span style="font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.06em;">/mo</span></span>
+                <span class="adv-spot-avail">Available</span>
+              </div>
+              <div class="adv-spot">
+                <span class="adv-spot-name">Store Page Sponsor</span>
+                <span class="adv-spot-price">$35<span style="font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.06em;">/mo</span></span>
+                <span class="adv-spot-avail">Available</span>
+              </div>
+              <div class="adv-spot">
+                <span class="adv-spot-name">Podcast Episode Sponsor</span>
+                <span class="adv-spot-price">$100<span style="font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:0.06em;">/ep</span></span>
+                <span class="adv-spot-avail">Available</span>
+              </div>
+            </div>
+            <p style="font-family:var(--mono); font-size:0.52rem; letter-spacing:0.06em; color:var(--dim2); line-height:1.7; margin-bottom:1rem;">All ads reviewed before publishing. We don't run ads that exploit or demean incarcerated people or their families. That's the one rule.</p>
+            <button class="btn-red" onclick="alert('Advertising inquiries: contact@razorwirefeels.org — coming soon')">Contact Us About Advertising →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER INFO -->
+      <div style="padding:1.5rem 1rem; border-top:1px solid var(--border);">
+        <div class="footer-brand" style="margin-bottom:0.5rem;">RAZOR WIRE <span>FEELS</span></div>
+        <div class="footer-meta">
+          razorwirefeels.org · RWF Publishing LLC<br>
+          Not affiliated with NCDAC or any correctional institution.<br>
+          Founded by Nicolas Losito "Redbeard the Great" · ID 1369313<br>
+          © 2026 RWF Publishing LLC · All rights reserved
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /view-about -->
+
+</div><!-- /view-container -->
+
+<!-- ══════════════════════════════════════
+     BOTTOM NAV
+══════════════════════════════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-tab active" id="tab-home" onclick="switchTab('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span class="nav-tab-label">Home</span>
+  </button>
+  <button class="nav-tab" id="tab-directory" onclick="switchTab('directory')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span class="nav-tab-label">Directory</span>
+  </button>
+  <button class="nav-tab" id="tab-store" onclick="switchTab('store')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <span class="nav-tab-label">Store</span>
+  </button>
+  <button class="nav-tab" id="tab-profile" onclick="switchTab('profile')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="nav-tab-label">Redbeard</span>
+  </button>
+  <button class="nav-tab" id="tab-more" onclick="openMoreSheet()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    <span class="nav-tab-label">More</span>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SEARCH OVERLAY
+══════════════════════════════════════ -->
+<div class="search-overlay" id="search-overlay">
+  <div class="search-top">
+    <input class="search-field" id="search-field" type="text" placeholder="Search contributors..." autofocus>
+    <button class="search-cancel" onclick="closeSearch()">Cancel</button>
+  </div>
+  <div class="search-results" id="search-results">
+    <div class="search-hint">Type to search contributors by name or ID number</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SIDE DRAWER
+══════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()">
+  <nav class="drawer" onclick="event.stopPropagation()">
+    <div class="drawer-head">
+      <span class="drawer-brand">RAZOR WIRE <span>FEELS</span></span>
+      <button class="drawer-close" onclick="closeDrawer()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-nav">
+      <button class="drawer-link" onclick="switchTab('home'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Home Feed
+      </button>
+      <button class="drawer-link" onclick="switchTab('directory'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Directory
+      </button>
+      <button class="drawer-link" onclick="switchTab('profile'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Redbeard's Page
+      </button>
+      <div class="drawer-sep"></div>
+      <button class="drawer-link" onclick="switchTab('store'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Store
+      </button>
+      <button class="drawer-link" onclick="switchTab('services'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Services &amp; Plans
+      </button>
+      <button class="drawer-link" onclick="switchTab('about'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        About &amp; Contact
+      </button>
+      <button class="drawer-link" onclick="closeDrawer(); openLoginModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Rep Login
+      </button>
+      <div class="drawer-sep"></div>
+      <button class="drawer-link cta" onclick="switchTab('submit'); closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Get Your Free Page
+      </button>
+      <button class="drawer-link" onclick="closeDrawer(); document.querySelector('.support-section').scrollIntoView({behavior:'smooth'}); switchTab('home');">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Support the Cause
+      </button>
+      <button class="drawer-link" onclick="closeDrawer(); switchTab('home'); setTimeout(()=>document.querySelector('.phonein-section').scrollIntoView({behavior:'smooth'}),200);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Call In Line
+      </button>
+      <div class="drawer-sep"></div>
+      <a class="drawer-link" href="https://youtube.com/@razorwirefeels" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42C1 8.14 1 12 1 12s0 3.86.46 5.58a2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95C23 15.86 23 12 23 12s0-3.86-.46-5.58z"/><polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        Podcast on YouTube
+      </a>
+      <div class="drawer-sep"></div>
+      <a class="drawer-link" href="https://razorwirefeels.org" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Full Site
+      </a>
+    </div>
+    <div class="drawer-footer">
+      razorwirefeels.org · RWF Publishing LLC<br>
+      © 2026 · Founded by Nicolas Losito
+    </div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+     EPISODE MODAL
+══════════════════════════════════════ -->
+<div class="ep-modal" id="ep-modal">
+  <div class="ep-modal-head">
+    <button class="ep-modal-back" onclick="closeEpisode()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="ep-modal-title" id="ep-modal-title">Razor Wire Feels</div>
+  </div>
+  <div class="ep-modal-body" id="ep-modal-body">
+    <!-- content injected by JS -->
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+
+/* ── AGE GATE ────────────────────────── */
+(function() {
+  if (sessionStorage.getItem('rwf_age_ok')) {
+    document.getElementById('age-gate').style.display = 'none';
+  }
+})();
+function enterSite() {
+  sessionStorage.setItem('rwf_age_ok', '1');
+  var gate = document.getElementById('age-gate');
+  gate.style.transition = 'opacity 0.4s';
+  gate.style.opacity = '0';
+  setTimeout(function() { gate.style.display = 'none'; }, 400);
+}
+function denyEntry() {
+  document.getElementById('age-gate').style.display = 'none';
+  document.getElementById('age-denied').classList.add('show');
+}
+
+/* ── LOGIN MODAL ─────────────────────── */
+function openLoginModal() {
+  document.getElementById('login-modal').classList.add('open');
+}
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+}
+function switchModalTab(tab, btn) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('modal-login').style.display = tab === 'login' ? 'flex' : 'none';
+  document.getElementById('modal-signup').style.display = tab === 'signup' ? 'flex' : 'none';
+}
+
+/* ── MORE SHEET ──────────────────────── */
+function openMoreSheet() {
+  document.getElementById('more-sheet-overlay').classList.add('open');
+}
+function closeMoreSheet() {
+  document.getElementById('more-sheet-overlay').classList.remove('open');
+}
+
+/* ── NAVIGATION ─────────────────────── */
+var navTabs = ['home','directory','store','profile','submit','services','about'];
+function switchTab(tab) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  var view = document.getElementById('view-' + tab);
+  if (view) view.classList.add('active');
+  var navBtn = document.getElementById('tab-' + tab);
+  if (navBtn) navBtn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+/* ── DRAWER ─────────────────────────── */
+function openDrawer() {
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+/* ── SEARCH OVERLAY ─────────────────── */
+function openSearch() {
+  document.getElementById('search-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('search-field').focus(), 100);
+}
+function closeSearch() {
+  document.getElementById('search-overlay').classList.remove('open');
+  document.getElementById('search-field').value = '';
+  document.getElementById('search-results').innerHTML = '<div class="search-hint">Type to search contributors by name or ID number</div>';
+}
+
+document.getElementById('search-field').addEventListener('input', function() {
+  var q = this.value.trim().toLowerCase();
+  var results = document.getElementById('search-results');
+  if (!q) {
+    results.innerHTML = '<div class="search-hint">Type to search contributors by name or ID number</div>';
+    return;
+  }
+  var contributors = [
+    { name: 'Nicolas Losito', alias: '"Redbeard the Great"', id: '1369313', facility: 'Central Prison · Raleigh, NC', tab: 'profile' }
+  ];
+  var matches = contributors.filter(c =>
+    c.name.toLowerCase().includes(q) ||
+    c.id.includes(q) ||
+    c.alias.toLowerCase().includes(q)
+  );
+  if (!matches.length) {
+    results.innerHTML = '<div class="search-hint" style="color:var(--dim)">No results for "' + q + '"</div>';
+    return;
+  }
+  results.innerHTML = matches.map(c => `
+    <div class="inmate-card has-page featured" style="border:1px solid var(--border); margin-bottom:1px; cursor:pointer;"
+      onclick="closeSearch(); switchTab('${c.tab}')">
+      <div class="ic-avatar">RL</div>
+      <div class="ic-body">
+        <div class="ic-name">${c.name}</div>
+        <div class="ic-alias">${c.alias}</div>
+        <div class="ic-id">ID: ${c.id} · NCDAC</div>
+        <div class="ic-bottom" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border);">
+          <span class="ic-facility">${c.facility}</span>
+          <span class="ic-cta">View →</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+});
+
+/* ── DIRECTORY FILTER ───────────────── */
+function setFilter(btn, type) {
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  var cards = document.querySelectorAll('#inmate-list .inmate-card');
+  cards.forEach(function(card) {
+    if (type === 'all') { card.style.display = ''; return; }
+    if (type === 'page' && card.classList.contains('has-page')) { card.style.display = ''; return; }
+    if (type === 'new' && card.dataset.new === 'true') { card.style.display = ''; return; }
+    if (type === 'writing' && card.dataset.type && card.dataset.type.includes('writing')) { card.style.display = ''; return; }
+    if (type === 'art' && card.dataset.type && card.dataset.type.includes('art')) { card.style.display = ''; return; }
+    card.style.display = 'none';
+  });
+}
+
+function doSearch() {
+  var q = document.getElementById('dir-search-input').value.toLowerCase().trim();
+  var cards = document.querySelectorAll('#inmate-list .inmate-card');
+  cards.forEach(function(card) {
+    var name = (card.dataset.name || '').toLowerCase();
+    var id = (card.dataset.id || '').toLowerCase();
+    if (!q || name.includes(q) || id.includes(q)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+document.getElementById('dir-search-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doSearch();
+});
+
+/* ── EPISODE TABS ───────────────────── */
+document.querySelectorAll('.ep-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.ep-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    // show/hide media vs writing panel
+    var isMedia = tab.dataset.epTab === 'media';
+    document.getElementById('media-tab-panel').style.display = isMedia ? 'block' : 'none';
+    document.getElementById('writing-tab-panel').style.display = isMedia ? 'none' : 'block';
+  });
+});
+
+function showMediaTab() {
+  document.querySelectorAll('.ep-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-ep-tab="media"]').classList.add('active');
+  document.getElementById('media-tab-panel').style.display = 'block';
+  document.getElementById('writing-tab-panel').style.display = 'none';
+}
+
+/* ── AUDIO PLAYER (demo) ─────────────── */
+var playing = null;
+function togglePlay(btn) {
+  var icon = btn.querySelector('svg');
+  var progressFill = btn.closest('.audio-bar').querySelector('.audio-progress-fill');
+  if (playing && playing !== btn) {
+    // stop previous
+    playing.querySelector('svg').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+    clearInterval(playing._timer);
+    playing = null;
+  }
+  if (btn._playing) {
+    btn._playing = false;
+    clearInterval(btn._timer);
+    playing = null;
+    icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+  } else {
+    btn._playing = true;
+    playing = btn;
+    icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+    var pct = parseFloat(progressFill.style.width) || 0;
+    btn._timer = setInterval(function() {
+      pct += 0.3;
+      if (pct >= 100) { pct = 0; clearInterval(btn._timer); btn._playing = false; playing = null; icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>'; }
+      progressFill.style.width = pct + '%';
+    }, 80);
+  }
+}
+function seekAudio(bar) {
+  var fill = bar.querySelector('.audio-progress-fill');
+  fill.style.width = '25%';
+}
+
+/* ── EPISODE DATA ───────────────────── */
+var episodes = {
+  'final': {
+    part: 'Part V · Final Episode · a.o.T.D',
+    alias: 'Redbeard the Astronomer',
+    title: 'C-Lizzle Mainizzle — Greetings from the Dungeon',
+    date: 'October 26, 2023',
+    text: `<p>The hole again. Final weeks. No phone, no coffee, no sunlight.</p>
+    <p>A CO came by and asked him what he was writing. He said: "A letter." The CO asked who to. He said: "Whoever reads it."</p>
+    <p>The CO walked away and didn't come back for four hours. When he did, he slid a cup of coffee under the door without a word.</p>
+    <p>That's the last thing Redbeard the Astronomer wrote about from inside. The mathematical inquiry into the size of a dick required to choke the sun was conducted in collaboration with that same CO, who Googled it and came back an hour later with an answer. The answer was not printable.</p>
+    <div class="redbeard-sign">This has been the final incarcerated episode of Razor Wire Feels.<br>I'm your host, Redbeard the Astronomer.<br>See you soon Cuz.</div>
+    <div class="aotd">(a.o.T.D over)</div>`
+  },
+  'origin': {
+    part: 'Part IV · 12/12/20 · Origin Episode',
+    alias: 'Redbeard the Regressor',
+    title: 'The Birth of Redbeard the Great',
+    date: 'December 12, 2020',
+    text: `<p>Guards shook down the block today and took everything. Forty pairs of socks. Ten pants. Fourteen boxers. The block grieved collectively.</p>
+    <p>He went on a three-page tangent about language regressing to cave paintings, the origin of milk ("someone had to decide to try that"), cannibalism as the first science. Then:</p>
+    <p>He's been teaching himself card tricks. One to two hours a day. Found a book on the block — "Card Tricks Anyone Can Do" — and has been working through it methodically. He can already do four. He has names for each of them.</p>
+    <div class="redbeard-sign">Already have my Magician name picked out — Redbeard the Great. Coincidence? I think not.</div>
+    <p>This has been another episode of Razor Wire Feels. I'm your host, Redbeard the Regressor.</p>`
+  },
+  'astronomer': {
+    part: 'Part V · Final Episodes',
+    alias: 'Redbeard the Astronomer',
+    title: 'The Allan Sandage Letter',
+    date: 'October 2023',
+    text: `<p>"Astronomy is an impossible science. It's a wonder we know anything at all." — Allan Sandage.</p>
+    <p>He'd been reading about Sandage for two weeks. No specific reason. The name came up in something else and he followed it. In a cell. In the dark.</p>
+    <p>The biggest question, Sandage said, is whether the universe is finite or infinite. Lying in the hole he wondered the same about time. Whether there's an edge to it. Whether being in one place long enough means you start to understand the shape of the whole thing from the inside.</p>
+    <p>He decided the answer is yes. And that you have to go all the way to the edge to know that.</p>
+    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Astronomer.</div>
+    <div class="aotd">"The biggest question is: did it happen once, or does it happen over and over?" — A. Sandage</div>`
+  },
+  'regressor': {
+    part: 'Part IV · December 2020',
+    alias: 'Redbeard the Regressor',
+    title: 'Going Backwards to Move Forward',
+    date: 'December 2020',
+    text: `<p>He'd been at it for two weeks. Card tricks. The same four moves, over and over, until his hands stopped thinking about them and just did them.</p>
+    <p>Someone on the block watched him practice and said: "Why you learning magic in prison?"</p>
+    <p>He said: "Because a magician makes things disappear, and I've been trying to figure out how they do it in here."</p>
+    <p>The guy didn't say anything after that.</p>
+    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Regressor.</div>`
+  },
+  'cold-open': {
+    part: 'Part III · Solitary',
+    alias: 'Redbeard the Great',
+    title: 'The Cold Open',
+    date: '2019–2020',
+    text: `<p>Six miles from where I grew up. That's where they put me. I could see a window from my cell — sandblasted so you couldn't see through it. There were grates on it anyway. I stared at it for a year.</p>
+    <p>Sometimes when the light hit it right, in the afternoon, it looked almost blue. Not quite blue. Some other color that doesn't have a name because nobody's needed to name it before.</p>
+    <p>I named it. I'm not going to say what. Some things you keep.</p>
+    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
+  },
+  'covid-radio': {
+    part: 'Part IV · 2020',
+    alias: 'Redbeard the Great',
+    title: 'COVID Through a Radio',
+    date: 'March–December 2020',
+    text: `<p>The world went into lockdown March 2020. I'd been locked down since May 2019. I heard the whole pandemic through a transistor radio.</p>
+    <p>Glenn Beck. Rush Limbaugh. NPR. I listened to all of them, every day, for hours. The news coming from the outside sounded exactly like the inside: fear, bad information, people losing their minds in enclosed spaces.</p>
+    <p>I didn't tell anyone I felt that way. I wrote it instead.</p>
+    <p>We came out more in the hole during COVID than before it. Nobody explained why. The logic of incarceration doesn't require explanation.</p>
+    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
+  },
+  'mason': {
+    part: 'Part V · November 2022',
+    alias: 'Redbeard the Great',
+    title: 'Mason',
+    date: 'November 14, 2022',
+    text: `<p>His son, Mason, is six years old. He has never seen a picture of him. His mom was showing him photos on her phone. He pointed at one and asked who that was.</p>
+    <p>She said: that's your dad, he comes home from prison next year.</p>
+    <p>Mason looked at her and said — proudly, by all accounts — "My Dad comes home from prison next year."</p>
+    <p>His baby mama was furious that he apparently said it to like four other kids at school that week. She called to tell him about it. He could barely hear her over the sound of being the proudest man alive.</p>
+    <div class="redbeard-sign">I'm proud of the kid for being proud of me coming home from prison.<br>This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
+  },
+  'paranoid': {
+    part: 'Part V · March 2023',
+    alias: 'Redbeard the Paranoid',
+    title: 'Squeaky Pip — Solitary Confinement is the Catalyst',
+    date: 'March 30, 2023',
+    text: `<p>Back in the hole. Protective custody this time. Different feeling from solitary — more chaotic, less controlled. People in PC are there because someone outside is trying to hurt them.</p>
+    <p>A stranger he'd never met walked up to him one morning and handed him a freshly sharpened pencil. Said he seemed like a good dude. Said nothing else and walked away.</p>
+    <p>He knew immediately what it meant. He understood the geometry of the gesture.</p>
+    <p>That afternoon he could hear, through two walls, someone coaching someone else on where to aim. Specifically: under the ear. The carotid artery. He wrote it down. He wrote it all down.</p>
+    <p>Then he wrote the letter anyway. He always writes the letter.</p>
+    <div class="redbeard-sign">Respect from a bunch of criminals isn't gonna pay my bills or raise my son. I'm coming home.<br>This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Paranoid.</div>`
+  },
+  'breaking-bad': {
+    part: 'Part IV–V · March 2022',
+    alias: 'Redbeard the Great',
+    title: 'The Breaking Bad Letter — Mary Beth & Nate',
+    date: 'March 27, 2022',
+    text: `<p>He tried to watch the Breaking Bad episode where Jesse's girlfriend chokes on her vomit. Season two. He'd seen it before, years ago, before everything.</p>
+    <p>He couldn't get through it. His body went into a full panic attack. Hyperventilation. Shaking. He had to lie on the floor of his cell and breathe until it stopped.</p>
+    <p>That's how Mary Beth went out. Alone in her apartment.</p>
+    <p>That's how Nate went out. Alone in his room.</p>
+    <p>Both of them are people he introduced to this seductively numbing personal form of hell. He carries that. He wrote about carrying it — not for absolution, not for pity. Just because it's true and it needed to be somewhere outside his head.</p>
+    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Great.</div>`
+  },
+  'thanksgiving': {
+    part: 'Part IV · November 2020',
+    alias: 'Redbeard the Wise',
+    title: 'Gobble Gobble Motherfuckers',
+    date: 'November 26, 2020',
+    text: `<p>Thanksgiving on lockdown. 166.75 hours a week in the cell. One hour out, three days a week — maybe. Depends on staffing.</p>
+    <p>The prison radio played Alice's Restaurant at the exact moment they slid his tray under the door. He took this as a sign. A sign of what, exactly, he wasn't sure. A sign that the universe has a sense of irony and a mean streak.</p>
+    <p>The turkey was one slice. That thick — he drew a line in the margin, maybe a centimeter wide. He ate it in one bite and then spent the rest of the meal writing about it.</p>
+    <p>We came out more in the hole during COVID than before it. He got used to the math of it — the conversion rate between time spent and time remaining, the exchange rate between outside hours and inside hours.</p>
+    <div class="redbeard-sign">This has been another episode of Razor Wire Feels.<br>I'm your host, Redbeard the Wise.</div>`
+  }
+};
+
+function openEpisode(id) {
+  var ep = episodes[id];
+  if (!ep) return;
+  document.getElementById('ep-modal-title').textContent = ep.part;
+  document.getElementById('ep-modal-body').innerHTML = `
+    <div class="ep-modal-kicker">${ep.part}</div>
+    <h1 class="ep-modal-headline">${ep.title}</h1>
+    <div class="ep-modal-byline">${ep.alias} · ${ep.date}</div>
+    <div class="ep-modal-text">${ep.text}</div>
+    <div class="ep-nav">
+      <button class="ep-nav-btn" onclick="closeEpisode()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <button class="ep-nav-btn" onclick="switchTab('profile'); closeEpisode()">
+        All Episodes
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </div>
+  `;
+  document.getElementById('ep-modal').classList.add('open');
+  document.getElementById('ep-modal').scrollTop = 0;
+}
+
+function closeEpisode() {
+  document.getElementById('ep-modal').classList.remove('open');
+}
+
+/* ── KEYBOARD SHORTCUTS ─────────────── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeSearch();
+    closeDrawer();
+    closeEpisode();
+  }
+});
+
+/* ── STAT COUNTER ANIMATION ─────────── */
+function animateCount(el, target, duration) {
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function() {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = Math.floor(start).toLocaleString();
+  }, 16);
+}
+setTimeout(function() {
+  animateCount(document.getElementById('stat-count'), 32000, 1800);
+}, 400);
+
+</script>
+</body>
+</html>
