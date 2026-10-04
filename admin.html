@@ -1,1609 +1,283 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RWF Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0d0d0d;
-  --surface: #1a1a1a;
-  --surface2: #242424;
-  --surface3: #2e2e2e;
-  --border: #333;
-  --border-light: #444;
-  --text: #e0e0e0;
-  --text-dim: #888;
-  --text-muted: #555;
-  --accent: #ff3333;
-  --accent-dim: #cc2222;
-  --accent-glow: rgba(255, 51, 51, 0.15);
-  --green: #33cc66;
-  --green-dim: rgba(51, 204, 102, 0.15);
-  --yellow: #ffcc33;
-  --yellow-dim: rgba(255, 204, 51, 0.15);
-  --font-display: 'Permanent Marker', cursive;
-  --font-body: 'Courier Prime', monospace;
-  --radius: 4px;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 100vh;
-}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-/* ── LOGIN SCREEN ── */
-#login-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.login-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 3rem 2.5rem;
-  max-width: 440px;
-  width: 100%;
-  text-align: center;
-}
-
-.login-box h1 {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  color: var(--accent);
-  margin-bottom: 0.25rem;
-  letter-spacing: 2px;
-}
-
-.login-box .subtitle {
-  color: var(--text-dim);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 2rem;
-}
-
-.login-box input {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 13px;
-  margin-bottom: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.login-box input:focus {
-  border-color: var(--accent);
-}
-
-.login-box input::placeholder { color: var(--text-muted); }
-
-.login-box .repo-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.login-box .repo-row input { margin-bottom: 0; }
-
-.login-error {
-  color: var(--accent);
-  font-size: 12px;
-  margin-bottom: 1rem;
-  display: none;
-}
-
-/* ── BUTTONS ── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
-  border: 1px solid var(--border);
-  background: var(--surface2);
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.15s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background: var(--accent-dim);
-  border-color: var(--accent-dim);
-  color: #fff;
-}
-
-.btn-small {
-  padding: 6px 12px;
-  font-size: 11px;
-}
-
-.btn-ghost {
-  background: transparent;
-  border-color: transparent;
-}
-
-.btn-ghost:hover {
-  background: var(--surface2);
-  border-color: var(--border);
-}
-
-.btn-danger {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: transparent;
-}
-
-.btn-danger:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
-/* ── APP LAYOUT ── */
-#app { display: none; }
-
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.app-header .logo {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  color: var(--accent);
-  letter-spacing: 1px;
-}
-
-.app-header .logo span {
-  color: var(--text-dim);
-  font-family: var(--font-body);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-left: 12px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-actions .user-info {
-  color: var(--text-dim);
-  font-size: 12px;
-}
-
-/* ── DASHBOARD ── */
-.dashboard {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.dash-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.dash-header h2 {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: var(--text);
-}
-
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  max-width: 400px;
-}
-
-.search-bar input {
-  flex: 1;
-  padding: 8px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 13px;
-  outline: none;
-}
-
-.search-bar input:focus { border-color: var(--accent); }
-
-.stats-bar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1rem 1.5rem;
-  flex: 1;
-  min-width: 140px;
-}
-
-.stat-card .stat-num {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  color: var(--accent);
-}
-
-.stat-card .stat-label {
-  font-size: 11px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-/* ── CONTRIBUTOR GRID ── */
-.contributor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-}
-
-.contributor-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1.25rem;
-  cursor: pointer;
-  transition: all 0.15s;
-  position: relative;
-}
-
-.contributor-card:hover {
-  border-color: var(--accent);
-  background: var(--surface2);
-}
-
-.contributor-card .card-id {
-  font-size: 11px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 4px;
-}
-
-.contributor-card .card-name {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.contributor-card .card-facility {
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-bottom: 8px;
-}
-
-.contributor-card .card-meta {
-  display: flex;
-  gap: 12px;
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.card-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 2px 8px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 1px solid;
-}
-
-.card-badge.live {
-  color: var(--green);
-  border-color: var(--green);
-  background: var(--green-dim);
-}
-
-.card-badge.draft {
-  color: var(--yellow);
-  border-color: var(--yellow);
-  background: var(--yellow-dim);
-}
-
-/* ── EDITOR VIEW ── */
-#editor-view { display: none; }
-
-.editor-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.editor-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.editor-header h2 {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-}
-
-.editor-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.form-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.form-section h3 {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--accent);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.form-row {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.form-group {
-  flex: 1;
-  min-width: 200px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 11px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 10px 14px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 13px;
-  outline: none;
-  resize: vertical;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  border-color: var(--accent);
-}
-
-.form-group select option { background: var(--bg); }
-
-/* ── CONTENT ITEMS ── */
-.content-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.content-item {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 1rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.content-item .item-type {
-  padding: 4px 10px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.content-item .item-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.content-item .item-title {
-  font-weight: 700;
-  margin-bottom: 4px;
-  color: var(--text);
-}
-
-.content-item .item-preview {
-  font-size: 12px;
-  color: var(--text-dim);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.content-item .item-actions {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-/* ── ADD CONTENT MODAL ── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 2rem;
-}
-
-.modal-overlay.active { display: flex; }
-
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  max-width: 600px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 2rem;
-}
-
-.modal h3 {
-  font-family: var(--font-display);
-  color: var(--accent);
-  margin-bottom: 1.5rem;
-}
-
-.modal .form-group { margin-bottom: 1rem; }
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-/* ── IMAGE UPLOAD ── */
-.upload-zone {
-  border: 2px dashed var(--border);
-  padding: 2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 1rem;
-}
-
-.upload-zone:hover {
-  border-color: var(--accent);
-  background: var(--accent-glow);
-}
-
-.upload-zone p {
-  color: var(--text-dim);
-  font-size: 13px;
-}
-
-.upload-zone .upload-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.image-preview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
-}
-
-.image-preview-grid img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border: 1px solid var(--border);
-}
-
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  padding: 12px 20px;
-  background: var(--green);
-  color: #000;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
-  z-index: 300;
-  transform: translateY(100px);
-  opacity: 0;
-  transition: all 0.3s;
-}
-
-.toast.active {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.toast.error { background: var(--accent); color: #fff; }
-
-/* ── LOADING ── */
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 250;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.loading-overlay.active { display: flex; }
-.loading-overlay .spinner { width: 32px; height: 32px; border-width: 3px; }
-.loading-overlay p { color: var(--text-dim); font-size: 13px; }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
-  .dashboard { padding: 1rem; }
-  .contributor-grid { grid-template-columns: 1fr; }
-  .form-row { flex-direction: column; }
-  .dash-header { flex-direction: column; align-items: flex-start; }
-  .search-bar { max-width: 100%; width: 100%; }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Razor Wire Feels — North Carolina Incarcerated Archive</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React & ReactDOM CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX in Browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0D0D0D; color: #F3F4F6; }
+    .font-mono { font-family: 'Courier Prime', monospace; }
+  </style>
 </head>
 <body>
+  <div id="root"></div>
 
-<!-- ════════════ LOGIN ════════════ -->
-<div id="login-screen">
-  <div class="login-box">
-    <h1>RWF</h1>
-    <div class="subtitle">Admin Panel</div>
-    <input type="password" id="token-input" placeholder="GitHub Personal Access Token" autocomplete="off">
-    <div class="repo-row">
-      <input type="text" id="owner-input" placeholder="Owner" value="bjornothunder">
-      <input type="text" id="repo-input" placeholder="Repo" value="razorwirefeels">
-    </div>
-    <div class="login-error" id="login-error"></div>
-    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Connect</button>
-    <p style="margin-top:1.5rem;font-size:11px;color:var(--text-muted)">
-      Requires a GitHub token with <strong>repo</strong> scope.<br>
-      <a href="https://github.com/settings/tokens/new?scopes=repo&description=RWF+Admin" target="_blank" style="color:var(--accent)">Generate token →</a>
-    </p>
-  </div>
-</div>
+  <script type="text/babel">
+    function App() {
+      const [searchTerm, setSearchTerm] = React.useState('');
+      const [selectedFacility, setSelectedFacility] = React.useState('All');
 
-<!-- ════════════ APP ════════════ -->
-<div id="app">
-  <!-- HEADER -->
-  <div class="app-header">
-    <div class="logo">RWF <span>Admin</span></div>
-    <div class="header-actions">
-      <span class="user-info" id="user-info"></span>
-      <button class="btn btn-small btn-ghost" onclick="logout()">Logout</button>
-    </div>
-  </div>
+      const creators = [
+        {
+          id: 'NC-1369313',
+          name: 'Nicolas Losito',
+          alias: 'Redbeard the Great',
+          facility: 'Central Prison · Raleigh, NC',
+          category: 'Memoir & Audio Dispatches',
+          worksCount: '52 Episodes · Founder Archive',
+          tier: 'Founder / Archival',
+          snippet: '"Written and recorded from the hole. Uncensored, unbroken, and preserved forever."'
+        },
+        {
+          id: 'NC-1489201',
+          name: 'Marcus V.',
+          alias: 'Scribe of Maury',
+          facility: 'Maury Correctional · Hookerton, NC',
+          category: 'Poetry & Essays',
+          worksCount: '8 Handwritten Manuscripts',
+          tier: 'Indigent (Free Page)',
+          snippet: '"Reflective essays on survival, redemption, and rebuilding a life beyond the wire."'
+        },
+        {
+          id: 'NC-1502394',
+          name: 'Darius K.',
+          alias: 'K-Master K',
+          facility: 'Scotland CI · Laurinburg, NC',
+          category: 'Visual Art & Ink Sketches',
+          worksCount: '12 Scanned Drawings',
+          tier: 'Family Sponsored ($10/mo)',
+          snippet: '"High-concept ink drawings and graphic story panels created in segregation."'
+        },
+        {
+          id: 'NC-1610422',
+          name: 'Tyrell W.',
+          alias: 'Poet of Pasquotank',
+          facility: 'Pasquotank CI · Elizabeth City, NC',
+          category: 'Poetry & Spoken Word',
+          worksCount: '14 Poems',
+          tier: 'Indigent (Free Page)',
+          snippet: '"Rhymes and reflections written on prison-issued stationery during lockdown."'
+        }
+      ];
 
-  <!-- DASHBOARD -->
-  <div id="dashboard-view">
-    <div class="dashboard">
-      <div class="stats-bar">
-        <div class="stat-card">
-          <div class="stat-num" id="stat-total">0</div>
-          <div class="stat-label">Contributors</div>
+      const facilities = [
+        'All',
+        'Central Prison · Raleigh, NC',
+        'Maury Correctional · Hookerton, NC',
+        'Scotland CI · Laurinburg, NC',
+        'Pasquotank CI · Elizabeth City, NC'
+      ];
+
+      const filtered = creators.filter(c => {
+        const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              c.alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              c.id.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFacility = selectedFacility === 'All' || c.facility === selectedFacility;
+        return matchesSearch && matchesFacility;
+      });
+
+      return (
+        <div className="min-h-screen flex flex-col justify-between selection:bg-[#DC2626] selection:text-white">
+          
+          {/* HEADER / NAVIGATION */}
+          <header className="sticky top-0 z-50 bg-[#121212]/95 border-b border-zinc-800 px-4 py-3 backdrop-blur">
+            <div className="max-w-6xl mx-auto flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-[#DC2626] font-mono font-bold text-black flex items-center justify-center rounded">RWF</div>
+                <div>
+                  <span className="font-mono font-bold text-base tracking-wider text-white block leading-none">RAZOR WIRE FEELS</span>
+                  <span className="text-[10px] text-[#DC2626] font-mono tracking-widest uppercase">NORTH CAROLINA INCARCERATED ARCHIVE</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <a href="#mail-intake" className="text-xs font-mono text-gray-300 hover:text-white hidden sm:block">
+                  Mail Ingestion
+                </a>
+                <a href="#support" className="bg-[#DC2626] hover:bg-red-700 text-white font-bold text-xs font-mono uppercase px-3.5 py-1.5 rounded tracking-wider transition-all">
+                  Sponsor ($10/mo)
+                </a>
+              </div>
+            </div>
+          </header>
+
+          {/* HERO SECTION */}
+          <section className="px-6 py-12 text-center bg-gradient-to-b from-[#141414] to-[#0D0D0D] border-b border-zinc-800">
+            <div className="max-w-3xl mx-auto space-y-4">
+              <span className="text-xs font-mono text-red-400 border border-red-900/60 bg-red-950/40 px-3.5 py-1 rounded-full inline-block">
+                PHYSICAL MAIL INTAKE · AI OCR TRANSCRIBED · 60+ NC FACILITIES
+              </span>
+              <h1 className="text-3xl md:text-5xl font-black font-mono uppercase tracking-tight">
+                32,000 PEOPLE. <span className="text-[#DC2626]">ONE VOICE EACH.</span>
+              </h1>
+              <p className="text-sm md:text-base text-gray-300 font-light leading-relaxed">
+                Preserving and amplifying the memoirs, poetry, and artwork of incarcerated North Carolinians. Written on paper, scanned to the web, preserved forever.
+              </p>
+            </div>
+          </section>
+
+          {/* PODCAST HIGHLIGHT BANNER */}
+          <section id="podcast" className="bg-black/80 border-b border-zinc-800 py-6 px-4">
+            <div className="max-w-4xl mx-auto bg-[#141414] border border-zinc-800 p-4 sm:p-6 rounded flex flex-col sm:flex-row items-center gap-5">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#DC2626] text-black font-mono font-black flex-shrink-0 flex items-center justify-center text-center text-xs p-2 rounded">
+                PODCAST WEEKLY
+              </div>
+              <div className="space-y-1 text-center sm:text-left flex-1">
+                <div className="text-[10px] font-mono text-[#DC2626] uppercase tracking-widest">DISPATCHES FROM THE BLACK HOLE</div>
+                <h3 className="font-bold text-base font-mono text-white">Hosted by Nicolas "Redbeard the Great" Losito</h3>
+                <p className="text-xs text-gray-400 font-mono">
+                  Weekly audio readings of handwritten letters sent to our NC PO Box. Real voices, authentic stories, live on Spotify, Apple, & YouTube.
+                </p>
+              </div>
+              <a href="#podcast" className="bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-mono font-bold px-4 py-2 rounded border border-zinc-700 text-center flex-shrink-0">
+                Listen Now →
+              </a>
+            </div>
+          </section>
+
+          {/* CREATOR DIRECTORY */}
+          <main className="max-w-6xl mx-auto px-4 py-8 space-y-6 w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-800 pb-4">
+              <div>
+                <h2 className="text-xl font-bold font-mono uppercase">North Carolina Creator Directory</h2>
+                <p className="text-xs text-gray-400 font-mono mt-0.5">Explore authentic handwritten portfolios from NC carceral facilities.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                <select 
+                  value={selectedFacility}
+                  onChange={e => setSelectedFacility(e.target.value)}
+                  className="bg-[#181818] border border-zinc-800 text-xs font-mono rounded px-3 py-1.5 text-gray-300 focus:outline-none focus:border-[#DC2626]"
+                >
+                  {facilities.map(f => <option key={f} value={f}>{f}</option>)}
+                </select>
+                <input 
+                  type="text" 
+                  placeholder="Search name, ID..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="bg-[#181818] border border-zinc-800 text-xs font-mono rounded px-3 py-1.5 text-white w-full sm:w-48 focus:outline-none focus:border-[#DC2626]"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filtered.map(c => (
+                <div key={c.id} className="bg-[#141414] border border-zinc-800 hover:border-[#DC2626] p-5 rounded space-y-3 transition-all flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-xs font-mono">
+                      <span className="bg-zinc-800 text-red-400 px-2 py-0.5 rounded">{c.id}</span>
+                      <span className="text-gray-500 text-[11px]">{c.tier}</span>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg font-mono text-white">{c.name}</h3>
+                      <div className="text-xs text-[#DC2626] font-mono">"{c.alias}"</div>
+                      <div className="text-xs text-gray-400 mt-0.5">{c.facility}</div>
+                    </div>
+                    <p className="text-xs text-gray-300 font-mono italic bg-black/50 p-3 rounded border border-zinc-900 leading-relaxed">
+                      {c.snippet}
+                    </p>
+                  </div>
+                  <div className="pt-3 border-t border-zinc-900 flex justify-between items-center text-xs font-mono">
+                    <span className="text-gray-500">{c.worksCount}</span>
+                    <span className="text-[#DC2626] font-bold hover:underline cursor-pointer">View Scans →</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </main>
+
+          {/* PHYSICAL MAIL INTAKE INSTRUCTIONS */}
+          <section id="mail-intake" className="bg-[#121212] border-t border-b border-zinc-800 py-12 px-6">
+            <div className="max-w-4xl mx-auto space-y-8">
+              <div className="text-center space-y-2">
+                <span className="text-xs font-mono text-red-400 uppercase tracking-widest">SUBMISSION PROCESS</span>
+                <h2 className="text-2xl font-bold font-mono text-white uppercase">How Incarcerated Writers & Artists Submit Work</h2>
+                <p className="text-xs text-gray-400 max-w-xl mx-auto font-mono">
+                  We process physical mail sent directly from North Carolina carceral facilities through our dedicated intake hub.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6 font-mono text-xs">
+                <div className="bg-[#181818] border border-zinc-800 p-5 rounded space-y-2">
+                  <div className="text-[#DC2626] font-bold text-base">01. MAIL MANUSCRIPT</div>
+                  <p className="text-gray-300 leading-relaxed">
+                    Creators mail original handwritten letters, memoirs, poetry, or artwork along with a signed Contributor Release Form to our NC PO Box.
+                  </p>
+                </div>
+                <div className="bg-[#181818] border border-zinc-800 p-5 rounded space-y-2">
+                  <div className="text-[#DC2626] font-bold text-base">02. HIGH-SPEED SCAN & OCR</div>
+                  <p className="text-gray-300 leading-relaxed">
+                    We batch-scan physical pages using desktop ADF scanners and run AI VLM OCR to transcribe handwriting into clean, searchable web text.
+                  </p>
+                </div>
+                <div className="bg-[#181818] border border-zinc-800 p-5 rounded space-y-2">
+                  <div className="text-[#DC2626] font-bold text-base">03. PUBLISH & ESCROW</div>
+                  <p className="text-gray-300 leading-relaxed">
+                    Work is hosted on razorwirefeels.org and published in quarterly zines. 70% of net sales go into creator support escrow accounts.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-black border border-red-900/40 p-6 rounded text-center space-y-3 font-mono">
+                <div className="text-xs text-gray-400 uppercase tracking-wider">OFFICIAL NC MAILING ADDRESS & RELEASE FORM</div>
+                <div className="text-base font-bold text-white">RWF Publishing LLC · PO Box [Number] · [City], NC [Zip]</div>
+                <div className="pt-2">
+                  <a href="/contributor-release-agreement-v2.pdf" download className="bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold px-4 py-2 rounded border border-zinc-700 inline-block">
+                    📄 Download Printable Release Form (PDF)
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* SPONSOR & ESCROW SECTION */}
+          <section id="support" className="bg-[#0D0D0D] py-12 px-6">
+            <div className="max-w-4xl mx-auto text-center space-y-6">
+              <span className="text-xs font-mono text-red-400 uppercase tracking-widest">EXPOSURE-FIRST FINANCIAL MODEL</span>
+              <h2 className="text-2xl font-bold font-mono text-white">SPONSOR A VOICE ($10/MO)</h2>
+              <p className="text-xs md:text-sm text-gray-300 max-w-2xl mx-auto leading-relaxed font-mono">
+                Outside family members and supporters pay a $10/month subscription to maintain priority manuscript ingestion. Every subscription directly cross-subsidizes free profile pages for indigent creators across North Carolina.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-4 max-w-xl mx-auto pt-2 font-mono text-xs">
+                <div className="bg-[#141414] border border-zinc-800 p-4 rounded text-left space-y-2">
+                  <div className="text-[#DC2626] font-bold">$10/Mo Family Supporter</div>
+                  <p className="text-gray-400 text-[11px]">Priority scanning, dedicated creator page, audio dispatch highlight, and full archive backup.</p>
+                  <button className="w-full bg-[#DC2626] hover:bg-red-700 text-white font-bold py-2 rounded uppercase mt-2">Sponsor Now</button>
+                </div>
+                <div className="bg-[#141414] border border-zinc-800 p-4 rounded text-left space-y-2">
+                  <div className="text-white font-bold">Indigent Inmate Request</div>
+                  <p className="text-gray-400 text-[11px]">100% free profile hosting, basic OCR transcription, and inclusion in the Edovo tablet zine.</p>
+                  <button className="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2 rounded uppercase border border-zinc-700 mt-2">Request Free Page</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* FOOTER */}
+          <footer className="bg-black border-t border-zinc-800 p-6 text-center text-xs text-gray-500 font-mono space-y-2">
+            <div>© 2026 RWF Publishing LLC · razorwirefeels.org</div>
+            <div>Founded by Nicolas "Redbeard the Great" Losito · ID 1369313</div>
+            <div className="text-[10px] text-gray-600 max-w-lg mx-auto pt-2">
+              RWF Publishing LLC operates independently of the NCDAC. Section 230 safe harbors apply. All creator earnings managed through NCDAC-compliant Support Escrow Accounts.
+            </div>
+          </footer>
+
         </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-content">0</div>
-          <div class="stat-label">Content Items</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-files">0</div>
-          <div class="stat-label">Repo Files</div>
-        </div>
-      </div>
-
-      <div class="dash-header">
-        <h2>Contributors</h2>
-        <div class="search-bar">
-          <input type="text" id="search-input" placeholder="Search by name, ID, or facility..." oninput="filterContributors()">
-        </div>
-        <button class="btn btn-primary" onclick="openNewContributor()">+ New Contributor</button>
-      </div>
-
-      <div class="contributor-grid" id="contributor-grid">
-        <!-- populated by JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- EDITOR -->
-  <div id="editor-view">
-    <div class="editor-container">
-      <div class="editor-header">
-        <div>
-          <button class="btn btn-small btn-ghost" onclick="backToDashboard()">← Back</button>
-          <h2 id="editor-title" style="display:inline;margin-left:12px">Edit Contributor</h2>
-        </div>
-        <div class="editor-actions">
-          <button class="btn btn-small" onclick="previewPage()">Preview</button>
-          <button class="btn btn-small btn-primary" onclick="savePage()">Save & Push</button>
-        </div>
-      </div>
-
-      <!-- Profile Section -->
-      <div class="form-section">
-        <h3>Profile</h3>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Display Name</label>
-            <input type="text" id="ed-name" placeholder="e.g. Redbeard The Great">
-          </div>
-          <div class="form-group">
-            <label>ID Number</label>
-            <input type="text" id="ed-id" placeholder="e.g. 1369313">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Facility</label>
-            <input type="text" id="ed-facility" placeholder="e.g. Central Prison, Raleigh">
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            <select id="ed-status">
-              <option value="live">Live</option>
-              <option value="draft">Draft</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Page Filename</label>
-          <input type="text" id="ed-filename" placeholder="e.g. contributor-redbeard.html">
-        </div>
-        <div class="form-group">
-          <label>Bio</label>
-          <textarea id="ed-bio" rows="4" placeholder="Contributor biography..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Tagline / Quote</label>
-          <input type="text" id="ed-tagline" placeholder='e.g. "We were exiled from society..."'>
-        </div>
-      </div>
-
-      <!-- Profile Image -->
-      <div class="form-section">
-        <h3>Profile Image</h3>
-        <div class="upload-zone" onclick="document.getElementById('profile-img-upload').click()">
-          <div class="upload-icon">📷</div>
-          <p>Click to upload profile image</p>
-          <input type="file" id="profile-img-upload" accept="image/*" style="display:none" onchange="handleProfileImage(event)">
-        </div>
-        <div id="profile-img-preview" style="text-align:center"></div>
-      </div>
-
-      <!-- Content -->
-      <div class="form-section">
-        <h3>Content</h3>
-        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;gap:8px">
-          <button class="btn btn-small" onclick="openAddContent('writing')">+ Writing</button>
-          <button class="btn btn-small" onclick="openAddContent('art')">+ Art</button>
-          <button class="btn btn-small" onclick="openAddContent('poem')">+ Poem</button>
-          <button class="btn btn-small" onclick="openAddContent('letter')">+ Letter</button>
-        </div>
-        <div class="content-list" id="content-list">
-          <p style="color:var(--text-muted);text-align:center;padding:2rem">No content yet. Add writings, art, poems, or letters above.</p>
-        </div>
-      </div>
-
-      <!-- Danger Zone -->
-      <div class="form-section" id="danger-zone" style="display:none">
-        <h3 style="color:var(--accent)">Danger Zone</h3>
-        <p style="color:var(--text-dim);font-size:12px;margin-bottom:1rem">Permanently delete this contributor page from the repo.</p>
-        <button class="btn btn-small btn-danger" onclick="deletePage()">Delete Page</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════ ADD CONTENT MODAL ════════════ -->
-<div class="modal-overlay" id="content-modal">
-  <div class="modal">
-    <h3 id="modal-title">Add Content</h3>
-    <div class="form-group">
-      <label>Title</label>
-      <input type="text" id="modal-content-title" placeholder="Title of the piece">
-    </div>
-    <div class="form-group">
-      <label>Type</label>
-      <select id="modal-content-type">
-        <option value="writing">Writing</option>
-        <option value="poem">Poem</option>
-        <option value="letter">Letter</option>
-        <option value="art">Art</option>
-      </select>
-    </div>
-    <div class="form-group" id="modal-text-group">
-      <label>Content</label>
-      <textarea id="modal-content-body" rows="10" placeholder="Paste or type the full text..."></textarea>
-    </div>
-    <div class="form-group" id="modal-art-group" style="display:none">
-      <label>Image</label>
-      <div class="upload-zone" onclick="document.getElementById('art-upload').click()">
-        <div class="upload-icon">🎨</div>
-        <p>Click to upload artwork image</p>
-        <input type="file" id="art-upload" accept="image/*" style="display:none" onchange="handleArtUpload(event)">
-      </div>
-      <div id="art-preview"></div>
-    </div>
-    <div class="form-group">
-      <label>Description / Notes</label>
-      <textarea id="modal-content-desc" rows="3" placeholder="Optional description, dedication, context..."></textarea>
-    </div>
-    <div class="form-group">
-      <label>Date Written</label>
-      <input type="text" id="modal-content-date" placeholder="e.g. April 2020">
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-small" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-small btn-primary" onclick="addContent()">Add</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════ PREVIEW MODAL ════════════ -->
-<div class="modal-overlay" id="preview-modal">
-  <div class="modal" style="max-width:800px;max-height:90vh">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-      <h3 style="margin:0">Page Preview</h3>
-      <button class="btn btn-small" onclick="document.getElementById('preview-modal').classList.remove('active')">Close</button>
-    </div>
-    <iframe id="preview-frame" style="width:100%;height:70vh;border:1px solid var(--border);background:#fff"></iframe>
-  </div>
-</div>
-
-<!-- ════════════ LOADING ════════════ -->
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <p id="loading-text">Connecting to GitHub...</p>
-</div>
-
-<!-- ════════════ TOAST ════════════ -->
-<div class="toast" id="toast"></div>
-
-<script>
-// ══════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════
-let TOKEN = '';
-let OWNER = '';
-let REPO = '';
-let contributors = [];
-let currentContributor = null;
-let currentContents = [];
-let editingIndex = -1; // -1 = new, >= 0 = existing
-let tempArtData = null;
-let tempProfileData = null;
-let repoFiles = [];
-
-// ══════════════════════════════════════
-//  GITHUB API
-// ══════════════════════════════════════
-async function ghFetch(path, opts = {}) {
-  const url = `https://api.github.com/repos/${OWNER}/${REPO}${path}`;
-  const res = await fetch(url, {
-    ...opts,
-    headers: {
-      'Authorization': `token ${TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json',
-      ...(opts.headers || {}),
-    },
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `GitHub API error: ${res.status}`);
-  }
-  return res.json();
-}
-
-async function getRepoContents(path = '') {
-  return ghFetch(`/contents/${path}`);
-}
-
-async function getFile(path) {
-  return ghFetch(`/contents/${path}`);
-}
-
-async function putFile(path, content, message, sha = null) {
-  const body = {
-    message,
-    content: btoa(unescape(encodeURIComponent(content))),
-  };
-  if (sha) body.sha = sha;
-  return ghFetch(`/contents/${path}`, {
-    method: 'PUT',
-    body: JSON.stringify(body),
-  });
-}
-
-async function putBinaryFile(path, base64Content, message, sha = null) {
-  const body = {
-    message,
-    content: base64Content,
-  };
-  if (sha) body.sha = sha;
-  return ghFetch(`/contents/${path}`, {
-    method: 'PUT',
-    body: JSON.stringify(body),
-  });
-}
-
-async function deleteFile(path, sha, message) {
-  return ghFetch(`/contents/${path}`, {
-    method: 'DELETE',
-    body: JSON.stringify({ message, sha }),
-  });
-}
-
-// ══════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════
-async function doLogin() {
-  TOKEN = document.getElementById('token-input').value.trim();
-  OWNER = document.getElementById('owner-input').value.trim();
-  REPO = document.getElementById('repo-input').value.trim();
-
-  if (!TOKEN || !OWNER || !REPO) {
-    showLoginError('All fields required');
-    return;
-  }
-
-  showLoading('Connecting to GitHub...');
-  try {
-    // Verify token and repo access
-    const repo = await ghFetch('');
-    sessionStorage.setItem('rwf_token', TOKEN);
-    sessionStorage.setItem('rwf_owner', OWNER);
-    sessionStorage.setItem('rwf_repo', REPO);
-
-    document.getElementById('user-info').textContent = `${OWNER}/${REPO}`;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-
-    await loadDashboard();
-  } catch (e) {
-    showLoginError('Connection failed: ' + e.message);
-  }
-  hideLoading();
-}
-
-function logout() {
-  sessionStorage.clear();
-  TOKEN = '';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('token-input').value = '';
-}
-
-function showLoginError(msg) {
-  const el = document.getElementById('login-error');
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
-// Check for saved session
-(function autoLogin() {
-  const t = sessionStorage.getItem('rwf_token');
-  const o = sessionStorage.getItem('rwf_owner');
-  const r = sessionStorage.getItem('rwf_repo');
-  if (t && o && r) {
-    document.getElementById('token-input').value = t;
-    document.getElementById('owner-input').value = o;
-    document.getElementById('repo-input').value = r;
-    doLogin();
-  }
-})();
-
-// ══════════════════════════════════════
-//  DASHBOARD
-// ══════════════════════════════════════
-async function loadDashboard() {
-  showLoading('Loading repo files...');
-  try {
-    repoFiles = await getRepoContents('');
-    await loadContributorIndex();
-    renderDashboard();
-  } catch (e) {
-    toast('Failed to load repo: ' + e.message, true);
-  }
-  hideLoading();
-}
-
-async function loadContributorIndex() {
-  // Try to load the contributors index JSON
-  try {
-    const file = await getFile('admin-data/contributors.json');
-    const content = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
-    contributors = JSON.parse(content);
-    contributors._sha = file.sha;
-  } catch (e) {
-    // No index yet — start fresh
-    contributors = [];
-    contributors._sha = null;
-  }
-}
-
-async function saveContributorIndex() {
-  const sha = contributors._sha || null;
-  const data = contributors.filter(c => c); // remove holes
-  const content = JSON.stringify(data, null, 2);
-  try {
-    const result = await putFile(
-      'admin-data/contributors.json',
-      content,
-      'Update contributor index',
-      sha
-    );
-    contributors._sha = result.content.sha;
-  } catch (e) {
-    toast('Failed to save index: ' + e.message, true);
-    throw e;
-  }
-}
-
-function renderDashboard() {
-  document.getElementById('stat-total').textContent = contributors.length;
-  const totalContent = contributors.reduce((sum, c) => sum + (c.content ? c.content.length : 0), 0);
-  document.getElementById('stat-content').textContent = totalContent;
-  document.getElementById('stat-files').textContent = repoFiles.length;
-
-  renderContributorGrid(contributors);
-}
-
-function renderContributorGrid(list) {
-  const grid = document.getElementById('contributor-grid');
-  if (list.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--text-muted)">
-        <p style="font-size:2rem;margin-bottom:1rem">📂</p>
-        <p>No contributors yet. Click <strong>+ New Contributor</strong> to get started.</p>
-      </div>`;
-    return;
-  }
-
-  grid.innerHTML = list.map((c, i) => `
-    <div class="contributor-card" onclick="openEditor(${contributors.indexOf(c)})">
-      <div class="card-badge ${c.status || 'draft'}">${c.status || 'draft'}</div>
-      <div class="card-id">#${c.id || '—'}</div>
-      <div class="card-name">${esc(c.name || 'Unnamed')}</div>
-      <div class="card-facility">${esc(c.facility || 'No facility set')}</div>
-      <div class="card-meta">
-        <span>${(c.content || []).length} items</span>
-        <span>${c.filename || 'no file'}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function filterContributors() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  if (!q) { renderContributorGrid(contributors); return; }
-  const filtered = contributors.filter(c =>
-    (c.name || '').toLowerCase().includes(q) ||
-    (c.id || '').toLowerCase().includes(q) ||
-    (c.facility || '').toLowerCase().includes(q)
-  );
-  renderContributorGrid(filtered);
-}
-
-// ══════════════════════════════════════
-//  EDITOR
-// ══════════════════════════════════════
-function openNewContributor() {
-  editingIndex = -1;
-  currentContributor = {
-    name: '', id: '', facility: '', status: 'draft',
-    filename: '', bio: '', tagline: '', profileImage: '',
-    content: []
-  };
-  currentContents = [];
-  tempProfileData = null;
-  populateEditor();
-  showEditor();
-}
-
-function openEditor(index) {
-  editingIndex = index;
-  currentContributor = JSON.parse(JSON.stringify(contributors[index]));
-  currentContents = currentContributor.content || [];
-  tempProfileData = null;
-  populateEditor();
-  showEditor();
-}
-
-function populateEditor() {
-  const c = currentContributor;
-  document.getElementById('ed-name').value = c.name || '';
-  document.getElementById('ed-id').value = c.id || '';
-  document.getElementById('ed-facility').value = c.facility || '';
-  document.getElementById('ed-status').value = c.status || 'draft';
-  document.getElementById('ed-filename').value = c.filename || '';
-  document.getElementById('ed-bio').value = c.bio || '';
-  document.getElementById('ed-tagline').value = c.tagline || '';
-  document.getElementById('editor-title').textContent = c.name ? `Edit: ${c.name}` : 'New Contributor';
-  document.getElementById('danger-zone').style.display = editingIndex >= 0 ? 'block' : 'none';
-
-  // Profile image
-  const imgPreview = document.getElementById('profile-img-preview');
-  if (c.profileImage) {
-    imgPreview.innerHTML = `<img src="${c.profileImage}" style="max-width:200px;border:1px solid var(--border)">`;
-  } else {
-    imgPreview.innerHTML = '';
-  }
-
-  renderContentList();
-}
-
-function renderContentList() {
-  const list = document.getElementById('content-list');
-  if (currentContents.length === 0) {
-    list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:2rem">No content yet. Add writings, art, poems, or letters above.</p>';
-    return;
-  }
-
-  list.innerHTML = currentContents.map((item, i) => `
-    <div class="content-item">
-      <span class="item-type">${esc(item.type)}</span>
-      <div class="item-body">
-        <div class="item-title">${esc(item.title)}</div>
-        <div class="item-preview">${esc((item.body || item.description || '').substring(0, 120))}</div>
-        ${item.date ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px">${esc(item.date)}</div>` : ''}
-      </div>
-      <div class="item-actions">
-        <button class="btn btn-small btn-ghost" onclick="editContent(${i})">Edit</button>
-        <button class="btn btn-small btn-ghost" style="color:var(--accent)" onclick="removeContent(${i})">×</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function showEditor() {
-  document.getElementById('dashboard-view').style.display = 'none';
-  document.getElementById('editor-view').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-
-function backToDashboard() {
-  document.getElementById('editor-view').style.display = 'none';
-  document.getElementById('dashboard-view').style.display = 'block';
-  renderDashboard();
-}
-
-// ══════════════════════════════════════
-//  CONTENT MANAGEMENT
-// ══════════════════════════════════════
-let editingContentIndex = -1;
-
-function openAddContent(type) {
-  editingContentIndex = -1;
-  document.getElementById('modal-content-title').value = '';
-  document.getElementById('modal-content-type').value = type;
-  document.getElementById('modal-content-body').value = '';
-  document.getElementById('modal-content-desc').value = '';
-  document.getElementById('modal-content-date').value = '';
-  document.getElementById('art-preview').innerHTML = '';
-  tempArtData = null;
-  toggleContentTypeFields(type);
-  document.getElementById('modal-title').textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-  document.getElementById('content-modal').classList.add('active');
-}
-
-function editContent(index) {
-  editingContentIndex = index;
-  const item = currentContents[index];
-  document.getElementById('modal-content-title').value = item.title || '';
-  document.getElementById('modal-content-type').value = item.type || 'writing';
-  document.getElementById('modal-content-body').value = item.body || '';
-  document.getElementById('modal-content-desc').value = item.description || '';
-  document.getElementById('modal-content-date').value = item.date || '';
-  tempArtData = item.imageData || null;
-  toggleContentTypeFields(item.type);
-  if (item.imageData) {
-    document.getElementById('art-preview').innerHTML = `<img src="${item.imageData}" style="max-width:200px;border:1px solid var(--border)">`;
-  }
-  document.getElementById('modal-title').textContent = `Edit ${item.type}`;
-  document.getElementById('content-modal').classList.add('active');
-}
-
-function toggleContentTypeFields(type) {
-  if (type === 'art') {
-    document.getElementById('modal-text-group').style.display = 'none';
-    document.getElementById('modal-art-group').style.display = 'block';
-  } else {
-    document.getElementById('modal-text-group').style.display = 'block';
-    document.getElementById('modal-art-group').style.display = 'none';
-  }
-}
-
-document.getElementById('modal-content-type').addEventListener('change', function() {
-  toggleContentTypeFields(this.value);
-});
-
-function addContent() {
-  const item = {
-    title: document.getElementById('modal-content-title').value.trim(),
-    type: document.getElementById('modal-content-type').value,
-    body: document.getElementById('modal-content-body').value,
-    description: document.getElementById('modal-content-desc').value,
-    date: document.getElementById('modal-content-date').value,
-    imageData: tempArtData || null,
-  };
-
-  if (!item.title) { toast('Title is required', true); return; }
-
-  if (editingContentIndex >= 0) {
-    currentContents[editingContentIndex] = item;
-  } else {
-    currentContents.push(item);
-  }
-
-  renderContentList();
-  closeModal();
-  toast('Content added');
-}
-
-function removeContent(index) {
-  if (confirm('Remove this content item?')) {
-    currentContents.splice(index, 1);
-    renderContentList();
-  }
-}
-
-function closeModal() {
-  document.getElementById('content-modal').classList.remove('active');
-}
-
-// ══════════════════════════════════════
-//  IMAGE HANDLING
-// ══════════════════════════════════════
-function handleProfileImage(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    tempProfileData = e.target.result;
-    document.getElementById('profile-img-preview').innerHTML =
-      `<img src="${tempProfileData}" style="max-width:200px;border:1px solid var(--border)">`;
-  };
-  reader.readAsDataURL(file);
-}
-
-function handleArtUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    tempArtData = e.target.result;
-    document.getElementById('art-preview').innerHTML =
-      `<img src="${tempArtData}" style="max-width:200px;border:1px solid var(--border)">`;
-  };
-  reader.readAsDataURL(file);
-}
-
-// ══════════════════════════════════════
-//  SAVE / PUSH TO GITHUB
-// ══════════════════════════════════════
-async function savePage() {
-  const name = document.getElementById('ed-name').value.trim();
-  const id = document.getElementById('ed-id').value.trim();
-  let filename = document.getElementById('ed-filename').value.trim();
-
-  if (!name) { toast('Name is required', true); return; }
-  if (!filename) {
-    filename = 'contributor-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '') + '.html';
-    document.getElementById('ed-filename').value = filename;
-  }
-  if (!filename.endsWith('.html')) filename += '.html';
-
-  // Build contributor data
-  currentContributor = {
-    name,
-    id,
-    facility: document.getElementById('ed-facility').value.trim(),
-    status: document.getElementById('ed-status').value,
-    filename,
-    bio: document.getElementById('ed-bio').value,
-    tagline: document.getElementById('ed-tagline').value,
-    profileImage: tempProfileData || currentContributor.profileImage || '',
-    content: currentContents,
-  };
-
-  showLoading('Generating page & pushing to GitHub...');
-
-  try {
-    // 1. Generate the HTML page
-    const html = generateContributorPage(currentContributor);
-
-    // 2. Check if file exists (to get SHA for update)
-    let sha = null;
-    try {
-      const existing = await getFile(filename);
-      sha = existing.sha;
-    } catch (e) { /* new file */ }
-
-    // 3. Push the HTML file
-    await putFile(filename, html, `${editingIndex >= 0 ? 'Update' : 'Add'} contributor: ${name}`, sha);
-
-    // 4. Upload profile image if new
-    if (tempProfileData && tempProfileData.startsWith('data:')) {
-      const ext = tempProfileData.split(';')[0].split('/')[1] || 'jpg';
-      const imgPath = `images/profiles/${filename.replace('.html', '')}.${ext}`;
-      const base64 = tempProfileData.split(',')[1];
-      let imgSha = null;
-      try { const f = await getFile(imgPath); imgSha = f.sha; } catch(e) {}
-      await putBinaryFile(imgPath, base64, `Profile image: ${name}`, imgSha);
-      currentContributor.profileImage = imgPath;
-      tempProfileData = null;
+      );
     }
 
-    // 5. Upload art images
-    for (let i = 0; i < currentContents.length; i++) {
-      const item = currentContents[i];
-      if (item.imageData && item.imageData.startsWith('data:')) {
-        const ext = item.imageData.split(';')[0].split('/')[1] || 'jpg';
-        const artPath = `images/art/${filename.replace('.html', '')}-${i}.${ext}`;
-        const base64 = item.imageData.split(',')[1];
-        let artSha = null;
-        try { const f = await getFile(artPath); artSha = f.sha; } catch(e) {}
-        await putBinaryFile(artPath, base64, `Art upload: ${item.title}`, artSha);
-        currentContents[i].imageData = artPath;
-      }
-    }
-
-    // 6. Update the contributor index
-    if (editingIndex >= 0) {
-      contributors[editingIndex] = currentContributor;
-    } else {
-      contributors.push(currentContributor);
-      editingIndex = contributors.length - 1;
-    }
-    await saveContributorIndex();
-
-    toast('Saved & pushed to GitHub!');
-    document.getElementById('editor-title').textContent = `Edit: ${name}`;
-    document.getElementById('danger-zone').style.display = 'block';
-  } catch (e) {
-    toast('Save failed: ' + e.message, true);
-  }
-  hideLoading();
-}
-
-// ══════════════════════════════════════
-//  DELETE
-// ══════════════════════════════════════
-async function deletePage() {
-  if (!confirm(`Delete ${currentContributor.name}? This removes the file from GitHub.`)) return;
-  if (!confirm('Are you absolutely sure? This cannot be undone.')) return;
-
-  showLoading('Deleting...');
-  try {
-    const filename = currentContributor.filename;
-    if (filename) {
-      try {
-        const file = await getFile(filename);
-        await deleteFile(filename, file.sha, `Delete contributor: ${currentContributor.name}`);
-      } catch(e) { /* file may not exist */ }
-    }
-
-    contributors.splice(editingIndex, 1);
-    await saveContributorIndex();
-    toast('Deleted');
-    backToDashboard();
-  } catch (e) {
-    toast('Delete failed: ' + e.message, true);
-  }
-  hideLoading();
-}
-
-// ══════════════════════════════════════
-//  PAGE GENERATOR
-// ══════════════════════════════════════
-function generateContributorPage(c) {
-  const contentHTML = (c.content || []).map(item => {
-    if (item.type === 'art') {
-      const src = item.imageData || '';
-      return `
-      <div class="content-piece art-piece">
-        <h3>${esc(item.title)}</h3>
-        ${src ? `<img src="${src}" alt="${esc(item.title)}" class="art-image">` : ''}
-        ${item.description ? `<p class="piece-desc">${esc(item.description)}</p>` : ''}
-        ${item.date ? `<span class="piece-date">${esc(item.date)}</span>` : ''}
-      </div>`;
-    }
-    return `
-    <div class="content-piece">
-      <span class="piece-type">${esc(item.type)}</span>
-      <h3>${esc(item.title)}</h3>
-      <div class="piece-body">${escMultiline(item.body || '')}</div>
-      ${item.description ? `<p class="piece-desc">${esc(item.description)}</p>` : ''}
-      ${item.date ? `<span class="piece-date">${esc(item.date)}</span>` : ''}
-    </div>`;
-  }).join('\n');
-
-  const profileImgSrc = c.profileImage || '';
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(c.name)} | Razor Wire Feels</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0a0a0a;
-    --surface: #141414;
-    --border: #2a2a2a;
-    --text: #d4d4d4;
-    --text-dim: #777;
-    --accent: #ff3333;
-    --accent-glow: rgba(255,51,51,0.08);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Courier Prime', monospace;
-    line-height: 1.7;
-  }
-  .noise {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .container { max-width: 800px; margin: 0 auto; padding: 2rem; position: relative; z-index: 1; }
-  .back-link {
-    display: inline-block; margin-bottom: 2rem; color: var(--text-dim);
-    text-decoration: none; font-size: 13px;
-  }
-  .back-link:hover { color: var(--accent); }
-  .profile-header {
-    text-align: center; padding: 3rem 0; margin-bottom: 2rem;
-    border-bottom: 2px solid var(--border);
-  }
-  .profile-img {
-    width: 160px; height: 160px; border-radius: 50%; object-fit: cover;
-    border: 3px solid var(--accent); margin-bottom: 1.5rem;
-  }
-  .profile-name {
-    font-family: 'Permanent Marker', cursive; font-size: 2.2rem;
-    color: var(--accent); margin-bottom: 0.25rem;
-  }
-  .profile-id { color: var(--text-dim); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; }
-  .profile-facility { color: var(--text-dim); font-size: 14px; margin-top: 0.5rem; }
-  .profile-tagline {
-    font-style: italic; color: var(--text); margin-top: 1.5rem;
-    font-size: 15px; max-width: 500px; margin-left: auto; margin-right: auto;
-  }
-  .bio-section {
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 2rem; margin-bottom: 2rem;
-  }
-  .bio-section h2 {
-    font-family: 'Permanent Marker', cursive; color: var(--accent);
-    font-size: 1.2rem; margin-bottom: 1rem;
-  }
-  .content-piece {
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 2rem; margin-bottom: 1.5rem;
-  }
-  .content-piece h3 {
-    font-family: 'Permanent Marker', cursive; font-size: 1.3rem;
-    color: var(--text); margin-bottom: 1rem;
-  }
-  .piece-type {
-    display: inline-block; padding: 2px 10px; font-size: 10px;
-    text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--accent);
-    color: var(--accent); margin-bottom: 1rem;
-  }
-  .piece-body { white-space: pre-wrap; line-height: 1.8; }
-  .piece-desc { color: var(--text-dim); font-size: 13px; margin-top: 1rem; font-style: italic; }
-  .piece-date { display: block; color: var(--text-dim); font-size: 12px; margin-top: 0.75rem; letter-spacing: 1px; }
-  .art-image { width: 100%; max-width: 600px; margin: 1rem auto; display: block; border: 1px solid var(--border); }
-  .chain-divider {
-    text-align: center; padding: 1rem 0; color: var(--text-dim);
-    font-size: 12px; letter-spacing: 4px;
-  }
-  .site-footer {
-    text-align: center; padding: 3rem 0; color: var(--text-dim);
-    font-size: 12px; border-top: 1px solid var(--border); margin-top: 3rem;
-  }
-  .site-footer a { color: var(--accent); text-decoration: none; }
-</style>
-</head>
-<body>
-<div class="noise"></div>
-<div class="container">
-  <a href="index.html" class="back-link">← Back to Directory</a>
-  <div class="profile-header">
-    ${profileImgSrc ? `<img src="${profileImgSrc}" alt="${esc(c.name)}" class="profile-img">` : ''}
-    <div class="profile-name">${esc(c.name)}</div>
-    ${c.id ? `<div class="profile-id">#${esc(c.id)}</div>` : ''}
-    ${c.facility ? `<div class="profile-facility">${esc(c.facility)}</div>` : ''}
-    ${c.tagline ? `<div class="profile-tagline">"${esc(c.tagline)}"</div>` : ''}
-  </div>
-
-  ${c.bio ? `
-  <div class="bio-section">
-    <h2>About</h2>
-    <p>${escMultiline(c.bio)}</p>
-  </div>` : ''}
-
-  <div class="chain-divider">⛓ ⛓ ⛓ ⛓ ⛓</div>
-
-  ${contentHTML}
-
-  <div class="site-footer">
-    <p><a href="index.html">Razor Wire Feels</a></p>
-    <p style="margin-top:0.5rem">We were exiled from society. This is what we made while we were gone.</p>
-  </div>
-</div>
-</body>
-</html>`;
-}
-
-// ══════════════════════════════════════
-//  PREVIEW
-// ══════════════════════════════════════
-function previewPage() {
-  const c = {
-    name: document.getElementById('ed-name').value.trim() || 'Preview',
-    id: document.getElementById('ed-id').value.trim(),
-    facility: document.getElementById('ed-facility').value.trim(),
-    status: document.getElementById('ed-status').value,
-    bio: document.getElementById('ed-bio').value,
-    tagline: document.getElementById('ed-tagline').value,
-    profileImage: tempProfileData || currentContributor.profileImage || '',
-    content: currentContents,
-  };
-
-  const html = generateContributorPage(c);
-  const frame = document.getElementById('preview-frame');
-  frame.srcdoc = html;
-  document.getElementById('preview-modal').classList.add('active');
-}
-
-// ══════════════════════════════════════
-//  UTILITIES
-// ══════════════════════════════════════
-function esc(str) {
-  if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function escMultiline(str) {
-  return esc(str).replace(/\n/g, '<br>');
-}
-
-function toast(msg, isError = false) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast active' + (isError ? ' error' : '');
-  setTimeout(() => el.classList.remove('active'), 3000);
-}
-
-function showLoading(msg) {
-  document.getElementById('loading-text').textContent = msg || 'Loading...';
-  document.getElementById('loading').classList.add('active');
-}
-
-function hideLoading() {
-  document.getElementById('loading').classList.remove('active');
-}
-
-// Close modals on overlay click
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('active');
-  });
-});
-
-// Keyboard shortcuts
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-  }
-});
-</script>
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
